@@ -29,9 +29,9 @@ namespace WeaponControlSystem.MOI.Infrastructure.Repository.Base
 
         public IOfficerRepository Officer { get; private set; }
 
-        public Task SaveChanges(CancellationToken cancellationToken)
+        public async Task SaveChanges(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            await _dbContext.SaveChangesAsync();
         }
     }
 }
