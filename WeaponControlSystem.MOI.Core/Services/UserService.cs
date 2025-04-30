@@ -3,10 +3,43 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WeaponControlSystem.MOI.Core.Domain.RepositoryContracts.Base;
+using WeaponControlSystem.MOI.Core.DTOs.user;
+using WeaponControlSystem.MOI.Core.ServiceContracts;
 
 namespace WeaponControlSystem.MOI.Core.Services
 {
-    public  class UserService
+    public class UserService : IUserService
     {
+        private readonly IUnitOfWork _unitOfWork;
+        public UserService(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+        public async Task<UserAddDto> AddUser(UserAddDto userAddDto)
+        {
+            await _unitOfWork.User.Add(userAddDto.ToUser());
+            await _unitOfWork.SaveChanges(CancellationToken.None);
+            return userAddDto;
+        }
+
+        public async Task<UserResponseDTo> DeleteUser(int? UserId)
+        {   var user = await _unitOfWork.User.GetById(UserId.Value);
+            await _unitOfWork.User.Remove(user);
+            await _unitOfWork.SaveChanges(CancellationToken.None);
+            return user.ToUserResponseDTo();
+        }
+
+        public async Task<UserResponseDTo> GetUserById(int? userId)
+        {
+            var user= await _unitOfWork.User.GetById(userId.Value);
+            return user.ToUserResponseDTo();
+        }
+
+        public async Task<IEnumerable<UserResponseDTo>> GetUserList()
+        {
+            var users=await _unitOfWork.User.GetAll();
+            return users.Select(x => x.ToUserResponseDTo());
+        }
     }
 }
