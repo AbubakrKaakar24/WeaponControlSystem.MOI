@@ -1,0 +1,6 @@
+@WeaponControlSystem.MOI.Server_HostAddress = http://localhost:5186
+
+GET {{WeaponControlSystem.MOI.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
