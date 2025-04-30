@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using WeaponControlSystem.MOI.Core.DTOs.officer;
+using WeaponControlSystem.MOI.Core.ServiceContracts;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -9,35 +12,39 @@ namespace WeaponControlSystem.MOI.Server.Controllers
     public class OfficerController : ControllerBase
     {
         // GET: api/<OfficerController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IOfficerService _officerService;
+        public OfficerController(IOfficerService officerService)
         {
-            return new string[] { "value1", "value2" };
+            _officerService = officerService;
+        }
+        [HttpGet]
+        public async Task<IEnumerable<OfficerResponseDTo>> Get()
+        {  
+            return await _officerService.GetOfficerList();
+
         }
 
         // GET api/<OfficerController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<OfficerResponseDTo> Get(int id)
         {
-            return "value";
+           return await _officerService.GetOfficerById(id);
         }
 
         // POST api/<OfficerController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<OfficerAddDTo> Post(OfficerAddDTo officerAddDTo)
         {
+            return await _officerService.AddOfficer(officerAddDTo);
         }
 
-        // PUT api/<OfficerController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+        
 
         // DELETE api/<OfficerController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<OfficerResponseDTo> Delete(int id)
         {
+            return await _officerService.DeleteOfficer(id);
         }
     }
 }
