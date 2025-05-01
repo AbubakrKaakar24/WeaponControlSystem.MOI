@@ -5,7 +5,8 @@ class Login extends Component {
 
   render() {
     return (
-      <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
+      <body style={{ backgroundImage: "url('/moi.jpg')", backgroundSize: "cover" }}>
+        <div className="d-flex justify-content-center align-items-center vh-100 bg-light" >
         <div className="card shadow" style={{ width: "24rem" }}>
           <div className="card-body">
             <h4 className="text-center mb-4">Login</h4>
@@ -23,6 +24,7 @@ class Login extends Component {
           </div>
         </div>
       </div>
+      </body>
     );
   }
 }
