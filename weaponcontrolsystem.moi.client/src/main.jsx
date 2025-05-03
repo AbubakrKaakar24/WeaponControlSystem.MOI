@@ -7,7 +7,7 @@ import Login from './components/auth/Login.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    {/* <App /> */}
-    <Login />
+    <App />
+    {/* <Login /> */}
   </StrictMode>,
 )

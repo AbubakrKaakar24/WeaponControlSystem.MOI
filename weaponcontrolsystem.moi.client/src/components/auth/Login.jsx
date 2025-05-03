@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import { Navigate } from "react-router-dom";
 class Login extends Component {
   state = {
     email: "",
@@ -8,6 +8,7 @@ class Login extends Component {
       email: "",
       password: "",
     },
+    redirect: false,
   };
 handleBlur = (e) => {
     const { name, value } = e.target;
@@ -40,8 +41,8 @@ handleBlur = (e) => {
     if (Object.keys(errors).length > 0) {
       this.setState({ errors });
     } else {
-      this.setState({ email: "", password: "", errors: {} });
-      alert("Logged in successfully!");
+      this.setState({ email: "", password: "", errors: {}, redirect: true });
+      this.props.history.push("/home"); // Redirect to home page
     }
   };
   
@@ -53,6 +54,9 @@ handleBlur = (e) => {
   };
 
   render() {
+    if (this.state.redirect) {
+      return <Navigate to="/home" />;
+    }
     return (
       <div
         style={{ backgroundImage: "url('/moi.jpg')", backgroundSize: "cover" }}
@@ -91,6 +95,7 @@ handleBlur = (e) => {
               <button className="btn btn-primary w-100" type="submit">
                 Login
               </button>
+              
             </form>
           </div>
         </div>
