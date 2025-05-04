@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   return (
-    <nav className="navbar navbar-expand-sm navbar-dark bg-dark" style={{ paddingTop: '5px', paddingBottom: '5px' }}>
+    <nav className="navbar navbar-expand-sm navbar-dark bg-dark" style={{ paddingTop: '2px', paddingBottom: '2px' }}>
       {/* Use container-fluid for full width */}
       <div className="container-fluid p-0">
         <Link className="navbar-brand" to="/" style={{ padding: '0', margin: '0' }}>
