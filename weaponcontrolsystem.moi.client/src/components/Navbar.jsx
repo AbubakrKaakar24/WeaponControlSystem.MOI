@@ -1,64 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+  const closeDropdown = () => setIsDropdownOpen(false);
+
   return (
-    <nav className="navbar navbar-expand-sm navbar-dark bg-dark" style={{ paddingTop: '2px', paddingBottom: '2px' }}>
-      {/* Use container-fluid for full width */}
-      <div className="container-fluid p-0">
-        <Link className="navbar-brand" to="/" style={{ padding: '0', margin: '0' }}>
-          {/* Logo */}
-          <img
-            src="/moi.png"
-            alt="Logo"
-            className="d-inline-block align-top img-fluid"
-            style={{ maxWidth: '25%' }} // Adjust logo size
-          />
-        </Link>
-
-        {/* Toggler for mobile view */}
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-
-        <div className="collapse navbar-collapse" id="navbarNav">
-          {/* Right aligned items */}
-          <ul className="navbar-nav ms-auto">
+    <nav className="navbar navbar-expand-sm navbar-dark bg-dark fixed-top" style={{ paddingTop: '2px', paddingBottom: '2px' }}>
+      <div className="container-fluid p-0 d-flex justify-content-between align-items-center">
+        {/* Left: Nav Links */}
+        <div className="collapse navbar-collapse">
+          <ul className="navbar-nav me-auto">
             <li className="nav-item">
-              <Link className="nav-link active" aria-current="page" to="/home" style={{ fontSize: '14px' }}>
-                Home
+              <Link className="nav-link active" to="/user" style={{ fontSize: '14px' }}>
+                Add Officer
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/about" style={{ fontSize: '14px' }}>
-                About
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/services" style={{ fontSize: '14px' }}>
-                Services
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/contact" style={{ fontSize: '14px' }}>
-                Contact
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="btn btn-primary text-white" to="/login" style={{ fontSize: '14px' }}>
-                Login
+                Check Status
               </Link>
             </li>
           </ul>
         </div>
+
+        {/* Right: Logo */}
+        <Link className="ms-auto" to="/" style={{ padding: '0', margin: '0' }}>
+          <img
+            src="/moi.png"
+            alt="Logo"
+            className="d-inline-block align-top img-fluid"
+            style={{ maxWidth: '25%' }}
+          />
+        </Link>
       </div>
     </nav>
   );
