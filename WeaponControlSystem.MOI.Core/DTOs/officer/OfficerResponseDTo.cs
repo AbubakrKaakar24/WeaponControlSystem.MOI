@@ -12,7 +12,7 @@ namespace WeaponControlSystem.MOI.Core.DTOs.officer
         public int Id { get; set; }
         public string Name { get; set; }
         public string Base { get; set; } // Base where the officer is stationed
-        public string Moeenyat { get; set; } // Moeenyat where the officer is stationed
+        public string Deputy_Ministry { get; set; } // Moeenyat where the officer is stationed
         public string Directorate { get; set; } // Directorate where the officer is stationed
         public string Administration { get; set; } // Administration where the officer is stationed
         public string BadgeNo { get; set; }
@@ -26,7 +26,7 @@ namespace WeaponControlSystem.MOI.Core.DTOs.officer
                 Id = officer.Id,
                 Name = officer.Name,
                 Base = officer.Base,
-                Moeenyat = officer.Moeenyat,
+                Deputy_Ministry = officer.Deputy_Ministry,
                 Directorate = officer.Directorate,
                 Administration = officer.Administration,
                 BadgeNo = officer.BadgeNo

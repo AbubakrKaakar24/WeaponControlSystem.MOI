@@ -1,38 +1,29 @@
 import React, { useState } from 'react';
+import Dropdown from 'react-bootstrap/Dropdown';
 
-const Dropdown = (props) => {
-  const [isOpen, setIsOpen] = useState(false);
+const CustomDropdown = (props) => {
+  const [selectedItem, setSelectedItem] = useState(null);
 
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
+  const handleSelect = (eventKey) => {
+    setSelectedItem(eventKey);
   };
 
   return (
-    <div className="dropdown">
-      <button
-        className="btn btn-secondary dropdown-toggle"
-        type="button"
-        aria-expanded={isOpen ? 'true' : 'false'}
-        onClick={toggleDropdown}
-        style={{ backgroundColor: 'white', color: 'black' }} // Make the button full width
+    <Dropdown onSelect={handleSelect}>
+      <Dropdown.Toggle
+        variant="light"
+        style={{ backgroundColor: 'white', color: 'black' }}
       >
-        {props.Name} {/* Access props correctly here */}
-      </button>
-      {isOpen && (
-        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a className="dropdown-item" href="#">
-            Action
-          </a>
-          <a className="dropdown-item" href="#">
-            Another action
-          </a>
-          <a className="dropdown-item" href="#">
-            Something else here
-          </a>
-        </div>
-      )}
-    </div>
+        {selectedItem || props.Name}
+      </Dropdown.Toggle>
+
+      <Dropdown.Menu>
+        <Dropdown.Item eventKey="Action">Action</Dropdown.Item>
+        <Dropdown.Item eventKey="Another action">Another action</Dropdown.Item>
+        <Dropdown.Item eventKey="Something else here">Something else here</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
   );
 };
 
-export default Dropdown;
+export default CustomDropdown;
