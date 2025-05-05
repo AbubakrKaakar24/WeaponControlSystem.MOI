@@ -6,6 +6,9 @@ const CustomDropdown = (props) => {
 
   const handleSelect = (eventKey) => {
     setSelectedItem(eventKey);
+    if (props.onChange) {
+      props.onChange(props.name,eventKey); // Call the OnChange function with the selected item
+    }
   };
 
   return (
@@ -18,8 +21,8 @@ const CustomDropdown = (props) => {
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
-        <Dropdown.Item eventKey="Action">Action</Dropdown.Item>
-        <Dropdown.Item eventKey="Another action">Another action</Dropdown.Item>
+        <Dropdown.Item eventKey="Taminat">Action</Dropdown.Item>
+        <Dropdown.Item eventKey="Production">Another action</Dropdown.Item>
         <Dropdown.Item eventKey="Something else here">Something else here</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>

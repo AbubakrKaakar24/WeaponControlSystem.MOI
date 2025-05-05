@@ -20,7 +20,14 @@ namespace WeaponControlSystem.MOI.Server.Extensions
             services.AddScoped<IWeaponService, WeaponService>();
             services.AddScoped<IWeaponHandoverService, WeaponHandoverService>();
             services.AddScoped<IOfficerService, OfficerService>();
-            
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowReactApp",
+                    policy => policy
+                        .WithOrigins("https://localhost:50908")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+            });
             services.AddControllers();
 
             
