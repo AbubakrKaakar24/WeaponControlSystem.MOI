@@ -39,8 +39,6 @@ class OfficerAdd extends Component {
     e.preventDefault();
     const { firstName, lastName, badgeNo, deputyMinistry, directorate, administration, base } = this.state;
     const errors = {};
-    alert(`First Name: ${firstName}, Last Name: ${lastName}, Badge No: ${badgeNo}, Deputy Ministry: ${deputyMinistry}, Directorate: ${directorate}, Administration: ${administration}, Base: ${base}`);
-
     if (!firstName) errors.firstName = 'First name is required';
     if (!lastName) errors.lastName = 'Last name is required';
     if (!badgeNo) errors.badgeNo = 'Badge number is required';
@@ -80,7 +78,7 @@ class OfficerAdd extends Component {
           alert('Error while adding the Officer');
         }
       } catch (error) {
-        alert(`Error: ${error.message}`);
+       console.log('Errors:',error);
       }
       // Reset form
       this.setState({
