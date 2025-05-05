@@ -52,14 +52,14 @@ class OfficerAdd extends Component {
     } else {
       try {
         const officerData = {
-          firstName,
-          lastName,
-          badgeNo,
-          deputyMinistry,
-          directorate,
-          administration,
-          base,
+          Name: `${firstName} ${lastName}`, // Combining first and last name
+          Base: base,
+          Deputy_Ministry: deputyMinistry,
+          Directorate: directorate,
+          Administration: administration,
+          BadgeNo: badgeNo,
         };
+        
         const response = await fetch('https://localhost:7211/api/officer', {
           method: 'POST',
           headers: {
