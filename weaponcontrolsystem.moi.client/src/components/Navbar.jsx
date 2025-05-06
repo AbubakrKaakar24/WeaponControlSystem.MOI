@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -10,23 +10,38 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-sm navbar-dark bg-dark fixed-top" style={{ paddingTop: '2px', paddingBottom: '2px' }}>
       <div className="container-fluid p-0 d-flex justify-content-between align-items-center">
-        {/* Left: Nav Links */}
         <div className="collapse navbar-collapse">
           <ul className="navbar-nav me-auto">
             <li className="nav-item">
-              <Link className="nav-link active" to="/officer" style={{ fontSize: '14px' }}>
+              <NavLink
+                to="/officer"
+                className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}
+                style={{ fontSize: '14px' }}
+              >
                 Add Officer
-              </Link>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/register" style={{ fontSize: '14px' }}>
+              <NavLink
+                to="/register"
+                className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}
+                style={{ fontSize: '14px' }}
+              >
                 Add User
-              </Link>
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink
+                to="/weapon"
+                className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}
+                style={{ fontSize: '14px' }}
+              >
+                Add Weapon
+              </NavLink>
             </li>
           </ul>
         </div>
 
-        {/* Right: Logo */}
         <Link className="ms-auto" to="/" style={{ padding: '0', margin: '0' }}>
           <img
             src="/moi.png"

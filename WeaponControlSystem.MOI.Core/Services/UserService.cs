@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using WeaponControlSystem.MOI.Core.Domain.Entities;
 using WeaponControlSystem.MOI.Core.Domain.RepositoryContracts.Base;
 using WeaponControlSystem.MOI.Core.DTOs.user;
 using WeaponControlSystem.MOI.Core.ServiceContracts;
 //using Microsoft.AspNetCore.Identity;
-
 namespace WeaponControlSystem.MOI.Core.Services
 {
     public class UserService : IUserService
@@ -42,6 +37,11 @@ namespace WeaponControlSystem.MOI.Core.Services
             return user.ToUserResponseDTo();
         }
 
+        public async Task<bool> Login(string user,string password) {
+            
+            return false;
+        
+        } 
         public async Task<IEnumerable<UserResponseDTo>> GetUserList()
         {
             var users=await _unitOfWork.User.GetAll();

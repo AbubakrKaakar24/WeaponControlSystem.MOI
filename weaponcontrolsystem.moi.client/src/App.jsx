@@ -3,7 +3,9 @@ import Login from './components/auth/Login';
 import Home from './components/Home';
 import OfficerAdd from './components/OfficerAdd';
 import RegisterUser from './components/auth/RegisterUser';
+import WeaponAdd from './components/WeaponAdd';
 import './App.css';
+
 function App() {
   return (
     <Router>
@@ -13,6 +15,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/home" element={<Home />} />
         <Route path="/register" element={<RegisterUser />} />
+        <Route path="/weapon" element={<WeaponAdd />} />
       </Routes>
     </Router>
     

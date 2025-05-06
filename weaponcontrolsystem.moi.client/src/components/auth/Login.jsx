@@ -27,7 +27,7 @@ handleBlur = (e) => {
   
     this.setState({ errors, [name]: value });
   };
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = this.state;
     const errors = {};
@@ -37,7 +37,7 @@ handleBlur = (e) => {
   
     if (!password) errors.password = "Password is required";
     else if (password.length < 6) errors.password = "Password must be at least 6 characters";
-  
+   
     if (Object.keys(errors).length > 0) {
       this.setState({ errors });
     } else {

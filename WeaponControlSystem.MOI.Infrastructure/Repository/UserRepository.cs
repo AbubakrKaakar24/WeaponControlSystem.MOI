@@ -16,5 +16,10 @@ namespace WeaponControlSystem.MOI.Infrastructure.Repository
         {
             _dbContext = dbContext;
         }
+
+        public User getUserByName(string name)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -208,7 +208,7 @@ class OfficerAdd extends Component {
 
                 <div className="text-end">
                   <button className="btn btn-primary px-4 py-2 fw-semibold shadow-sm" type="submit">
-                    Add Officer
+                    Add
                   </button>
                 </div>
               </form>

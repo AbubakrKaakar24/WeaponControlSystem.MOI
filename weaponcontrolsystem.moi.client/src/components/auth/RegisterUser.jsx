@@ -125,7 +125,7 @@ class RegisterUser extends Component {
           case 'phoneNo':
             errors.phoneNo = value.length < 1 ? 'Phone number is required' : '';
             break;
-            case 'email': 
+          case 'email': 
             errors.email = value.length < 1 ? 'Email is required' : '';
             break;
             case 'password':

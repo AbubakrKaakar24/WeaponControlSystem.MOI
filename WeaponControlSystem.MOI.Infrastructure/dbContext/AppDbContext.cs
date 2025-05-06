@@ -22,6 +22,16 @@ namespace WeaponControlSystem.MOI.Infrastructure.dbContext
         {
             // Configure your entities here
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Officer>()
+            .HasIndex(o => o.BadgeNo)
+             .IsUnique();
+            modelBuilder.Entity<Weapon>()
+    .HasOne(w => w.Officer)
+    .WithMany(o => o.Weapons)
+    .HasForeignKey(w => w.OfficerBadgeNo)
+    .HasPrincipalKey(o => o.BadgeNo); // Important: tells EF to match FK to BadgeNo
+
+
         }
     }
 }
