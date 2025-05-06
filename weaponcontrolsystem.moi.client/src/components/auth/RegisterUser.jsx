@@ -19,7 +19,7 @@ class RegisterUser extends Component {
           role: '',
           gate: '',
           password: '',
-          confirmPassword: '', // <-- Add this
+          confirmPassword: '',
         },
       };
       
@@ -68,7 +68,7 @@ class RegisterUser extends Component {
           try {
             const userData = {
               Name: firstName,
-              LastName: lastName, // Combining first and last name
+              LastName: lastName,
               Phone: phoneNo,
               Email: email,
               Role: role,
@@ -251,8 +251,6 @@ class RegisterUser extends Component {
   />
   <div className="text-danger">{this.state.errors.confirmPassword}</div>
 </div>
-
-
                     </div>
     
                     <div className="text-end">
