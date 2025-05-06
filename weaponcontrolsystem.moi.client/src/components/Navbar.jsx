@@ -14,13 +14,13 @@ const Navbar = () => {
         <div className="collapse navbar-collapse">
           <ul className="navbar-nav me-auto">
             <li className="nav-item">
-              <Link className="nav-link active" to="/user" style={{ fontSize: '14px' }}>
+              <Link className="nav-link active" to="/officer" style={{ fontSize: '14px' }}>
                 Add Officer
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/about" style={{ fontSize: '14px' }}>
-                Check Status
+              <Link className="nav-link" to="/register" style={{ fontSize: '14px' }}>
+                Add User
               </Link>
             </li>
           </ul>

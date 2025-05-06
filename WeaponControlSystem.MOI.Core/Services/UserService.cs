@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WeaponControlSystem.MOI.Core.Domain.Entities;
 using WeaponControlSystem.MOI.Core.Domain.RepositoryContracts.Base;
 using WeaponControlSystem.MOI.Core.DTOs.user;
 using WeaponControlSystem.MOI.Core.ServiceContracts;
+//using Microsoft.AspNetCore.Identity;
 
 namespace WeaponControlSystem.MOI.Core.Services
 {
@@ -18,6 +20,10 @@ namespace WeaponControlSystem.MOI.Core.Services
         }
         public async Task<UserAddDto> AddUser(UserAddDto userAddDto)
         {
+            //var passwordHasher = new PasswordHasher<User>();
+            //string hashedPassword = passwordHasher.HashPassword(user, plainTextPassword);
+
+
             await _unitOfWork.User.Add(userAddDto.ToUser());
             await _unitOfWork.SaveChanges(CancellationToken.None);
             return userAddDto;

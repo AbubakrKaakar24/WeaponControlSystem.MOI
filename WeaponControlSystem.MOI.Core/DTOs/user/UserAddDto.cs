@@ -14,6 +14,7 @@ namespace WeaponControlSystem.MOI.Core.DTOs.user
         public string Email { get; set; }
         public string Role { get; set; }
         public string Gate { get; set; }
+        public string Password { get; set; }
         public User ToUser()
         {
             return new User
@@ -23,7 +24,8 @@ namespace WeaponControlSystem.MOI.Core.DTOs.user
                 Phone = Phone,
                 Email = Email,
                 Role = Role,
-                Gate = Gate
+                Gate = Gate,
+                Password = Password
             };
         }
     }
