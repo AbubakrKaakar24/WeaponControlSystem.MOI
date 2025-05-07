@@ -7,6 +7,7 @@ class WeaponAdd extends Component {
         return (
             <p>
                 <Navbar />
+                
             </p>
         );
     }
