@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Navbar from './Navbar';
 import Dropdown from './DropDown'; // Your dropdown component
 import Swal from 'sweetalert2';
+import ministryData from '../assets/ministryData.json';
 class OfficerAdd extends Component {
   state = {
     firstName: '',
@@ -11,6 +12,11 @@ class OfficerAdd extends Component {
     directorate: '',
     administration: '',
     base: '',
+    deputies:{},
+    directorates:{},
+    administrations:{},
+    bases:{},
+
     errors: {
       firstName: '',
       lastName: '',
@@ -21,7 +27,12 @@ class OfficerAdd extends Component {
       base: '',
     },
   };
+ componentDidMount() {
+       this.setState({
+        deputies: ministryData.deputies,
+        bases: ministryData.bases,});
 
+ }
   handleInputChange = (e) => {
     const { name, value } = e.target;
     this.setState({
@@ -30,10 +41,24 @@ class OfficerAdd extends Component {
   };
 
   handleDropdownChange = (name, value) => {
-    this.setState({
-      [name]: value,
-    });
-  };
+    const { deputyMinistry, directorate, administration, base } = this.state;
+    const selectedMinistry = ministryData.find((ministry) => ministry.Name === value);
+    const selectedDeputyMinistry = selectedMinistry ? selectedMinistry.Deputies : [];
+    const selectedDirectorate = selectedDeputyMinistry.find((deputy) => deputy.Name === value);
+      if (name==="deputies") {
+        this.setState({ deputyMinistry: value, directorate: '', administration: '', base: '' });
+      } else if (name==="directorates") {
+        this.setState({ directorate: value, administration: '', base: '' });
+      } else if (name==="administrations") {
+        this.setState({ administration: value, base: '' });
+      } 
+      else if (name==="bases") {
+        this.setState({ base: value });
+
+    // this.setState({
+    //   [name]: value,
+    // });
+  }};
 
   handleSubmit = async (e) => {
     e.preventDefault();
@@ -121,7 +146,8 @@ class OfficerAdd extends Component {
     this.setState({ errors, [name]: value });
   };
 
-  render() {
+  render() 
+  {
     return (
       <div className="bg-light min-vh-100">
         <Navbar />
@@ -180,6 +206,7 @@ class OfficerAdd extends Component {
                       name="deputyMinistry"
                       value={this.state.deputyMinistry}
                       onChange={this.handleDropdownChange}
+                      options={this.state.deputies}
                     />
                     <div className="text-danger">{this.state.errors.deputyMinistry}</div>
                   </div>
@@ -207,6 +234,7 @@ class OfficerAdd extends Component {
                       name="base"
                       value={this.state.base}
                       onChange={this.handleDropdownChange}
+                      options={this.state.bases}
                     />
                     <div className="text-danger">{this.state.errors.base}</div>
                   </div>
@@ -225,5 +253,4 @@ class OfficerAdd extends Component {
     );
   }
 }
-
 export default OfficerAdd;

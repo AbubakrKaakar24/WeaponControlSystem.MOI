@@ -1,0 +1,77 @@
+{
+    
+      "deputies": [
+        {
+          "name": "Deputy of Ministry 1",
+          "directorates": [
+            {
+              "name": "Directorate 1",
+              "administrations": [
+                { "name": "Administration 1" },
+                { "name": "Administration 2" },
+                { "name": "Administration 3" }
+              ]
+            },
+            {
+              "name": "Directorate 2",
+              "administrations": [
+                { "name": "Administration 1" },
+                { "name": "Administration 2" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Deputy of Ministry 2",
+          "directorates": [
+            {
+              "name": "Directorate 1",
+              "administrations": [
+                { "name": "Administration 1" },
+                { "name": "Administration 2" }
+              ]
+            },
+            {
+              "name": "Directorate 2",
+              "administrations": [
+                { "name": "Administration 1" },
+                { "name": "Administration 2" },
+                { "name": "Administration 3" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Deputy of Ministry 3",
+          "directorates": [
+            {
+              "name": "Directorate 1",
+              "administrations": [
+                { "name": "Administration 1" },
+                { "name": "Administration 2" }
+              ]
+            },
+            {
+              "name": "Directorate 2",
+              "administrations": [
+                { "name": "Administration 1" }
+              ]
+            }
+          ]
+        }
+      ],
+      
+      "gates":[
+        "By Vehicle",
+        "By Foot"
+      ],
+      "Bases":[
+       "Base 1",
+        "Base 2",
+        "Base 3",
+        "Base 4",
+        "Base 5"
+      ]
+    
+  }
+  

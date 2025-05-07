@@ -21,9 +21,11 @@ const CustomDropdown = (props) => {
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
-        <Dropdown.Item eventKey="Taminat">Action</Dropdown.Item>
-        <Dropdown.Item eventKey="Production">Another action</Dropdown.Item>
-        <Dropdown.Item eventKey="Something else here">Something else here</Dropdown.Item>
+      {Array.isArray(props.options) && props.options.map((item, index) => (
+      <Dropdown.Item key={index} eventKey={item}>
+     {item}
+      </Dropdown.Item>
+           ))}
       </Dropdown.Menu>
     </Dropdown>
   );

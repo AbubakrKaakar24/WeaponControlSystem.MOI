@@ -145,7 +145,18 @@ class RegisterUser extends Component {
     
         this.setState({ errors, [name]: value });
       };
-      
+      handlealert = () => {
+        Swal.fire({
+          icon: "success",
+          title: "Your work has been saved",
+          showConfirmButton: false,
+          timer: 1500,
+          timerProgressBar: true,
+          iconColor: "#198754",
+          toast: true,
+
+        });
+      }
     render() { 
         return (<div className="bg-light min-vh-100">
             <Navbar />
@@ -229,6 +240,8 @@ class RegisterUser extends Component {
                         />
                         <div className="text-danger">{this.state.errors.gate}</div>
                       </div>
+                      <button onClick={this.handlealert} className='btn btn-primary'>Click Alert</button>
+                      
                     </div>
                     <div className='row mb-3'>
                     <div className="col-md-3">
