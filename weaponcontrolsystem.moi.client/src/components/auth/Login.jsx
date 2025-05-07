@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Navigate } from "react-router-dom";
+
 class Login extends Component {
   state = {
     email: "",
@@ -10,42 +11,56 @@ class Login extends Component {
     },
     redirect: false,
   };
-handleBlur = (e) => {
+
+  handleBlur = (e) => {
     const { name, value } = e.target;
     let errors = this.state.errors;
-  
+
     switch (name) {
       case "email":
-        errors.email = value.length < 1 ? "Email is required" : !/\S+@\S+\.\S+/.test(value) ? "Email is invalid" : "";
+        errors.email =
+          value.length < 1
+            ? "Email is required"
+            : !/\S+@\S+\.\S+/.test(value)
+            ? "Email is invalid"
+            : "";
         break;
       case "password":
-        errors.password = value.length < 1 ?"Password is required":value.length<6? "Password must be at least 6 characters" : "";
+        errors.password =
+          value.length < 1
+            ? "Password is required"
+            : value.length < 6
+            ? "Password must be at least 6 characters"
+            : "";
         break;
       default:
         break;
     }
-  
+
     this.setState({ errors, [name]: value });
   };
+
   handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = this.state;
     const errors = {};
-  
+
+    // Manual validation for email and password
     if (!email) errors.email = "Email is required";
     else if (!/\S+@\S+\.\S+/.test(email)) errors.email = "Email is invalid";
-  
+
     if (!password) errors.password = "Password is required";
     else if (password.length < 6) errors.password = "Password must be at least 6 characters";
-   
+
+    // If errors exist, set them in state
     if (Object.keys(errors).length > 0) {
       this.setState({ errors });
     } else {
+      // Clear form and set redirect flag to true
       this.setState({ email: "", password: "", errors: {}, redirect: true });
-      this.props.history.push("/home"); // Redirect to home page
     }
   };
-  
+
   handleInputChange = (e) => {
     const { name, value } = e.target;
     this.setState({
@@ -54,9 +69,11 @@ handleBlur = (e) => {
   };
 
   render() {
+    // If redirect is true, navigate to /home
     if (this.state.redirect) {
       return <Navigate to="/home" />;
     }
+
     return (
       <div
         style={{ backgroundImage: "url('/moi.jpg')", backgroundSize: "cover" }}
@@ -95,7 +112,6 @@ handleBlur = (e) => {
               <button className="btn btn-primary w-100" type="submit">
                 Login
               </button>
-              
             </form>
           </div>
         </div>
