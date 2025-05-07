@@ -14,6 +14,7 @@ namespace WeaponControlSystem.MOI.Core.DTOs.weapon
         public DateTime InDate { get; set; }
         public DateTime? OutDate { get; set; }
         public string OfficerBadgeNo { get; set; } // FK to Officer's BadgeNo
+        public string CardNo { get; set; }
 
     }
     public static class WeaponExtensions
@@ -27,7 +28,9 @@ namespace WeaponControlSystem.MOI.Core.DTOs.weapon
                 Type = weapon.Type,
                 InDate = weapon.InDate,
                 OutDate = weapon.OutDate,
-                OfficerBadgeNo = weapon.OfficerBadgeNo
+                OfficerBadgeNo = weapon.OfficerBadgeNo,
+                CardNo = weapon.CardNo
+
             };
         }
     }

@@ -31,7 +31,11 @@ namespace WeaponControlSystem.MOI.Infrastructure.dbContext
     .HasForeignKey(w => w.OfficerBadgeNo)
     .HasPrincipalKey(o => o.BadgeNo); // Important: tells EF to match FK to BadgeNo
 
-
+            modelBuilder.Entity<WeaponHandover>()
+    .HasOne(wh => wh.Officer)
+    .WithMany(o => o.WeaponHandovers)
+    .HasForeignKey(wh => wh.OfficerBadgeNo)
+    .HasPrincipalKey(o => o.BadgeNo);
         }
     }
 }

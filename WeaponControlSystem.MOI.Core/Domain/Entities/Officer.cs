@@ -17,6 +17,7 @@ namespace WeaponControlSystem.MOI.Core.Domain.Entities
         public string BadgeNo { get; set; }
 
         public ICollection<Weapon> Weapons { get; set; }
+        public ICollection<WeaponHandover> WeaponHandovers { get; set; }
 
     }
 

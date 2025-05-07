@@ -1,16 +1,233 @@
 import React, { Component } from 'react';
 import Navbar from './Navbar';
-import Dropdown from './DropDown'; // Your dropdown component
+import Swal from 'sweetalert2';
+import { Modal, Button } from 'react-bootstrap';
 class WeaponAdd extends Component {
-    state = {  } 
-    render() { 
-        return (
-            <p>
-                <Navbar />
-                
-            </p>
-        );
+  state = {
+    name: '',
+    type: '',
+    inDate: '',
+    outDate: '',
+    officerBadgeNo: '',
+    cardNo: '',
+    errors: {
+      name: '',
+      type: '',
+      inDate: '',
+      officerBadgeNo: '',
+      cardNo: '',
+    },
+  };
+
+  handleInputChange = (e) => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
+
+  handleSubmit = async (e) => {
+    e.preventDefault();
+    const { name, type, inDate, outDate, officerBadgeNo, cardNo } = this.state;
+    const errors = {};
+
+    if (!name) errors.name = 'Name is required';
+    if (!type) errors.type = 'Type is required';
+    if (!inDate) errors.inDate = 'In date is required';
+    if (!officerBadgeNo) errors.officerBadgeNo = 'Officer badge is required';
+    if (!cardNo) errors.cardNo = 'Card Number is required';
+
+    if (Object.keys(errors).length > 0) {
+      this.setState({ errors });
+      return;
     }
+
+    try {
+      const weaponData = {
+        Name: name,
+        Type: type,
+        InDate: inDate,
+        OutDate: outDate || null, // explicitly allow null
+        OfficerBadgeNo: officerBadgeNo,
+        CardNo: cardNo,
+      };
+
+      const response = await fetch('https://localhost:7211/api/weapon', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(weaponData),
+      });
+    if (response.ok) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Weapon Added',
+            text: 'The weapon has been added successfully!',
+            timer: 3000,
+        });
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'There was an error adding the weapon.',
+            timer: 3000,
+        });
+    }
+      this.setState({
+        name: '',
+        type: '',
+        inDate: '',
+        outDate: '',
+        officerBadgeNo: '',
+        cardNo: '',
+        errors: {
+          name: '',
+          type: '',
+          inDate: '',
+          officerBadgeNo: '',
+          cardNo: '',
+        },
+      });
+    } catch (error) {
+      console.log('Errors:', error);
+    }
+  };
+
+  handleBlur = (e) => {
+    const { name, value } = e.target;
+    let errors = { ...this.state.errors };
+
+    switch (name) {
+      case 'name':
+        errors.name = value.trim() === '' ? 'Name is required' : '';
+        break;
+      case 'type':
+        errors.type = value.trim() === '' ? 'Type is required' : '';
+        break;
+      case 'inDate':
+        errors.inDate = value.trim() === '' ? 'In date is required' : '';
+        break;
+      case 'officerBadgeNo':
+        errors.officerBadgeNo = value.trim() === '' ? 'Officer badge is required' : '';
+        break;
+      case 'cardNo':
+        errors.cardNo = value.trim() === '' ? 'Card Number is required' : '';
+        break;
+      default:
+        break;
+    }
+
+    this.setState({ errors, [name]: value });
+  };
+  render() {
+    const { name, type, inDate, outDate, officerBadgeNo, errors, cardNo } = this.state;
+
+    return (
+      <div className="bg-light min-vh-100">
+        <Navbar />
+
+        <div className="container py-5 mt-5">
+          <div className="card shadow-lg border-0">
+            <div className="card-body">
+              <h3 className="mb-4 fw-bold text-primary">Add New Weapon</h3>
+              <form noValidate onSubmit={this.handleSubmit}>
+                <div className="row mb-3">
+                  <div className="col-md-4">
+                    <label className="form-label fw-semibold">Name</label>
+                    <input
+                      type="text"
+                      name="name"
+                      className="form-control"
+                      placeholder="Name"
+                      value={name}
+                      onChange={this.handleInputChange}
+                      onBlur={this.handleBlur}
+                    />
+                    <div className="text-danger">{errors.name}</div>
+                  </div>
+
+                  <div className="col-md-4">
+                    <label className="form-label fw-semibold">Type</label>
+                    <input
+                      type="text"
+                      name="type"
+                      className="form-control"
+                      placeholder="Type"
+                      value={type}
+                      onChange={this.handleInputChange}
+                      onBlur={this.handleBlur}
+                    />
+                    <div className="text-danger">{errors.type}</div>
+                  </div>
+
+                  <div className="col-md-4">
+                    <label className="form-label fw-semibold">In Date</label>
+                    <input
+                      type="date"
+                      name="inDate"
+                      className="form-control"
+                      value={inDate}
+                      onChange={this.handleInputChange}
+                      onBlur={this.handleBlur}
+                    />
+                    <div className="text-danger">{errors.inDate}</div>
+                  </div>
+                </div>
+
+                <div className="row mb-3">
+                  <div className="col-md-3">
+                    <label className="form-label fw-semibold">Out Date (optional)</label>
+                    <input
+                      type="date"
+                      name="outDate"
+                      className="form-control"
+                      value={outDate}
+                      onChange={this.handleInputChange}
+                    />
+                  </div>
+
+                  <div className="col-md-3">
+                    <label className="form-label fw-semibold">Officer Badge No</label>
+                    <input
+                      type="text"
+                      name="officerBadgeNo"
+                      className="form-control"
+                      value={officerBadgeNo}
+                      placeholder="Officer Badge No"
+                      onChange={this.handleInputChange}
+                      onBlur={this.handleBlur}
+                    />
+                    <div className="text-danger">{errors.officerBadgeNo}</div>
+                  </div>
+                  <div className="col-md-3">
+                    <label className="form-label fw-semibold">Card No</label>
+                    <input
+                      type="text"
+                      name="cardNo"
+                      className="form-control"
+                      value={cardNo}
+                      placeholder="Card No"
+                      onChange={this.handleInputChange}
+                      onBlur={this.handleBlur}
+                    />
+                    <div className="text-danger">{errors.cardNo}</div>
+                  </div>
+                </div>
+
+                <div className="text-end">
+                  <button
+                    className="btn btn-primary px-4 py-2 fw-semibold shadow-sm"
+                    type="submit"
+                  >
+                    Add
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
- 
+
 export default WeaponAdd;

@@ -15,6 +15,7 @@ namespace WeaponControlSystem.MOI.Core.Domain.Entities
         public DateTime? OutDate { get; set; }
         public string OfficerBadgeNo { get; set; } // FK to Officer's BadgeNo
 
+        public string CardNo { get; set; } // Card number of the weapon
         // Navigation property
         public Officer Officer { get; set; }
     }

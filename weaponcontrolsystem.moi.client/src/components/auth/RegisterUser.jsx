@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Navbar from '../Navbar';
 import Dropdown from '../DropDown';
+import Swal from 'sweetalert2';
 class RegisterUser extends Component {
     state = {
         firstName: '',
@@ -84,14 +85,20 @@ class RegisterUser extends Component {
               body: JSON.stringify(userData),
             });
       
-            if (response.ok) {
-              const result = await response.json();
-              console.log('User added:', result);
-              alert('User added');
-              // You can show a success message or redirect to another page
+        if (response.ok) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'User Added',
+                    text: 'The User has been added successfully!',
+                    timer: 3000,
+                });
             } else {
-              console.error('Error adding User');
-              alert('Error while adding the user');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'There was an error adding the user.',
+                    timer: 3000,
+                });
             }
           } catch (error) {
            console.log('Errors:',error);
@@ -138,10 +145,11 @@ class RegisterUser extends Component {
     
         this.setState({ errors, [name]: value });
       };
+      
     render() { 
         return (<div className="bg-light min-vh-100">
             <Navbar />
-    
+         
             <div className="container py-5 mt-5">
               <div className="card shadow-lg border-0">
                 <div className="card-body">
@@ -221,8 +229,6 @@ class RegisterUser extends Component {
                         />
                         <div className="text-danger">{this.state.errors.gate}</div>
                       </div>
-
-                      
                     </div>
                     <div className='row mb-3'>
                     <div className="col-md-3">

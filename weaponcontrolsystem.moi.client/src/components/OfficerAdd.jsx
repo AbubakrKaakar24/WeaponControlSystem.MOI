@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Navbar from './Navbar';
 import Dropdown from './DropDown'; // Your dropdown component
-
+import Swal from 'sweetalert2';
 class OfficerAdd extends Component {
   state = {
     firstName: '',
@@ -69,14 +69,20 @@ class OfficerAdd extends Component {
         });
   
         if (response.ok) {
-          const result = await response.json();
-          console.log('Officer added:', result);
-          alert('officer added');
-          // You can show a success message or redirect to another page
-        } else {
-          console.error('Error adding officer');
-          alert('Error while adding the Officer');
-        }
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Officer Added',
+                    text: 'The officer has been added successfully!',
+                    timer: 3000,
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'There was an error adding the officer.',
+                    timer: 3000,
+                });
+            }
       } catch (error) {
        console.log('Errors:',error);
       }
