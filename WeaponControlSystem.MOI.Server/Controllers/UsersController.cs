@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WeaponControlSystem.MOI.Core.Domain.Entities;
+using WeaponControlSystem.MOI.Core.DTOs.loginInfo;
 using WeaponControlSystem.MOI.Core.DTOs.user;
 using WeaponControlSystem.MOI.Core.ServiceContracts;
 using WeaponControlSystem.MOI.Infrastructure.dbContext;
@@ -30,16 +31,27 @@ namespace WeaponControlSystem.MOI.Server.Controllers
             return await _userService.GetUserList();
         }
 
-        // GET: api/Users/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<UserResponseDTo>> GetUser(int id)
-        {
-            
 
-            return await _userService.GetUserById(id);
+        [HttpPost("login")]
+        public async Task<ActionResult> Login(LoginInfo info)
+        {
+            if (info == null)
+            {
+                Console.WriteLine("LoginInfo is null. Check request body format.");
+                return BadRequest("Invalid login request.");
+            }
+            var user = await _userService.Auth(info);
+            if (user)
+            {
+                return Ok();
+            }
+            else
+            {
+                return Unauthorized();
+            }
+
         }
 
-        
 
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -58,6 +70,14 @@ namespace WeaponControlSystem.MOI.Server.Controllers
             await _userService.DeleteUser(id);
 
             return NoContent();
+        }
+        // GET: api/Users/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UserResponseDTo>> GetUser(int id)
+        {
+            
+
+            return await _userService.GetUserById(id);
         }
     }
 }

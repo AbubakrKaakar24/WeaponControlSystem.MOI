@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Navigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 class Login extends Component {
   state = {
@@ -58,10 +59,45 @@ class Login extends Component {
       this.setState({ errors });
     } else {
       // Clear form and set redirect flag to true
-      this.setState({ email: "", password: "", errors: {}, redirect: true });
+      const { email, password } = this.state;
+      const LoginInfo = {
+        Email: email,
+        Pass: password,
+      };
+      try {
+        const response = await fetch("https://localhost:7211/api/users/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(LoginInfo),
+        });
+        if (response.ok) {
+          this.setState({
+            email: "",
+            password: "",
+            errors: {},
+            redirect: true,
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Login Failed",
+            text: "Invalid email or password",
+            timer: 3000,
+          });
+        }
+      } catch (error) {
+        console.error("Error during login:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Login Failed",
+          text: error.message,
+          timer: 3000,
+        });
+      }
     }
   };
-
   handleInputChange = (e) => {
     const { name, value } = e.target;
     this.setState({

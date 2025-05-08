@@ -1,6 +1,7 @@
 ﻿
 using WeaponControlSystem.MOI.Core.Domain.Entities;
 using WeaponControlSystem.MOI.Core.Domain.RepositoryContracts.Base;
+using WeaponControlSystem.MOI.Core.DTOs.loginInfo;
 using WeaponControlSystem.MOI.Core.DTOs.user;
 using WeaponControlSystem.MOI.Core.ServiceContracts;
 //using Microsoft.AspNetCore.Identity;
@@ -46,6 +47,19 @@ namespace WeaponControlSystem.MOI.Core.Services
         {
             var users=await _unitOfWork.User.GetAll();
             return users.Select(x => x.ToUserResponseDTo());
+        }
+
+        public async Task<bool> Auth(LoginInfo info)
+        {
+            var user= await _unitOfWork.User.GetFirstOrDefault( x=>x.Email==info.Email&& x.Password == info.Pass);
+            if (user != null)
+            {   
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

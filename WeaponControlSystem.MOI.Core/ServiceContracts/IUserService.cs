@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WeaponControlSystem.MOI.Core.DTOs.loginInfo;
 using WeaponControlSystem.MOI.Core.DTOs.user;
 namespace WeaponControlSystem.MOI.Core.ServiceContracts
 {
@@ -14,6 +15,7 @@ namespace WeaponControlSystem.MOI.Core.ServiceContracts
         public Task<IEnumerable<UserResponseDTo>> GetUserList();
 
         public Task<UserResponseDTo> DeleteUser(int? UserId);
+        public Task<bool> Auth(LoginInfo info);
 
     }
 }
