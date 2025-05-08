@@ -145,6 +145,16 @@ class OfficerAdd extends Component {
             text: "The officer has been added successfully!",
             timer: 3000,
           });
+          this.setState({
+            firstName: "",
+            lastName: "",
+            badgeNo: "",
+            deputyMinistry: "",
+            directorate: "",
+            administration: "",
+            base: "",
+            errors: {},
+          });
         } else {
           Swal.fire({
             icon: "error",
@@ -155,18 +165,14 @@ class OfficerAdd extends Component {
         }
       } catch (error) {
         console.log("Errors:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: error.message,
+          timer: 3000,
+        });
       }
       // Reset form
-      this.setState({
-        firstName: "",
-        lastName: "",
-        badgeNo: "",
-        deputyMinistry: "",
-        directorate: "",
-        administration: "",
-        base: "",
-        errors: {},
-      });
     }
   };
 

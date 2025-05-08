@@ -37,7 +37,7 @@ class WeaponAdd extends Component {
   }
 
   handleDropdownChange = (name, value) => {
-    if (name === "Type") {
+    if (name === "type") {
       const selectedType = weaponData.weaponTypes.find(
         (weapon) => weapon.type === value
       );
@@ -98,6 +98,21 @@ class WeaponAdd extends Component {
           text: "The weapon has been added successfully!",
           timer: 3000,
         });
+        this.setState({
+          name: "",
+          type: "",
+          inDate: "",
+          outDate: "",
+          officerBadgeNo: "",
+          cardNo: "",
+          errors: {
+            name: "",
+            type: "",
+            inDate: "",
+            officerBadgeNo: "",
+            cardNo: "",
+          },
+        });
       } else {
         Swal.fire({
           icon: "error",
@@ -106,23 +121,14 @@ class WeaponAdd extends Component {
           timer: 3000,
         });
       }
-      this.setState({
-        name: "",
-        type: "",
-        inDate: "",
-        outDate: "",
-        officerBadgeNo: "",
-        cardNo: "",
-        errors: {
-          name: "",
-          type: "",
-          inDate: "",
-          officerBadgeNo: "",
-          cardNo: "",
-        },
-      });
     } catch (error) {
       console.log("Errors:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error.message,
+        timer: 3000,
+      });
     }
   };
 
