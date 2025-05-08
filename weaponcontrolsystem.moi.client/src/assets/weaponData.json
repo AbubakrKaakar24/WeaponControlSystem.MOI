@@ -1,0 +1,40 @@
+{
+  "weaponTypes": [
+    {
+      "type": "Handgun",
+      "weapons": ["Glock 17", "Beretta 92", "Smith & Wesson M&P", "Colt 1911"]
+    },
+    {
+      "type": "Revolver",
+      "weapons": [
+        "Colt Python",
+        "Smith & Wesson Model 29",
+        "Ruger Super Redhawk"
+      ]
+    },
+    {
+      "type": "Submachine Gun",
+      "weapons": ["Uzi", "MP5", "Thompson M1A1"]
+    },
+    {
+      "type": "Assault Rifle",
+      "weapons": ["AK-47", "M16", "M4A1", "FN SCAR"]
+    },
+    {
+      "type": "Sniper Rifle",
+      "weapons": ["Barrett M82", "Dragunov SVD", "M24", "Remington 700"]
+    },
+    {
+      "type": "Shotgun",
+      "weapons": ["Remington 870", "Mossberg 500", "Benelli M4"]
+    },
+    {
+      "type": "Machine Gun",
+      "weapons": ["M249 SAW", "M240B", "MG3"]
+    },
+    {
+      "type": "Melee Weapon",
+      "weapons": ["Combat Knife", "Machete", "Bayonet"]
+    }
+  ]
+}

@@ -1,22 +1,56 @@
-import React, { Component } from 'react';
-import Navbar from './Navbar';
-import Swal from 'sweetalert2';
-import { Modal, Button } from 'react-bootstrap';
+import React, { Component } from "react";
+import Navbar from "./Navbar";
+import Swal from "sweetalert2";
+import { Modal, Button } from "react-bootstrap";
+import weaponData from "../assets/weaponData.json";
+import Dropdown from "./DropDown";
 class WeaponAdd extends Component {
   state = {
-    name: '',
-    type: '',
-    inDate: '',
-    outDate: '',
-    officerBadgeNo: '',
-    cardNo: '',
+    name: "",
+    type: "",
+    names: [],
+    types: [],
+    inDate: "",
+    outDate: "",
+    officerBadgeNo: "",
+    cardNo: "",
     errors: {
-      name: '',
-      type: '',
-      inDate: '',
-      officerBadgeNo: '',
-      cardNo: '',
+      name: "",
+      type: "",
+      inDate: "",
+      officerBadgeNo: "",
+      cardNo: "",
     },
+  };
+
+  componentDidMount() {
+    // Access the weaponTypes array from the weaponData object
+    const names = weaponData.weaponTypes
+      .map((weaponType) => weaponType.weapons)
+      .flat();
+    const types = weaponData.weaponTypes.map((weaponType) => weaponType.type);
+
+    this.setState({
+      names,
+      types,
+    });
+  }
+
+  handleDropdownChange = (name, value) => {
+    if (name === "Type") {
+      const selectedType = weaponData.weaponTypes.find(
+        (weapon) => weapon.type === value
+      );
+      // Check if selectedType is found, then use its weapons array, otherwise fallback to previous state
+      const names = selectedType ? selectedType.weapons : [];
+
+      this.setState({
+        type: value,
+        names: names,
+      });
+    } else if (name === "name") {
+      this.setState({ name: value });
+    }
   };
 
   handleInputChange = (e) => {
@@ -29,11 +63,11 @@ class WeaponAdd extends Component {
     const { name, type, inDate, outDate, officerBadgeNo, cardNo } = this.state;
     const errors = {};
 
-    if (!name) errors.name = 'Name is required';
-    if (!type) errors.type = 'Type is required';
-    if (!inDate) errors.inDate = 'In date is required';
-    if (!officerBadgeNo) errors.officerBadgeNo = 'Officer badge is required';
-    if (!cardNo) errors.cardNo = 'Card Number is required';
+    if (!name) errors.name = "Name is required";
+    if (!type) errors.type = "Type is required";
+    if (!inDate) errors.inDate = "In date is required";
+    if (!officerBadgeNo) errors.officerBadgeNo = "Officer badge is required";
+    if (!cardNo) errors.cardNo = "Card Number is required";
 
     if (Object.keys(errors).length > 0) {
       this.setState({ errors });
@@ -50,45 +84,45 @@ class WeaponAdd extends Component {
         CardNo: cardNo,
       };
 
-      const response = await fetch('https://localhost:7211/api/weapon', {
-        method: 'POST',
+      const response = await fetch("https://localhost:7211/api/weapon", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(weaponData),
       });
-    if (response.ok) {
+      if (response.ok) {
         Swal.fire({
-            icon: 'success',
-            title: 'Weapon Added',
-            text: 'The weapon has been added successfully!',
-            timer: 3000,
+          icon: "success",
+          title: "Weapon Added",
+          text: "The weapon has been added successfully!",
+          timer: 3000,
         });
-    } else {
+      } else {
         Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'There was an error adding the weapon.',
-            timer: 3000,
+          icon: "error",
+          title: "Error",
+          text: "There was an error adding the weapon.",
+          timer: 3000,
         });
-    }
+      }
       this.setState({
-        name: '',
-        type: '',
-        inDate: '',
-        outDate: '',
-        officerBadgeNo: '',
-        cardNo: '',
+        name: "",
+        type: "",
+        inDate: "",
+        outDate: "",
+        officerBadgeNo: "",
+        cardNo: "",
         errors: {
-          name: '',
-          type: '',
-          inDate: '',
-          officerBadgeNo: '',
-          cardNo: '',
+          name: "",
+          type: "",
+          inDate: "",
+          officerBadgeNo: "",
+          cardNo: "",
         },
       });
     } catch (error) {
-      console.log('Errors:', error);
+      console.log("Errors:", error);
     }
   };
 
@@ -97,20 +131,21 @@ class WeaponAdd extends Component {
     let errors = { ...this.state.errors };
 
     switch (name) {
-      case 'name':
-        errors.name = value.trim() === '' ? 'Name is required' : '';
+      case "name":
+        errors.name = value.trim() === "" ? "Name is required" : "";
         break;
-      case 'type':
-        errors.type = value.trim() === '' ? 'Type is required' : '';
+      case "type":
+        errors.type = value.trim() === "" ? "Type is required" : "";
         break;
-      case 'inDate':
-        errors.inDate = value.trim() === '' ? 'In date is required' : '';
+      case "inDate":
+        errors.inDate = value.trim() === "" ? "In date is required" : "";
         break;
-      case 'officerBadgeNo':
-        errors.officerBadgeNo = value.trim() === '' ? 'Officer badge is required' : '';
+      case "officerBadgeNo":
+        errors.officerBadgeNo =
+          value.trim() === "" ? "Officer badge is required" : "";
         break;
-      case 'cardNo':
-        errors.cardNo = value.trim() === '' ? 'Card Number is required' : '';
+      case "cardNo":
+        errors.cardNo = value.trim() === "" ? "Card Number is required" : "";
         break;
       default:
         break;
@@ -119,7 +154,8 @@ class WeaponAdd extends Component {
     this.setState({ errors, [name]: value });
   };
   render() {
-    const { name, type, inDate, outDate, officerBadgeNo, errors, cardNo } = this.state;
+    const { name, type, inDate, outDate, officerBadgeNo, errors, cardNo } =
+      this.state;
 
     return (
       <div className="bg-light min-vh-100">
@@ -132,31 +168,27 @@ class WeaponAdd extends Component {
               <form noValidate onSubmit={this.handleSubmit}>
                 <div className="row mb-3">
                   <div className="col-md-4">
-                    <label className="form-label fw-semibold">Name</label>
-                    <input
-                      type="text"
-                      name="name"
-                      className="form-control"
-                      placeholder="Name"
-                      value={name}
-                      onChange={this.handleInputChange}
-                      onBlur={this.handleBlur}
+                    <label className="form-label fw-semibold">Type</label>
+                    <Dropdown
+                      name="type"
+                      options={this.state.types}
+                      value={type}
+                      onChange={this.handleDropdownChange}
                     />
-                    <div className="text-danger">{errors.name}</div>
+
+                    <div className="text-danger">{errors.type}</div>
                   </div>
 
                   <div className="col-md-4">
-                    <label className="form-label fw-semibold">Type</label>
-                    <input
-                      type="text"
-                      name="type"
-                      className="form-control"
-                      placeholder="Type"
-                      value={type}
-                      onChange={this.handleInputChange}
-                      onBlur={this.handleBlur}
+                    <label className="form-label fw-semibold">Name</label>
+                    <Dropdown
+                      name="name"
+                      options={this.state.names}
+                      value={name}
+                      onChange={this.handleDropdownChange}
                     />
-                    <div className="text-danger">{errors.type}</div>
+
+                    <div className="text-danger">{errors.name}</div>
                   </div>
 
                   <div className="col-md-4">
@@ -175,7 +207,9 @@ class WeaponAdd extends Component {
 
                 <div className="row mb-3">
                   <div className="col-md-3">
-                    <label className="form-label fw-semibold">Out Date (optional)</label>
+                    <label className="form-label fw-semibold">
+                      Out Date (optional)
+                    </label>
                     <input
                       type="date"
                       name="outDate"
@@ -186,7 +220,9 @@ class WeaponAdd extends Component {
                   </div>
 
                   <div className="col-md-3">
-                    <label className="form-label fw-semibold">Officer Badge No</label>
+                    <label className="form-label fw-semibold">
+                      Officer Badge No
+                    </label>
                     <input
                       type="text"
                       name="officerBadgeNo"

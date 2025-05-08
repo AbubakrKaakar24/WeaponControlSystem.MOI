@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import Dropdown from 'react-bootstrap/Dropdown';
+import React, { useState } from "react";
+import Dropdown from "react-bootstrap/Dropdown";
 
 const CustomDropdown = (props) => {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -7,7 +7,7 @@ const CustomDropdown = (props) => {
   const handleSelect = (eventKey) => {
     setSelectedItem(eventKey);
     if (props.onChange) {
-      props.onChange(props.name,eventKey); // Call the OnChange function with the selected item
+      props.onChange(props.name, eventKey); // Call the OnChange function with the selected item
     }
   };
 
@@ -15,17 +15,18 @@ const CustomDropdown = (props) => {
     <Dropdown onSelect={handleSelect}>
       <Dropdown.Toggle
         variant="light"
-        style={{ backgroundColor: 'white', color: 'black' }}
+        style={{ backgroundColor: "white", color: "black" }}
       >
         {selectedItem || props.Name}
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
-      {Array.isArray(props.options) && props.options.map((item, index) => (
-      <Dropdown.Item key={index} eventKey={item}>
-     {item}
-      </Dropdown.Item>
-           ))}
+        {props.options &&
+          props.options.map((item, index) => (
+            <Dropdown.Item key={index} eventKey={item}>
+              {item}
+            </Dropdown.Item>
+          ))}
       </Dropdown.Menu>
     </Dropdown>
   );

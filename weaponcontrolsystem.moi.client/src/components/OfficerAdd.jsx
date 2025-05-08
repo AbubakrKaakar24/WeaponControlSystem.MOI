@@ -1,38 +1,52 @@
-import React, { Component } from 'react';
-import Navbar from './Navbar';
-import Dropdown from './DropDown'; // Your dropdown component
-import Swal from 'sweetalert2';
-import ministryData from '../assets/ministryData.json';
+import React, { Component } from "react";
+import Navbar from "./Navbar";
+import Dropdown from "./DropDown"; // Your dropdown component
+import Swal from "sweetalert2";
+import ministryData from "../assets/ministryData.json";
 class OfficerAdd extends Component {
   state = {
-    firstName: '',
-    lastName: '',
-    badgeNo: '',
-    deputyMinistry: '',
-    directorate: '',
-    administration: '',
-    base: '',
-    deputies:{},
-    directorates:{},
-    administrations:{},
-    bases:{},
+    firstName: "",
+    lastName: "",
+    badgeNo: "",
+    deputyMinistry: "",
+    directorate: "",
+    administration: "",
+    base: "",
+    deputies: [],
+    directorates: [],
+    administrations: [],
+    bases: [],
 
     errors: {
-      firstName: '',
-      lastName: '',
-      badgeNo: '',
-      deputyMinistry: '',
-      directorate: '',
-      administration: '',
-      base: '',
+      firstName: "",
+      lastName: "",
+      badgeNo: "",
+      deputyMinistry: "",
+      directorate: "",
+      administration: "",
+      base: "",
     },
   };
- componentDidMount() {
-       this.setState({
-        deputies: ministryData.deputies,
-        bases: ministryData.bases,});
-
- }
+  componentDidMount() {
+    var listofDeputies = ministryData.deputies.map((deputy) => deputy.name);
+    var listofDirectorates = ministryData.deputies
+      .map((deputy) => deputy.directorates.map((dir) => dir.name))
+      .flat();
+    var listofAdministrations = ministryData.deputies
+      .map((deputy) =>
+        deputy.directorates.map((dir) =>
+          dir.administrations.map((admin) => admin.name)
+        )
+      )
+      .flat()
+      .flat();
+    this.setState({
+      deputies: listofDeputies,
+      directorates: listofDirectorates,
+      administrations: listofAdministrations,
+      bases: ministryData.Bases,
+    });
+  }
   handleInputChange = (e) => {
     const { name, value } = e.target;
     this.setState({
@@ -40,37 +54,68 @@ class OfficerAdd extends Component {
     });
   };
 
-  handleDropdownChange = (name, value) => {
-    const { deputyMinistry, directorate, administration, base } = this.state;
-    const selectedMinistry = ministryData.find((ministry) => ministry.Name === value);
-    const selectedDeputyMinistry = selectedMinistry ? selectedMinistry.Deputies : [];
-    const selectedDirectorate = selectedDeputyMinistry.find((deputy) => deputy.Name === value);
-      if (name==="deputies") {
-        this.setState({ deputyMinistry: value, directorate: '', administration: '', base: '' });
-      } else if (name==="directorates") {
-        this.setState({ directorate: value, administration: '', base: '' });
-      } else if (name==="administrations") {
-        this.setState({ administration: value, base: '' });
-      } 
-      else if (name==="bases") {
-        this.setState({ base: value });
+  // handleDropdownChange = (name, value) => {
+  //     if (name==="deputies") {
+  //       this.setState({ deputyMinistry: value, directorate: '', administration: '', base: '' });
+  //     } else if (name==="directorates") {
+  //       this.setState({ directorate: value, administration: '', base: '' });
+  //     } else if (name==="administrations") {
+  //       this.setState({ administration: value, base: '' });
+  //     }
+  //     else if (name==="bases") {
+  //       this.setState({ base: value });
 
-    // this.setState({
-    //   [name]: value,
-    // });
-  }};
+  // }};
+
+  handleDropdownChange = (name, value) => {
+    if (name === "deputyMinistry") {
+      const selectedDeputy = ministryData.deputies.find(
+        (deputy) => deputy.name === value
+      );
+      const directorates = selectedDeputy
+        ? selectedDeputy.directorates.map((dir) => dir.name)
+        : this.state.directorates;
+      this.setState({
+        deputyMinistry: value,
+        directorates,
+      });
+    } else if (name === "directorate") {
+      const selectedDirectorate = ministryData.deputies
+        .find((deputy) => deputy.name === this.state.deputyMinistry)
+        .directorates.find((dir) => dir.name === value);
+      const administrations = selectedDirectorate
+        ? selectedDirectorate.administrations.map((admin) => admin.name)
+        : this.state.administrations;
+      this.setState({
+        directorate: value,
+        administrations,
+      });
+    } else if (name === "administration") {
+      this.setState({ administration: value });
+    } else if (name === "base") {
+      this.setState({ base: value });
+    }
+  };
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    const { firstName, lastName, badgeNo, deputyMinistry, directorate, administration, base } = this.state;
+    const {
+      firstName,
+      lastName,
+      badgeNo,
+      deputyMinistry,
+      directorate,
+      administration,
+      base,
+    } = this.state;
     const errors = {};
-    if (!firstName) errors.firstName = 'First name is required';
-    if (!lastName) errors.lastName = 'Last name is required';
-    if (!badgeNo) errors.badgeNo = 'Badge number is required';
-    if (!deputyMinistry) errors.deputyMinistry = 'Deputy ministry is required';
-    if (!directorate) errors.directorate = 'Directorate is required';
-    if (!administration) errors.administration = 'Administration is required';
-    if (!base) errors.base = 'Base is required';
+    if (!firstName) errors.firstName = "First name is required";
+    if (!lastName) errors.lastName = "Last name is required";
+    if (!badgeNo) errors.badgeNo = "Badge number is required";
+    if (!deputyMinistry) errors.deputyMinistry = "Deputy ministry is required";
+    if (!directorate) errors.directorate = "Directorate is required";
+    if (!administration) errors.administration = "Administration is required";
+    if (!base) errors.base = "Base is required";
 
     if (Object.keys(errors).length > 0) {
       this.setState({ errors });
@@ -84,42 +129,42 @@ class OfficerAdd extends Component {
           Administration: administration,
           BadgeNo: badgeNo,
         };
-        
-        const response = await fetch('https://localhost:7211/api/officer', {
-          method: 'POST',
+
+        const response = await fetch("https://localhost:7211/api/officer", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(officerData),
         });
-  
+
         if (response.ok) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Officer Added',
-                    text: 'The officer has been added successfully!',
-                    timer: 3000,
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'There was an error adding the officer.',
-                    timer: 3000,
-                });
-            }
+          Swal.fire({
+            icon: "success",
+            title: "Officer Added",
+            text: "The officer has been added successfully!",
+            timer: 3000,
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "There was an error adding the officer.",
+            timer: 3000,
+          });
+        }
       } catch (error) {
-       console.log('Errors:',error);
+        console.log("Errors:", error);
       }
       // Reset form
       this.setState({
-        firstName: '',
-        lastName: '',
-        badgeNo: '',
-        deputyMinistry: '',
-        directorate: '',
-        administration: '',
-        base: '',
+        firstName: "",
+        lastName: "",
+        badgeNo: "",
+        deputyMinistry: "",
+        directorate: "",
+        administration: "",
+        base: "",
         errors: {},
       });
     }
@@ -130,14 +175,14 @@ class OfficerAdd extends Component {
     let errors = this.state.errors;
 
     switch (name) {
-      case 'firstName':
-        errors.firstName = value.length < 1 ? 'First name is required' : '';
+      case "firstName":
+        errors.firstName = value.length < 1 ? "First name is required" : "";
         break;
-      case 'lastName':
-        errors.lastName = value.length < 1 ? 'Last name is required' : '';
+      case "lastName":
+        errors.lastName = value.length < 1 ? "Last name is required" : "";
         break;
-      case 'badgeNo':
-        errors.badgeNo = value.length < 1 ? 'Badge number is required' : '';
+      case "badgeNo":
+        errors.badgeNo = value.length < 1 ? "Badge number is required" : "";
         break;
       default:
         break;
@@ -146,8 +191,7 @@ class OfficerAdd extends Component {
     this.setState({ errors, [name]: value });
   };
 
-  render() 
-  {
+  render() {
     return (
       <div className="bg-light min-vh-100">
         <Navbar />
@@ -169,7 +213,9 @@ class OfficerAdd extends Component {
                       onChange={this.handleInputChange}
                       onBlur={this.handleBlur}
                     />
-                    <div className="text-danger">{this.state.errors.firstName}</div>
+                    <div className="text-danger">
+                      {this.state.errors.firstName}
+                    </div>
                   </div>
                   <div className="col-md-4">
                     <label className="form-label fw-semibold">Last Name</label>
@@ -182,7 +228,9 @@ class OfficerAdd extends Component {
                       onChange={this.handleInputChange}
                       onBlur={this.handleBlur}
                     />
-                    <div className="text-danger">{this.state.errors.lastName}</div>
+                    <div className="text-danger">
+                      {this.state.errors.lastName}
+                    </div>
                   </div>
                   <div className="col-md-4">
                     <label className="form-label fw-semibold">Badge No</label>
@@ -195,38 +243,54 @@ class OfficerAdd extends Component {
                       onChange={this.handleInputChange}
                       onBlur={this.handleBlur}
                     />
-                    <div className="text-danger">{this.state.errors.badgeNo}</div>
+                    <div className="text-danger">
+                      {this.state.errors.badgeNo}
+                    </div>
                   </div>
                 </div>
 
                 <div className="row mb-3">
                   <div className="col-md-3">
-                    <label className="form-label fw-semibold">Deputy Ministry</label>
+                    <label className="form-label fw-semibold">
+                      Deputy Ministry
+                    </label>
                     <Dropdown
                       name="deputyMinistry"
                       value={this.state.deputyMinistry}
                       onChange={this.handleDropdownChange}
                       options={this.state.deputies}
                     />
-                    <div className="text-danger">{this.state.errors.deputyMinistry}</div>
+                    <div className="text-danger">
+                      {this.state.errors.deputyMinistry}
+                    </div>
                   </div>
                   <div className="col-md-3">
-                    <label className="form-label fw-semibold">Directorate</label>
+                    <label className="form-label fw-semibold">
+                      Directorate
+                    </label>
                     <Dropdown
                       name="directorate"
                       value={this.state.directorate}
                       onChange={this.handleDropdownChange}
+                      options={this.state.directorates}
                     />
-                    <div className="text-danger">{this.state.errors.directorate}</div>
+                    <div className="text-danger">
+                      {this.state.errors.directorate}
+                    </div>
                   </div>
                   <div className="col-md-3">
-                    <label className="form-label fw-semibold">Administration</label>
+                    <label className="form-label fw-semibold">
+                      Administration
+                    </label>
                     <Dropdown
                       name="administration"
                       value={this.state.administration}
                       onChange={this.handleDropdownChange}
+                      options={this.state.administrations}
                     />
-                    <div className="text-danger">{this.state.errors.administration}</div>
+                    <div className="text-danger">
+                      {this.state.errors.administration}
+                    </div>
                   </div>
                   <div className="col-md-3">
                     <label className="form-label fw-semibold">Base</label>
@@ -241,7 +305,10 @@ class OfficerAdd extends Component {
                 </div>
 
                 <div className="text-end">
-                  <button className="btn btn-primary px-4 py-2 fw-semibold shadow-sm" type="submit">
+                  <button
+                    className="btn btn-primary px-4 py-2 fw-semibold shadow-sm"
+                    type="submit"
+                  >
                     Add
                   </button>
                 </div>

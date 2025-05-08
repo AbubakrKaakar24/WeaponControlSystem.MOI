@@ -65,6 +65,10 @@
         "By Vehicle",
         "By Foot"
       ],
+      "roles":[
+        "Admin",
+        "Stuff"
+      ],
       "Bases":[
        "Base 1",
         "Base 2",

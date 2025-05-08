@@ -50,7 +50,8 @@ class Login extends Component {
     else if (!/\S+@\S+\.\S+/.test(email)) errors.email = "Email is invalid";
 
     if (!password) errors.password = "Password is required";
-    else if (password.length < 6) errors.password = "Password must be at least 6 characters";
+    else if (password.length < 6)
+      errors.password = "Password must be at least 6 characters";
 
     // If errors exist, set them in state
     if (Object.keys(errors).length > 0) {
