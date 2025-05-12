@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import Navbar from "./Navbar";
 import Swal from "sweetalert2";
-import { Modal, Button } from "react-bootstrap";
 import weaponData from "../assets/weaponData.json";
-import Dropdown from "./DropDown";
 import Select from "react-select";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
+//import DatePicker from "react-multi-date-picker";
+import "jalaali-react-date-picker/lib/styles/index.css";
+import { DatePicker } from "jalaali-react-date-picker";
 class WeaponAdd extends Component {
   state = {
     name: "",
@@ -221,31 +224,43 @@ class WeaponAdd extends Component {
                     <div className="text-danger">{errors.name}</div>
                   </div>
 
-                  <div className="col-md-4">
+                  <div className="col-md-4 d-flex flex-column">
                     <label className="form-label fw-semibold">In Date</label>
-                    <input
-                      type="date"
-                      name="inDate"
-                      className="form-control"
-                      value={inDate}
-                      onChange={this.handleInputChange}
-                      onBlur={this.handleBlur}
+                    <DatePicker
+                      value={this.state.inDate}
+                      onChange={(value) => this.setState({ inDate: value })}
+                      calendar={persian}
+                      locale={persian_fa}
+                      calendarposition="bottom-left"
+                      placeholder="Select In Date"
+                      style={{
+                        width: "100%",
+                        backgroundColor: "#fff",
+                        height: "100%",
+                        color: "black  ",
+                      }}
                     />
                     <div className="text-danger">{errors.inDate}</div>
                   </div>
                 </div>
 
                 <div className="row mb-3">
-                  <div className="col-md-4">
+                  <div className="col-md-4 d-flex flex-column">
                     <label className="form-label fw-semibold">
                       Out Date (optional)
                     </label>
-                    <input
-                      type="date"
-                      name="outDate"
-                      className="form-control"
-                      value={outDate}
-                      onChange={this.handleInputChange}
+
+                    <DatePicker
+                      value={this.state.outDate}
+                      onChange={(value) => this.setState({ outDate: value })}
+                      calendar={persian}
+                      locale={persian_fa}
+                      style={{
+                        width: "100%",
+                        backgroundColor: "#fff",
+                        height: "100%",
+                        color: "black  ",
+                      }}
                     />
                   </div>
 

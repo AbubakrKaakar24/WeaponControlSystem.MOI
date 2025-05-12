@@ -214,7 +214,7 @@ class OfficerAdd extends Component {
               <h3 className="mb-4 fw-bold text-primary">Add New Officer</h3>
               <form noValidate onSubmit={this.handleSubmit}>
                 <div className="row mb-3">
-                  <div className="col-md-4">
+                  <div className="col-md-3">
                     <label className="form-label fw-semibold">First Name</label>
                     <input
                       type="text"
@@ -229,7 +229,7 @@ class OfficerAdd extends Component {
                       {this.state.errors.firstName}
                     </div>
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-md-3">
                     <label className="form-label fw-semibold">Last Name</label>
                     <input
                       type="text"
@@ -244,7 +244,7 @@ class OfficerAdd extends Component {
                       {this.state.errors.lastName}
                     </div>
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-md-3">
                     <label className="form-label fw-semibold">Badge No</label>
                     <input
                       type="text"
@@ -259,6 +259,28 @@ class OfficerAdd extends Component {
                       {this.state.errors.badgeNo}
                     </div>
                   </div>
+                  <div className="col-md-3">
+                    <label className="form-label fw-semibold">
+                      Deputy Ministry
+                    </label>
+                    <Select
+                      name="deputyMinistry"
+                      value={deputyOptions.find(
+                        (opt) => opt.value === this.state.deputyMinistry
+                      )}
+                      options={deputyOptions}
+                      onChange={(option) =>
+                        this.handleDropdownChange(
+                          "deputyMinistry",
+                          option.value
+                        )
+                      }
+                      placeholder="Select Deputy Ministry"
+                    />
+                    <div className="text-danger">
+                      {this.state.errors.deputyMinistry}
+                    </div>
+                  </div>
                 </div>
 
                 <div className="row mb-3">
@@ -266,12 +288,6 @@ class OfficerAdd extends Component {
                     <label className="form-label fw-semibold">
                       Deputy Ministry
                     </label>
-                    {/* <Dropdown
-                      name="deputyMinistry"
-                      value={this.state.deputyMinistry}
-                      onChange={this.handleDropdownChange}
-                      options={this.state.deputies}
-                    /> */}
                     <Select
                       name="deputyMinistry"
                       value={deputyOptions.find(
