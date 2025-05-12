@@ -17,7 +17,7 @@ const CustomDropdown = (props) => {
         variant="light"
         style={{ backgroundColor: "white", color: "black" }}
       >
-        {selectedItem || props.Name}
+        {selectedItem || "Please select the " + props.name}
       </Dropdown.Toggle>
 
       <Dropdown.Menu>

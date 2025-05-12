@@ -12,9 +12,30 @@ const Navbar = () => {
       className="navbar navbar-expand-sm navbar-dark bg-dark fixed-top"
       style={{ paddingTop: "2px", paddingBottom: "2px" }}
     >
-      <div className="container-fluid p-0 d-flex justify-content-between align-items-center">
-        <div className="collapse navbar-collapse">
-          <ul className="navbar-nav me-auto">
+      <div className="container-fluid">
+        {/* Logo on the left */}
+        <Link to="/" className="navbar-brand">
+          <img
+            src="/moi.png"
+            alt="Logo"
+            style={{ height: "60px" }} // Fixed height works better
+          />
+        </Link>
+
+        {/* Mobile toggle button */}
+        <button
+          className="navbar-toggler"
+          type="button"
+          onClick={toggleDropdown}
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        {/* Navigation links - pushed to right */}
+        <div
+          className={`collapse navbar-collapse ${isDropdownOpen ? "show" : ""}`}
+        >
+          <ul className="navbar-nav">
             <li className="nav-item">
               <NavLink
                 to="/officer"
@@ -22,8 +43,9 @@ const Navbar = () => {
                   "nav-link" + (isActive ? " active" : "")
                 }
                 style={{ fontSize: "14px" }}
+                onClick={closeDropdown}
               >
-                Add Officer
+                Officer
               </NavLink>
             </li>
             <li className="nav-item">
@@ -33,8 +55,9 @@ const Navbar = () => {
                   "nav-link" + (isActive ? " active" : "")
                 }
                 style={{ fontSize: "14px" }}
+                onClick={closeDropdown}
               >
-                Add User
+                User
               </NavLink>
             </li>
             <li className="nav-item">
@@ -44,21 +67,13 @@ const Navbar = () => {
                   "nav-link" + (isActive ? " active" : "")
                 }
                 style={{ fontSize: "14px" }}
+                onClick={closeDropdown}
               >
-                Add Weapon
+                Weapon
               </NavLink>
             </li>
           </ul>
         </div>
-
-        <Link className="ms-auto" to="/" style={{ padding: "0", margin: "0" }}>
-          <img
-            src="/moi.png"
-            alt="Logo"
-            className="d-inline-block align-top img-fluid"
-            style={{ maxWidth: "25%" }}
-          />
-        </Link>
       </div>
     </nav>
   );

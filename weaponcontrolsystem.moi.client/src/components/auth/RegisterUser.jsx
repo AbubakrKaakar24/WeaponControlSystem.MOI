@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Select from "react-select";
 import Navbar from "../Navbar";
 import Dropdown from "../DropDown";
 import Swal from "sweetalert2";
@@ -168,6 +169,15 @@ class RegisterUser extends Component {
     });
   };
   render() {
+    const roleOptions = ministryData.roles.map((role) => ({
+      value: role,
+      label: role,
+    }));
+
+    const gateOptions = ministryData.gates.map((gate) => ({
+      value: gate,
+      label: gate,
+    }));
     return (
       <div className="bg-light min-vh-100">
         <Navbar />
@@ -177,8 +187,8 @@ class RegisterUser extends Component {
             <div className="card-body">
               <h3 className="mb-4 fw-bold text-primary">Add New User</h3>
               <form noValidate onSubmit={this.handleSubmit}>
-                <div className="row mb-3">
-                  <div className="col-md-4">
+                <div className="row mb-2">
+                  <div className="col-md-3">
                     <label className="form-label fw-semibold">First Name</label>
                     <input
                       type="text"
@@ -193,7 +203,7 @@ class RegisterUser extends Component {
                       {this.state.errors.firstName}
                     </div>
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-md-3">
                     <label className="form-label fw-semibold">Last Name</label>
                     <input
                       type="text"
@@ -208,7 +218,7 @@ class RegisterUser extends Component {
                       {this.state.errors.lastName}
                     </div>
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-md-3">
                     <label className="form-label fw-semibold">Phone No</label>
                     <input
                       type="text"
@@ -223,9 +233,6 @@ class RegisterUser extends Component {
                       {this.state.errors.phoneNo}
                     </div>
                   </div>
-                </div>
-
-                <div className="row mb-3">
                   <div className="col-md-3">
                     <label className="form-label fw-semibold">
                       Email Address
@@ -241,28 +248,47 @@ class RegisterUser extends Component {
                     />
                     <div className="text-danger">{this.state.errors.email}</div>
                   </div>
+                </div>
+
+                <div className="row mb-3">
                   <div className="col-md-3">
                     <label className="form-label fw-semibold">Role</label>
-                    <Dropdown
+                    <Select
                       name="role"
-                      value={this.state.role}
-                      onChange={this.handleDropdownChange}
-                      options={ministryData.roles}
+                      value={roleOptions.find(
+                        (opt) => opt.value === this.state.role
+                      )}
+                      onChange={(selected) =>
+                        this.handleDropdownChange(
+                          "role",
+                          selected ? selected.value : ""
+                        )
+                      }
+                      options={roleOptions}
+                      placeholder="Please select a role"
                     />
+
                     <div className="text-danger">{this.state.errors.role}</div>
                   </div>
                   <div className="col-md-3">
                     <label className="form-label fw-semibold">Gate</label>
-                    <Dropdown
+                    <Select
                       name="gate"
-                      value={this.state.gate}
-                      onChange={this.handleDropdownChange}
-                      options={ministryData.gates}
+                      value={gateOptions.find(
+                        (opt) => opt.value === this.state.gate
+                      )}
+                      onChange={(selected) =>
+                        this.handleDropdownChange(
+                          "gate",
+                          selected ? selected.value : ""
+                        )
+                      }
+                      options={gateOptions}
+                      placeholder="Please select a gate"
                     />
+
                     <div className="text-danger">{this.state.errors.gate}</div>
                   </div>
-                </div>
-                <div className="row mb-3">
                   <div className="col-md-3">
                     <label className="form-label fw-semibold">Password</label>
                     <input

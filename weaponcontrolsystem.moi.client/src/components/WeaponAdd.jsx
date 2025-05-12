@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { Modal, Button } from "react-bootstrap";
 import weaponData from "../assets/weaponData.json";
 import Dropdown from "./DropDown";
+import Select from "react-select";
 class WeaponAdd extends Component {
   state = {
     name: "",
@@ -175,23 +176,46 @@ class WeaponAdd extends Component {
                 <div className="row mb-3">
                   <div className="col-md-4">
                     <label className="form-label fw-semibold">Type</label>
-                    <Dropdown
+                    {/* <Dropdown
                       name="type"
                       options={this.state.types}
                       value={type}
                       onChange={this.handleDropdownChange}
+                    /> */}
+                    <Select
+                      name="type"
+                      options={this.state.types.map((type) => ({
+                        value: type,
+                        label: type,
+                      }))}
+                      value={this.state.types.find((t) => t.value === type)}
+                      onChange={(selectedOption) =>
+                        this.handleDropdownChange("type", selectedOption.value)
+                      }
+                      placeholder="Select Type"
                     />
-
                     <div className="text-danger">{errors.type}</div>
                   </div>
 
                   <div className="col-md-4">
                     <label className="form-label fw-semibold">Name</label>
-                    <Dropdown
+                    {/* <Dropdown
                       name="name"
                       options={this.state.names}
                       value={name}
                       onChange={this.handleDropdownChange}
+                    /> */}
+                    <Select
+                      name="name"
+                      options={this.state.names.map((name) => ({
+                        value: name,
+                        label: name,
+                      }))}
+                      value={this.state.names.find((n) => n.value === name)}
+                      onChange={(selectedOption) =>
+                        this.handleDropdownChange("name", selectedOption.value)
+                      }
+                      placeholder="Select Name"
                     />
 
                     <div className="text-danger">{errors.name}</div>
@@ -212,7 +236,7 @@ class WeaponAdd extends Component {
                 </div>
 
                 <div className="row mb-3">
-                  <div className="col-md-3">
+                  <div className="col-md-4">
                     <label className="form-label fw-semibold">
                       Out Date (optional)
                     </label>
@@ -225,7 +249,7 @@ class WeaponAdd extends Component {
                     />
                   </div>
 
-                  <div className="col-md-3">
+                  <div className="col-md-4">
                     <label className="form-label fw-semibold">
                       Officer Badge No
                     </label>
@@ -240,7 +264,7 @@ class WeaponAdd extends Component {
                     />
                     <div className="text-danger">{errors.officerBadgeNo}</div>
                   </div>
-                  <div className="col-md-3">
+                  <div className="col-md-4">
                     <label className="form-label fw-semibold">Card No</label>
                     <input
                       type="text"

@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using WeaponControlSystem.MOI.Core.Domain.Entities;
 using WeaponControlSystem.MOI.Core.DTOs.loginInfo;
 using WeaponControlSystem.MOI.Core.DTOs.user;
@@ -79,5 +83,27 @@ namespace WeaponControlSystem.MOI.Server.Controllers
 
             return await _userService.GetUserById(id);
         }
+
+    //    private string GenerateJwtToken(string username)
+    //    {
+    //        var claims = new[]
+    //        {
+    //    new Claim(ClaimTypes.Name, username),
+    //    // Add more claims as needed
+    //};
+
+    //        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+    //        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+    //        var token = new JwtSecurityToken(
+    //            issuer: _config["Jwt:Issuer"],
+    //            audience: _config["Jwt:Audience"],
+    //            claims: claims,
+    //            expires: DateTime.Now.AddHours(2),
+    //            signingCredentials: creds);
+
+    //        return new JwtSecurityTokenHandler().WriteToken(token);
+    //    }
+
     }
 }

@@ -3,6 +3,7 @@ import Navbar from "./Navbar";
 import Dropdown from "./DropDown"; // Your dropdown component
 import Swal from "sweetalert2";
 import ministryData from "../assets/ministryData.json";
+import Select from "react-select";
 class OfficerAdd extends Component {
   state = {
     firstName: "",
@@ -53,19 +54,6 @@ class OfficerAdd extends Component {
       [name]: value,
     });
   };
-
-  // handleDropdownChange = (name, value) => {
-  //     if (name==="deputies") {
-  //       this.setState({ deputyMinistry: value, directorate: '', administration: '', base: '' });
-  //     } else if (name==="directorates") {
-  //       this.setState({ directorate: value, administration: '', base: '' });
-  //     } else if (name==="administrations") {
-  //       this.setState({ administration: value, base: '' });
-  //     }
-  //     else if (name==="bases") {
-  //       this.setState({ base: value });
-
-  // }};
 
   handleDropdownChange = (name, value) => {
     if (name === "deputyMinistry") {
@@ -198,6 +186,24 @@ class OfficerAdd extends Component {
   };
 
   render() {
+    const deputyOptions = this.state.deputies.map((deputy) => ({
+      label: deputy,
+      value: deputy,
+    }));
+    const directorateOptions = this.state.directorates.map((directorate) => ({
+      label: directorate,
+      value: directorate,
+    }));
+    const administrationOptions = this.state.administrations.map(
+      (administration) => ({
+        label: administration,
+        value: administration,
+      })
+    );
+    const baseOptions = this.state.bases.map((base) => ({
+      label: base,
+      value: base,
+    }));
     return (
       <div className="bg-light min-vh-100">
         <Navbar />
@@ -260,11 +266,25 @@ class OfficerAdd extends Component {
                     <label className="form-label fw-semibold">
                       Deputy Ministry
                     </label>
-                    <Dropdown
+                    {/* <Dropdown
                       name="deputyMinistry"
                       value={this.state.deputyMinistry}
                       onChange={this.handleDropdownChange}
                       options={this.state.deputies}
+                    /> */}
+                    <Select
+                      name="deputyMinistry"
+                      value={deputyOptions.find(
+                        (opt) => opt.value === this.state.deputyMinistry
+                      )}
+                      options={deputyOptions}
+                      onChange={(option) =>
+                        this.handleDropdownChange(
+                          "deputyMinistry",
+                          option.value
+                        )
+                      }
+                      placeholder="Select Deputy Ministry"
                     />
                     <div className="text-danger">
                       {this.state.errors.deputyMinistry}
@@ -274,11 +294,22 @@ class OfficerAdd extends Component {
                     <label className="form-label fw-semibold">
                       Directorate
                     </label>
-                    <Dropdown
+                    {/* <Dropdown
                       name="directorate"
                       value={this.state.directorate}
                       onChange={this.handleDropdownChange}
                       options={this.state.directorates}
+                    /> */}
+                    <Select
+                      name="directorate"
+                      value={directorateOptions.find(
+                        (opt) => opt.value === this.state.directorate
+                      )}
+                      options={directorateOptions}
+                      onChange={(option) =>
+                        this.handleDropdownChange("directorate", option.value)
+                      }
+                      placeholder="Select Directorate"
                     />
                     <div className="text-danger">
                       {this.state.errors.directorate}
@@ -288,23 +319,50 @@ class OfficerAdd extends Component {
                     <label className="form-label fw-semibold">
                       Administration
                     </label>
-                    <Dropdown
+                    {/* <Dropdown
                       name="administration"
                       value={this.state.administration}
                       onChange={this.handleDropdownChange}
                       options={this.state.administrations}
+                    /> */}
+
+                    <Select
+                      name="administration"
+                      value={administrationOptions.find(
+                        (opt) => opt.value === this.state.administration
+                      )}
+                      options={administrationOptions}
+                      onChange={(option) =>
+                        this.handleDropdownChange(
+                          "administration",
+                          option.value
+                        )
+                      }
+                      placeholder="Select Administration"
                     />
+
                     <div className="text-danger">
                       {this.state.errors.administration}
                     </div>
                   </div>
                   <div className="col-md-3">
                     <label className="form-label fw-semibold">Base</label>
-                    <Dropdown
+                    {/* <Dropdown
                       name="base"
                       value={this.state.base}
                       onChange={this.handleDropdownChange}
                       options={this.state.bases}
+                    /> */}
+                    <Select
+                      name="base"
+                      value={baseOptions.find(
+                        (opt) => opt.value === this.state.base
+                      )}
+                      options={baseOptions}
+                      onChange={(option) =>
+                        this.handleDropdownChange("base", option.value)
+                      }
+                      placeholder="Select Base"
                     />
                     <div className="text-danger">{this.state.errors.base}</div>
                   </div>
