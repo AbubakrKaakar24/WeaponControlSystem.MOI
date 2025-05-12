@@ -4,10 +4,9 @@ import Swal from "sweetalert2";
 import weaponData from "../assets/weaponData.json";
 import Select from "react-select";
 import persian from "react-date-object/calendars/persian";
-import persian_fa from "react-date-object/locales/persian_fa";
-//import DatePicker from "react-multi-date-picker";
-import "jalaali-react-date-picker/lib/styles/index.css";
-import { DatePicker } from "jalaali-react-date-picker";
+import persian_fa from "../assets/persian_fa";
+import DatePicker from "react-multi-date-picker";
+
 class WeaponAdd extends Component {
   state = {
     name: "",
@@ -237,7 +236,6 @@ class WeaponAdd extends Component {
                         width: "100%",
                         backgroundColor: "#fff",
                         height: "100%",
-                        color: "black  ",
                       }}
                     />
                     <div className="text-danger">{errors.inDate}</div>
