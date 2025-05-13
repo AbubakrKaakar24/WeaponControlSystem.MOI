@@ -235,7 +235,8 @@ class WeaponAdd extends Component {
                       style={{
                         width: "100%",
                         backgroundColor: "#fff",
-                        height: "100%",
+                        height: "130%",
+                        color: "black",
                       }}
                     />
                     <div className="text-danger">{errors.inDate}</div>
@@ -253,11 +254,12 @@ class WeaponAdd extends Component {
                       onChange={(value) => this.setState({ outDate: value })}
                       calendar={persian}
                       locale={persian_fa}
+                      placeholder="Select Out Date"
                       style={{
                         width: "100%",
                         backgroundColor: "#fff",
-                        height: "100%",
-                        color: "black  ",
+                        color: "black",
+                        height: "130%",
                       }}
                     />
                   </div>
