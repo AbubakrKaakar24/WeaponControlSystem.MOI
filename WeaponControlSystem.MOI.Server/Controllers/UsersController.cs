@@ -75,6 +75,33 @@ namespace WeaponControlSystem.MOI.Server.Controllers
 
             return NoContent();
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutUser(int id, [FromBody] UserAddDto user)
+        {
+         
+            UserResponseDTo user2=   await _userService.UpdateUser(id,user);
+               
+                if (user2==null)
+                {
+                    return NotFound();
+                }
+                
+                else {
+                return Ok(user2);
+            }
+        }
+
+        [HttpGet("getByName/{name}")]
+        public async Task<ActionResult<UserResponseDTo>> GetUserByName(string name)
+        {
+            var user = await _userService.getUserByName(name);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
+
         // GET: api/Users/5
         [HttpGet("{id}")]
         public async Task<ActionResult<UserResponseDTo>> GetUser(int id)
@@ -83,6 +110,8 @@ namespace WeaponControlSystem.MOI.Server.Controllers
 
             return await _userService.GetUserById(id);
         }
+
+
 
     //    private string GenerateJwtToken(string username)
     //    {

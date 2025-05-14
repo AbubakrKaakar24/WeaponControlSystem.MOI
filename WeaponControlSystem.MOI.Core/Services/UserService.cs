@@ -61,5 +61,38 @@ namespace WeaponControlSystem.MOI.Core.Services
                 return false;
             }
         }
+
+        public async Task<UserResponseDTo> UpdateUser(int userId, UserAddDto user)
+        {
+
+            var userToUpdate = await _unitOfWork.User.GetById(userId);
+            if (userToUpdate == null)
+            {
+                throw new Exception("User not found");
+            }
+            userToUpdate.Name = user.Name;
+            userToUpdate.Email = user.Email;
+            userToUpdate.Password = user.Password;
+            userToUpdate.Phone= user.Phone;
+            userToUpdate.LastName = user.LastName;
+            userToUpdate.Gate = user.Gate;
+            userToUpdate.Role = user.Role;
+
+
+            await _unitOfWork.User.Update(userToUpdate);
+            await _unitOfWork.SaveChanges(CancellationToken.None);
+            return userToUpdate.ToUserResponseDTo();
+        }
+
+        public async Task<UserResponseDTo> getUserByName(string name)
+        {
+           
+            var user = await _unitOfWork.User.GetUserByName(name);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            return user.ToUserResponseDTo();
+        }
     }
 }

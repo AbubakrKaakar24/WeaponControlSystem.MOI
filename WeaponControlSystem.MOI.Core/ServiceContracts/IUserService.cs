@@ -15,6 +15,8 @@ namespace WeaponControlSystem.MOI.Core.ServiceContracts
         public Task<IEnumerable<UserResponseDTo>> GetUserList();
 
         public Task<UserResponseDTo> DeleteUser(int? UserId);
+        public Task<UserResponseDTo> UpdateUser(int userId, UserAddDto user);
+        public Task<UserResponseDTo> getUserByName(string name);
         public Task<bool> Auth(LoginInfo info);
 
     }

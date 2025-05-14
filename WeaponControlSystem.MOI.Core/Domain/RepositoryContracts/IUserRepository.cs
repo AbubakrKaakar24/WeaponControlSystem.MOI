@@ -8,7 +8,7 @@ using WeaponControlSystem.MOI.Core.Domain.RepositoryContracts.Base;
 namespace WeaponControlSystem.MOI.Core.Domain.RepositoryContracts
 {
     public interface IUserRepository : IGenericRepository<User>
-    {
-        public User getUserByName(string name);
+    {  
+      public Task<User> GetUserByName(string name);
     }
 }

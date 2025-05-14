@@ -26,9 +26,9 @@ namespace WeaponControlSystem.MOI.Infrastructure.Repository.Base
         }
         public async Task Update(T entity)
         {
-            dbSet.Update(entity);
+             dbSet.Update(entity);
         }
-      
+
 
         public Task Remove(T entity)
         {
@@ -92,6 +92,7 @@ namespace WeaponControlSystem.MOI.Infrastructure.Repository.Base
 
         }
 
+        
     }
 
 

@@ -1,19 +1,25 @@
 import React, { Component } from "react";
-import Select from "react-select";
-import Navbar from "../Navbar";
-import Dropdown from "../DropDown";
-import Swal from "sweetalert2";
+import AddUserModal from "../AddUserModel"; // Adjust the path if needed
 import ministryData from "../../assets/ministryData.json";
+import Swal from "sweetalert2";
+import Navbar from "../Navbar"; // Adjust the path if needed
+import { div, head, u } from "framer-motion/client";
 class RegisterUser extends Component {
   state = {
-    firstName: "",
-    lastName: "",
-    phoneNo: "",
-    email: "",
-    role: "",
-    gate: "",
-    password: "",
-    confirmPassword: "",
+    showModal: false,
+    header: "Add New User",
+    users: [], // To manage modal visibility
+    formData: {
+      id: "",
+      firstName: "",
+      lastName: "",
+      phoneNo: "",
+      email: "",
+      role: "",
+      gate: "",
+      password: "",
+      confirmPassword: "",
+    },
     errors: {
       firstName: "",
       lastName: "",
@@ -25,22 +31,47 @@ class RegisterUser extends Component {
       confirmPassword: "",
     },
   };
+  async componentDidMount() {
+    // Fetch users from the API
+    await this.fetchUsers();
+  }
+  fetchUsers = async () => {
+    const response = await fetch("https://localhost:7211/api/users");
+    const data = await response.json();
+    this.setState({ users: data });
+    console.log("Fetched users:", data);
+  };
 
-  handleInputChange = (e) => {
+  // Toggle modal visibility
+  toggleModal = () => {
+    this.setState((prevState) => ({
+      showModal: !prevState.showModal,
+    }));
+  };
+
+  // Handle input field change
+  handleChange = (e) => {
     const { name, value } = e.target;
     this.setState({
-      [name]: value,
+      formData: {
+        ...this.state.formData,
+        [name]: value,
+      },
     });
   };
 
-  handleDropdownChange = (name, value) => {
+  // Handle select field change (dropdown)
+  handleSelectChange = (name, value) => {
     this.setState({
-      [name]: value,
+      formData: {
+        ...this.state.formData,
+        [name]: value,
+      },
     });
   };
 
-  handleSubmit = async (e) => {
-    e.preventDefault();
+  // Handle form validation
+  validateForm = () => {
     const {
       firstName,
       lastName,
@@ -50,9 +81,9 @@ class RegisterUser extends Component {
       gate,
       password,
       confirmPassword,
-    } = this.state;
-
+    } = this.state.formData;
     const errors = {};
+
     if (!firstName) errors.firstName = "First name is required";
     if (!lastName) errors.lastName = "Last name is required";
     if (!phoneNo) errors.phoneNo = "Phone number is required";
@@ -68,54 +99,153 @@ class RegisterUser extends Component {
     if (!password) errors.password = "Password is required";
     else if (password.length < 8)
       errors.password = "Password must be at least 8 characters long";
-    if (!confirmPassword) {
+    if (!confirmPassword)
       errors.confirmPassword = "Confirm password is required";
-    } else if (password !== confirmPassword) {
+    else if (password !== confirmPassword)
       errors.confirmPassword = "Passwords do not match";
-    }
 
-    if (Object.keys(errors).length > 0) {
-      this.setState({ errors });
-    } else {
+    return errors;
+  };
+  // Handle delete user
+  handleDelete = async (userId) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    });
+    if (result.isConfirmed) {
       try {
-        const userData = {
-          Name: firstName,
-          LastName: lastName,
-          Phone: phoneNo,
-          Email: email,
-          Role: role,
-          Gate: gate,
-          Password: password,
-        };
-
-        const response = await fetch("https://localhost:7211/api/users", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(userData),
-        });
-
+        const response = await fetch(
+          `https://localhost:7211/api/users/${userId}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (response.ok) {
-          Swal.fire({
-            icon: "success",
-            title: "User Added",
-            text: "The User has been added successfully!",
-            timer: 3000,
-          });
+          Swal.fire("Deleted!", "User has been deleted.", "success");
+          this.fetchUsers(); // Refresh the user list
         } else {
+          const errorData = await response.json();
+          console.log("Error:", errorData);
           Swal.fire({
             icon: "error",
             title: "Error",
-            text: "There was an error adding the user.",
-            timer: 3000,
+            text: errorData.message,
           });
         }
       } catch (error) {
-        console.log("Errors:", error);
+        console.error("Error deleting user:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Failed to delete user.",
+        });
       }
-      // Reset form
-      this.setState({
+    }
+  };
+  // Handle edit user
+  handleEdit = async (userId) => {
+    const response = await fetch(`https://localhost:7211/api/users/${userId}`);
+    const user = await response.json();
+    this.setState({
+      formData: {
+        id: user.id,
+        firstName: user.name,
+        lastName: user.lastName,
+        phoneNo: user.phone,
+        email: user.email,
+        role: user.role,
+        gate: user.gate,
+        password: user.password,
+        confirmPassword: user.password,
+      },
+      showModal: true,
+      header: "Edit User",
+    });
+  };
+
+  // Handle form submission
+  handleSubmit = async () => {
+    const errors = this.validateForm();
+
+    if (Object.keys(errors).length > 0) {
+      this.setState({ errors });
+      return;
+    }
+
+    const { firstName, lastName, phoneNo, email, role, gate, password } =
+      this.state.formData;
+    const userData = {
+      Name: firstName,
+      LastName: lastName,
+      Phone: phoneNo,
+      Email: email,
+      Role: role,
+      Gate: gate,
+      Password: password,
+    };
+    var Method = this.state.header === "Add New User" ? "POST" : "PUT";
+    var url =
+      this.state.header === "Add New User"
+        ? "https://localhost:7211/api/users"
+        : "https://localhost:7211/api/users/" + this.state.formData.id;
+    try {
+      const response = await fetch(url, {
+        method: Method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (response.ok) {
+        this.setState({
+          showModal: false,
+
+          formData: {
+            firstName: "",
+            lastName: "",
+            phoneNo: "",
+            email: "",
+            role: "",
+            gate: "",
+            password: "",
+            confirmPassword: "",
+            header: "Add New User",
+          },
+          errors: {},
+        });
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "User registered successfully!",
+        });
+        this.fetchUsers(); // Refresh the user list
+      } else {
+        const errorData = await response.json();
+        console.log("Error:", errorData);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: errorData.message,
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error.message,
+      });
+    }
+    this.setState({
+      formData: {
         firstName: "",
         lastName: "",
         phoneNo: "",
@@ -124,50 +254,12 @@ class RegisterUser extends Component {
         gate: "",
         password: "",
         confirmPassword: "",
-        errors: {},
-      });
-    }
-  };
-
-  handleBlur = (e) => {
-    const { name, value } = e.target;
-    let errors = this.state.errors;
-
-    switch (name) {
-      case "firstName":
-        errors.firstName = value.length < 1 ? "First name is required" : "";
-        break;
-      case "lastName":
-        errors.lastName = value.length < 1 ? "Last name is required" : "";
-        break;
-      case "phoneNo":
-        errors.phoneNo = value.length < 1 ? "Phone number is required" : "";
-        break;
-      case "email":
-        errors.email = value.length < 1 ? "Email is required" : "";
-        break;
-      case "password":
-        errors.password = value.length < 1 ? "Password is required" : "";
-        break;
-      case "confirmPassword":
-        errors.confirmPassword =
-          value.length < 1 ? "Confirm password is required" : "";
-        break;
-    }
-
-    this.setState({ errors, [name]: value });
-  };
-  handlealert = () => {
-    Swal.fire({
-      icon: "success",
-      title: "Your work has been saved",
-      showConfirmButton: false,
-      timer: 1500,
-      timerProgressBar: true,
-      iconColor: "#198754",
-      toast: true,
+      },
+      errors: {},
+      header: "Add New User",
     });
   };
+
   render() {
     const roleOptions = ministryData.roles.map((role) => ({
       value: role,
@@ -178,6 +270,7 @@ class RegisterUser extends Component {
       value: gate,
       label: gate,
     }));
+
     return (
       <div className="bg-light min-vh-100">
         <Navbar />
@@ -185,156 +278,78 @@ class RegisterUser extends Component {
         <div className="container py-5 mt-5">
           <div className="card shadow-lg border-0">
             <div className="card-body">
-              <h3 className="mb-4 fw-bold text-primary">Add New User</h3>
-              <form noValidate onSubmit={this.handleSubmit}>
-                <div className="row mb-2">
-                  <div className="col-md-3">
-                    <label className="form-label fw-semibold">First Name</label>
-                    <input
-                      type="text"
-                      name="firstName"
-                      className="form-control"
-                      placeholder="First name"
-                      value={this.state.firstName}
-                      onChange={this.handleInputChange}
-                      onBlur={this.handleBlur}
-                    />
-                    <div className="text-danger">
-                      {this.state.errors.firstName}
-                    </div>
-                  </div>
-                  <div className="col-md-3">
-                    <label className="form-label fw-semibold">Last Name</label>
-                    <input
-                      type="text"
-                      name="lastName"
-                      className="form-control"
-                      placeholder="Last name"
-                      value={this.state.lastName}
-                      onChange={this.handleInputChange}
-                      onBlur={this.handleBlur}
-                    />
-                    <div className="text-danger">
-                      {this.state.errors.lastName}
-                    </div>
-                  </div>
-                  <div className="col-md-3">
-                    <label className="form-label fw-semibold">Phone No</label>
-                    <input
-                      type="text"
-                      name="phoneNo"
-                      className="form-control"
-                      placeholder="Phone Number"
-                      value={this.state.phoneNo}
-                      onChange={this.handleInputChange}
-                      onBlur={this.handleBlur}
-                    />
-                    <div className="text-danger">
-                      {this.state.errors.phoneNo}
-                    </div>
-                  </div>
-                  <div className="col-md-3">
-                    <label className="form-label fw-semibold">
-                      Email Address
-                    </label>
-                    <input
-                      type="text"
-                      name="email"
-                      className="form-control"
-                      placeholder="Email Address"
-                      value={this.state.email}
-                      onChange={this.handleInputChange}
-                      onBlur={this.handleBlur}
-                    />
-                    <div className="text-danger">{this.state.errors.email}</div>
-                  </div>
+              {this.state.users.length > 0 ? (
+                <div>
+                  <h3 className="mb-4 fw-bold text-primary">List of Users</h3>
+                  <table className="table table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Phone No</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Gate</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.state.users.map((user) => (
+                        <tr key={user.id}>
+                          <td>{user.name}</td>
+                          <td>{user.lastName}</td>
+                          <td>{user.phone}</td>
+                          <td>{user.email}</td>
+                          <td>{user.role}</td>
+                          <td>{user.gate}</td>
+                          <td>
+                            <button
+                              className="btn btn-sm btn-danger rounded"
+                              onClick={() => this.handleDelete(user.id)}
+                            >
+                              <i className="fa fa-trash"></i>{" "}
+                              {/* Font Awesome Trash Icon */}
+                            </button>
+                          </td>
+                          <td>
+                            <button
+                              className="btn btn-sm btn-warning rounded"
+                              onClick={() => this.handleEdit(user.id)}
+                            >
+                              <i className="fa fa-edit"></i>{" "}
+                              {/* Font Awesome Edit Icon */}
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
+              ) : (
+                <p>No users found.</p>
+              )}
 
-                <div className="row mb-3">
-                  <div className="col-md-3">
-                    <label className="form-label fw-semibold">Role</label>
-                    <Select
-                      name="role"
-                      value={roleOptions.find(
-                        (opt) => opt.value === this.state.role
-                      )}
-                      onChange={(selected) =>
-                        this.handleDropdownChange(
-                          "role",
-                          selected ? selected.value : ""
-                        )
-                      }
-                      options={roleOptions}
-                      placeholder="Please select a role"
-                    />
-
-                    <div className="text-danger">{this.state.errors.role}</div>
-                  </div>
-                  <div className="col-md-3">
-                    <label className="form-label fw-semibold">Gate</label>
-                    <Select
-                      name="gate"
-                      value={gateOptions.find(
-                        (opt) => opt.value === this.state.gate
-                      )}
-                      onChange={(selected) =>
-                        this.handleDropdownChange(
-                          "gate",
-                          selected ? selected.value : ""
-                        )
-                      }
-                      options={gateOptions}
-                      placeholder="Please select a gate"
-                    />
-
-                    <div className="text-danger">{this.state.errors.gate}</div>
-                  </div>
-                  <div className="col-md-3">
-                    <label className="form-label fw-semibold">Password</label>
-                    <input
-                      type="password"
-                      name="password"
-                      className="form-control"
-                      placeholder="Password"
-                      value={this.state.password}
-                      onChange={this.handleInputChange}
-                      onBlur={this.handleBlur}
-                    />
-                    <div className="text-danger">
-                      {this.state.errors.password}
-                    </div>
-                  </div>
-                  <div className="col-md-3">
-                    <label className="form-label fw-semibold">
-                      Confirm Password
-                    </label>
-                    <input
-                      type="password"
-                      name="confirmPassword"
-                      className="form-control"
-                      placeholder="Confirm Password"
-                      value={this.state.confirmPassword}
-                      onChange={this.handleInputChange}
-                      onBlur={this.handleBlur}
-                    />
-                    <div className="text-danger">
-                      {this.state.errors.confirmPassword}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="text-end">
-                  <button
-                    className="btn btn-primary px-4 py-2 fw-semibold shadow-sm"
-                    type="submit"
-                  >
-                    Add
-                  </button>
-                </div>
-              </form>
+              <div className="d-flex justify-content-end mb-3">
+                <button className="btn btn-primary" onClick={this.toggleModal}>
+                  Add User
+                </button>
+              </div>
             </div>
           </div>
         </div>
+
+        {/* Modal Component */}
+        <AddUserModal
+          show={this.state.showModal}
+          onHide={this.toggleModal}
+          onSubmit={this.handleSubmit}
+          roleOptions={roleOptions}
+          gateOptions={gateOptions}
+          formData={this.state.formData}
+          errors={this.state.errors}
+          handleChange={this.handleChange}
+          handleSelectChange={this.handleSelectChange}
+          header={this.state.header}
+        />
       </div>
     );
   }

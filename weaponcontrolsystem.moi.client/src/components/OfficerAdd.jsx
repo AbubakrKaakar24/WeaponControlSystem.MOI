@@ -310,12 +310,6 @@ class OfficerAdd extends Component {
                     <label className="form-label fw-semibold">
                       Directorate
                     </label>
-                    {/* <Dropdown
-                      name="directorate"
-                      value={this.state.directorate}
-                      onChange={this.handleDropdownChange}
-                      options={this.state.directorates}
-                    /> */}
                     <Select
                       name="directorate"
                       value={directorateOptions.find(
@@ -335,12 +329,6 @@ class OfficerAdd extends Component {
                     <label className="form-label fw-semibold">
                       Administration
                     </label>
-                    {/* <Dropdown
-                      name="administration"
-                      value={this.state.administration}
-                      onChange={this.handleDropdownChange}
-                      options={this.state.administrations}
-                    /> */}
 
                     <Select
                       name="administration"
@@ -363,12 +351,7 @@ class OfficerAdd extends Component {
                   </div>
                   <div className="col-md-3">
                     <label className="form-label fw-semibold">Base</label>
-                    {/* <Dropdown
-                      name="base"
-                      value={this.state.base}
-                      onChange={this.handleDropdownChange}
-                      options={this.state.bases}
-                    /> */}
+
                     <Select
                       name="base"
                       value={baseOptions.find(

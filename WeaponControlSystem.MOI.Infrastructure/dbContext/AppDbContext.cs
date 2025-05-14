@@ -36,6 +36,20 @@ namespace WeaponControlSystem.MOI.Infrastructure.dbContext
     .WithMany(o => o.WeaponHandovers)
     .HasForeignKey(wh => wh.OfficerBadgeNo)
     .HasPrincipalKey(o => o.BadgeNo);
+            modelBuilder.Entity<User>()
+        .HasIndex(u => new { u.Name, u.LastName })
+        .IsUnique();
+
+            modelBuilder.Entity<User>()
+    .Property(u => u.Name)
+    .HasMaxLength(100);
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.LastName)
+                .HasMaxLength(100);
+
+
         }
+
     }
 }

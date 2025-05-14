@@ -7,6 +7,7 @@ using WeaponControlSystem.MOI.Infrastructure.Repository.Base;
 using WeaponControlSystem.MOI.Core.Domain.Entities;
 using WeaponControlSystem.MOI.Core.Domain.RepositoryContracts;
 using WeaponControlSystem.MOI.Infrastructure.dbContext;
+using Microsoft.EntityFrameworkCore;
 namespace WeaponControlSystem.MOI.Infrastructure.Repository
 {
     public class UserRepository:GenericRepository<User>,IUserRepository
@@ -17,9 +18,20 @@ namespace WeaponControlSystem.MOI.Infrastructure.Repository
             _dbContext = dbContext;
         }
 
-        public User getUserByName(string name)
+        public async Task<User> GetUserByName(string name)
         {
-            throw new NotImplementedException();
+            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Name == name);
+
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            return user;
         }
+
+
+
+
     }
 }
