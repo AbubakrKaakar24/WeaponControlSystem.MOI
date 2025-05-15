@@ -68,8 +68,6 @@ class OfficerAdd extends Component {
       [name]: value,
     });
   };
-  handleDelete = () => {};
-  handleEdit = () => {};
   toggleModal = () => {
     this.setState((prevState) => ({
       showModal: !prevState.showModal,
@@ -114,7 +112,60 @@ class OfficerAdd extends Component {
       this.setState({ base: value });
     }
   };
-
+  handleDelete = async (userId) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    });
+    if (result.isConfirmed) {
+      try {
+        const response = await fetch(
+          `https://localhost:7211/api/officer/${officerId}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (response.ok) {
+          Swal.fire("Deleted!", "Officer has been deleted.", "success");
+          this.fetchUsers(); // Refresh the user list
+        } else {
+          const errorData = await response.json();
+          console.log("Error:", errorData);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: errorData.message,
+          });
+        }
+      } catch (error) {
+        console.error("Error deleting user:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Failed to delete user.",
+        });
+      }
+    }
+  };
+  // Handle edit user
+  handleEdit = async (userId) => {
+    const response = await fetch(
+      `https://localhost:7211/api/officer/${userId}`
+    );
+    const officer = await response.json();
+    this.setState({
+      showModal: true,
+      header: "Edit officer",
+    });
+  };
   handleSubmit = async (e) => {
     e.preventDefault();
     const {
