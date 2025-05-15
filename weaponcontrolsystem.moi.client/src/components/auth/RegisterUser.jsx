@@ -3,12 +3,15 @@ import AddUserModal from "../AddUserModel"; // Adjust the path if needed
 import ministryData from "../../assets/ministryData.json";
 import Swal from "sweetalert2";
 import Navbar from "../Navbar"; // Adjust the path if needed
-import { div, head, u } from "framer-motion/client";
+import DataTable from "react-data-table-component";
+import "react-data-table-component-extensions/dist/index.css";
+
 class RegisterUser extends Component {
   state = {
     showModal: false,
     header: "Add New User",
     users: [], // To manage modal visibility
+    AllUsers: [],
     formData: {
       id: "",
       firstName: "",
@@ -38,7 +41,7 @@ class RegisterUser extends Component {
   fetchUsers = async () => {
     const response = await fetch("https://localhost:7211/api/users");
     const data = await response.json();
-    this.setState({ users: data });
+    this.setState({ users: data, AllUsers: data });
     console.log("Fetched users:", data);
   };
 
@@ -46,6 +49,18 @@ class RegisterUser extends Component {
   toggleModal = () => {
     this.setState((prevState) => ({
       showModal: !prevState.showModal,
+      header: "Add New User",
+      formData: {
+        id: "",
+        firstName: "",
+        lastName: "",
+        phoneNo: "",
+        email: "",
+        role: "",
+        gate: "",
+        password: "",
+        confirmPassword: "",
+      },
     }));
   };
 
@@ -259,8 +274,91 @@ class RegisterUser extends Component {
       header: "Add New User",
     });
   };
-
+  searchUser = (e) => {
+    if (e.target.value === "") this.setState({ users: this.state.AllUsers });
+    else {
+      const searchTerm = e.target.value.toLowerCase();
+      const filteredUsers = this.state.users.filter((user) =>
+        user.name.toLowerCase().includes(searchTerm)
+      );
+      this.setState({ users: filteredUsers });
+    }
+  };
   render() {
+    const columns = [
+      {
+        name: "First Name",
+        selector: (row) => row.name,
+        sortable: true,
+      },
+      {
+        name: "Last Name",
+        selector: (row) => row.lastName,
+        sortable: true,
+      },
+      {
+        name: "Phone No",
+        selector: (row) => row.phone,
+        sortable: true,
+      },
+      {
+        name: "Email",
+        selector: (row) => row.email,
+        sortable: true,
+        minWidth: "250px",
+      },
+      {
+        name: "Role",
+        selector: (row) => row.role,
+        sortable: true,
+      },
+      {
+        name: "Gate",
+        selector: (row) => row.gate,
+        sortable: true,
+      },
+      {
+        name: "Actions",
+        cell: (row) => (
+          <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+            <i
+              className=" fa fa-trash fa-2x"
+              style={{
+                cursor: "pointer",
+                color: "#4ED7F1", // Bootstrap danger red
+                transition: "color 0.3s ease",
+              }}
+              onClick={() => this.handleDelete(row.id)}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#c9302c")} // darker red
+              onMouseLeave={(e) => (e.currentTarget.style.color = "#d9534f")}
+            />
+
+            <i
+              className="fa fa-edit fa-2x"
+              style={{
+                cursor: "pointer",
+                color: "#4ED7F1", // Bootstrap success green
+                transition: "color 0.3s ease",
+                marginTop: "4px",
+              }}
+              onClick={() => this.handleEdit(row.id)}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#4E71FF")} // darker green
+              onMouseLeave={(e) => (e.currentTarget.style.color = "#4ED7F1")}
+            />
+          </div>
+        ),
+      },
+    ];
+    const rows = this.state.users.map((user) => ({
+      id: user.id,
+      name: user.name,
+      lastName: user.lastName,
+      phone: user.phone,
+      email: user.email,
+      role: user.role,
+      gate: user.gate,
+    }));
+
     const roleOptions = ministryData.roles.map((role) => ({
       value: role,
       label: role,
@@ -280,49 +378,48 @@ class RegisterUser extends Component {
             <div className="card-body">
               {this.state.users.length > 0 ? (
                 <div>
+                  <div className="d-flex justify-content-end">
+                    <input
+                      type="search"
+                      name="searchUser"
+                      placeholder="🔍 Search User"
+                      className="form-control w-50 shadow-sm rounded-pill"
+                      style={{ maxWidth: "300px" }}
+                      onChange={(e) => {
+                        this.searchUser(e);
+                      }}
+                    />
+                  </div>
                   <h3 className="mb-4 fw-bold text-primary">List of Users</h3>
-                  <table className="table table-bordered table-striped">
-                    <thead>
-                      <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Phone No</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>Gate</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {this.state.users.map((user) => (
-                        <tr key={user.id}>
-                          <td>{user.name}</td>
-                          <td>{user.lastName}</td>
-                          <td>{user.phone}</td>
-                          <td>{user.email}</td>
-                          <td>{user.role}</td>
-                          <td>{user.gate}</td>
-                          <td>
-                            <button
-                              className="btn btn-sm btn-danger rounded"
-                              onClick={() => this.handleDelete(user.id)}
-                            >
-                              <i className="fa fa-trash"></i>{" "}
-                              {/* Font Awesome Trash Icon */}
-                            </button>
-                          </td>
-                          <td>
-                            <button
-                              className="btn btn-sm btn-warning rounded"
-                              onClick={() => this.handleEdit(user.id)}
-                            >
-                              <i className="fa fa-edit"></i>{" "}
-                              {/* Font Awesome Edit Icon */}
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                  <DataTable
+                    columns={columns}
+                    data={rows}
+                    pagination
+                    highlightOnHover
+                    striped
+                    responsive
+                    fixedHeader
+                    fixedHeaderScrollHeight="400px"
+                    customStyles={{
+                      rows: {
+                        style: {
+                          minHeight: "50px", // override the row height
+                        },
+                      },
+                      headCells: {
+                        style: {
+                          backgroundColor: "#f8f9fa",
+                          fontWeight: "bold",
+                        },
+                      },
+                      cells: {
+                        style: {
+                          paddingLeft: "8px", // override the cell padding for data cells
+                          paddingRight: "8px",
+                        },
+                      },
+                    }}
+                  />
                 </div>
               ) : (
                 <p>No users found.</p>

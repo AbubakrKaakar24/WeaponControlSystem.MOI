@@ -4,8 +4,14 @@ import Dropdown from "./DropDown"; // Your dropdown component
 import Swal from "sweetalert2";
 import ministryData from "../assets/ministryData.json";
 import Select from "react-select";
+import AddOfficerModal from "./AddOfficerModel";
+import DataTable from "react-data-table-component";
 class OfficerAdd extends Component {
   state = {
+    header: "Add New Officer",
+    showModal: false,
+    officers: [],
+    allOfficers: [],
     firstName: "",
     lastName: "",
     badgeNo: "",
@@ -28,7 +34,15 @@ class OfficerAdd extends Component {
       base: "",
     },
   };
-  componentDidMount() {
+  fetchOfficers = async () => {
+    const response = await fetch("https://localhost:7211/api/officer");
+    const data = await response.json();
+    this.setState({ officers: data, allOfficers: data });
+    console.log("Fetched users:", data);
+  };
+  async componentDidMount() {
+    await this.fetchOfficers();
+
     var listofDeputies = ministryData.deputies.map((deputy) => deputy.name);
     var listofDirectorates = ministryData.deputies
       .map((deputy) => deputy.directorates.map((dir) => dir.name))
@@ -54,7 +68,23 @@ class OfficerAdd extends Component {
       [name]: value,
     });
   };
-
+  handleDelete = () => {};
+  handleEdit = () => {};
+  toggleModal = () => {
+    this.setState((prevState) => ({
+      showModal: !prevState.showModal,
+      header: "Add New Officer",
+      id: "",
+      firstName: "",
+      lastName: "",
+      badgeNo: "",
+      deputyMinistry: "",
+      directorate: "",
+      administration: "",
+      base: "",
+      errors: {},
+    }));
+  };
   handleDropdownChange = (name, value) => {
     if (name === "deputyMinistry") {
       const selectedDeputy = ministryData.deputies.find(
@@ -142,7 +172,9 @@ class OfficerAdd extends Component {
             administration: "",
             base: "",
             errors: {},
+            showModal: false,
           });
+          this.fetchOfficers();
         } else {
           Swal.fire({
             icon: "error",
@@ -204,6 +236,81 @@ class OfficerAdd extends Component {
       label: base,
       value: base,
     }));
+
+    const columns = [
+      {
+        name: "Name",
+        selector: (row) => row.name,
+        sortable: true,
+      },
+      {
+        name: "Badge No",
+        selector: (row) => row.badgeNo,
+        sortable: true,
+      },
+      {
+        name: "Deputy Ministry",
+        selector: (row) => row.deputyMinistry,
+        sortable: true,
+        minWidth: "250px",
+      },
+      {
+        name: "Directorate",
+        selector: (row) => row.directorate,
+        sortable: true,
+      },
+      {
+        name: "Administration",
+        selector: (row) => row.administration,
+        sortable: true,
+      },
+      {
+        name: "Base",
+        selector: (row) => row.base,
+        sortable: true,
+      },
+      {
+        name: "Actions",
+        cell: (row) => (
+          <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+            <i
+              className=" fa fa-trash fa-2x"
+              style={{
+                cursor: "pointer",
+                color: "#4ED7F1", // Bootstrap danger red
+                transition: "color 0.3s ease",
+              }}
+              onClick={() => this.handleDelete(row.id)}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#c9302c")} // darker red
+              onMouseLeave={(e) => (e.currentTarget.style.color = "#d9534f")}
+            />
+
+            <i
+              className="fa fa-edit fa-2x"
+              style={{
+                cursor: "pointer",
+                color: "#4ED7F1", // Bootstrap success green
+                transition: "color 0.3s ease",
+                marginTop: "4px",
+              }}
+              onClick={() => this.handleEdit(row.id)}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#4E71FF")} // darker green
+              onMouseLeave={(e) => (e.currentTarget.style.color = "#4ED7F1")}
+            />
+          </div>
+        ),
+      },
+    ];
+    const rows = this.state.officers.map((officer) => ({
+      id: officer.id,
+      name: officer.name,
+      badgeNo: officer.badgeNo,
+      deputyMinistry: officer.deputy_Ministry,
+      directorate: officer.directorate,
+      administration: officer.administration,
+      base: officer.base,
+    }));
+
     return (
       <div className="bg-light min-vh-100">
         <Navbar />
@@ -211,171 +318,60 @@ class OfficerAdd extends Component {
         <div className="container py-5 mt-5">
           <div className="card shadow-lg border-0">
             <div className="card-body">
-              <h3 className="mb-4 fw-bold text-primary">Add New Officer</h3>
-              <form noValidate onSubmit={this.handleSubmit}>
-                <div className="row mb-3">
-                  <div className="col-md-3">
-                    <label className="form-label fw-semibold">First Name</label>
-                    <input
-                      type="text"
-                      name="firstName"
-                      className="form-control"
-                      placeholder="First name"
-                      value={this.state.firstName}
-                      onChange={this.handleInputChange}
-                      onBlur={this.handleBlur}
-                    />
-                    <div className="text-danger">
-                      {this.state.errors.firstName}
-                    </div>
-                  </div>
-                  <div className="col-md-3">
-                    <label className="form-label fw-semibold">Last Name</label>
-                    <input
-                      type="text"
-                      name="lastName"
-                      className="form-control"
-                      placeholder="Last name"
-                      value={this.state.lastName}
-                      onChange={this.handleInputChange}
-                      onBlur={this.handleBlur}
-                    />
-                    <div className="text-danger">
-                      {this.state.errors.lastName}
-                    </div>
-                  </div>
-                  <div className="col-md-3">
-                    <label className="form-label fw-semibold">Badge No</label>
-                    <input
-                      type="text"
-                      name="badgeNo"
-                      className="form-control"
-                      placeholder="Badge Number"
-                      value={this.state.badgeNo}
-                      onChange={this.handleInputChange}
-                      onBlur={this.handleBlur}
-                    />
-                    <div className="text-danger">
-                      {this.state.errors.badgeNo}
-                    </div>
-                  </div>
-                  <div className="col-md-3">
-                    <label className="form-label fw-semibold">
-                      Deputy Ministry
-                    </label>
-                    <Select
-                      name="deputyMinistry"
-                      value={deputyOptions.find(
-                        (opt) => opt.value === this.state.deputyMinistry
-                      )}
-                      options={deputyOptions}
-                      onChange={(option) =>
-                        this.handleDropdownChange(
-                          "deputyMinistry",
-                          option.value
-                        )
-                      }
-                      placeholder="Select Deputy Ministry"
-                    />
-                    <div className="text-danger">
-                      {this.state.errors.deputyMinistry}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="row mb-3">
-                  <div className="col-md-3">
-                    <label className="form-label fw-semibold">
-                      Deputy Ministry
-                    </label>
-                    <Select
-                      name="deputyMinistry"
-                      value={deputyOptions.find(
-                        (opt) => opt.value === this.state.deputyMinistry
-                      )}
-                      options={deputyOptions}
-                      onChange={(option) =>
-                        this.handleDropdownChange(
-                          "deputyMinistry",
-                          option.value
-                        )
-                      }
-                      placeholder="Select Deputy Ministry"
-                    />
-                    <div className="text-danger">
-                      {this.state.errors.deputyMinistry}
-                    </div>
-                  </div>
-                  <div className="col-md-3">
-                    <label className="form-label fw-semibold">
-                      Directorate
-                    </label>
-                    <Select
-                      name="directorate"
-                      value={directorateOptions.find(
-                        (opt) => opt.value === this.state.directorate
-                      )}
-                      options={directorateOptions}
-                      onChange={(option) =>
-                        this.handleDropdownChange("directorate", option.value)
-                      }
-                      placeholder="Select Directorate"
-                    />
-                    <div className="text-danger">
-                      {this.state.errors.directorate}
-                    </div>
-                  </div>
-                  <div className="col-md-3">
-                    <label className="form-label fw-semibold">
-                      Administration
-                    </label>
-
-                    <Select
-                      name="administration"
-                      value={administrationOptions.find(
-                        (opt) => opt.value === this.state.administration
-                      )}
-                      options={administrationOptions}
-                      onChange={(option) =>
-                        this.handleDropdownChange(
-                          "administration",
-                          option.value
-                        )
-                      }
-                      placeholder="Select Administration"
-                    />
-
-                    <div className="text-danger">
-                      {this.state.errors.administration}
-                    </div>
-                  </div>
-                  <div className="col-md-3">
-                    <label className="form-label fw-semibold">Base</label>
-
-                    <Select
-                      name="base"
-                      value={baseOptions.find(
-                        (opt) => opt.value === this.state.base
-                      )}
-                      options={baseOptions}
-                      onChange={(option) =>
-                        this.handleDropdownChange("base", option.value)
-                      }
-                      placeholder="Select Base"
-                    />
-                    <div className="text-danger">{this.state.errors.base}</div>
-                  </div>
-                </div>
-
-                <div className="text-end">
-                  <button
-                    className="btn btn-primary px-4 py-2 fw-semibold shadow-sm"
-                    type="submit"
-                  >
-                    Add
-                  </button>
-                </div>
-              </form>
+              <h3 className="mb-4 fw-bold text-primary">List of Officers</h3>
+              <DataTable
+                columns={columns}
+                data={rows}
+                highlightOnHover
+                striped
+                responsive
+                fixedHeader
+                fixedHeaderScrollHeight="400px"
+                customStyles={{
+                  rows: {
+                    style: {
+                      minHeight: "50px", // override the row height
+                    },
+                  },
+                  headCells: {
+                    style: {
+                      backgroundColor: "#f8f9fa",
+                      fontWeight: "bold",
+                    },
+                  },
+                  cells: {
+                    style: {
+                      paddingLeft: "8px", // override the cell padding for data cells
+                      paddingRight: "8px",
+                    },
+                  },
+                }}
+              />
+              <div className="d-flex justify-content-end mb-3">
+                <button className="btn btn-primary" onClick={this.toggleModal}>
+                  Add officer
+                </button>
+              </div>
+              <AddOfficerModal
+                firstName={this.state.firstName}
+                lastName={this.state.lastName}
+                badgeNo={this.state.badgeNo}
+                deputyMinistry={this.state.deputyMinistry}
+                administration={this.state.administration}
+                directorate={this.state.directorate}
+                base={this.state.base}
+                show={this.state.showModal}
+                onHide={this.toggleModal}
+                onSubmit={this.handleSubmit}
+                deputyOptions={deputyOptions}
+                directorateOptions={directorateOptions}
+                administrationOptions={administrationOptions}
+                baseOptions={baseOptions}
+                errors={this.state.errors}
+                handleChange={this.handleInputChange}
+                handleSelectChange={this.handleDropdownChange}
+                header={this.state.header}
+              />
             </div>
           </div>
         </div>
