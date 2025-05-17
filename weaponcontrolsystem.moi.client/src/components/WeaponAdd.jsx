@@ -68,7 +68,7 @@ class WeaponAdd extends Component {
 
     if (!name) errors.name = "Name is required";
     if (!type) errors.type = "Type is required";
-    if (!inDate) errors.inDate = "In date is required";
+    //if (!inDate) errors.inDate = "In date is required";
     if (!officerBadgeNo) errors.officerBadgeNo = "Officer badge is required";
     if (!cardNo) errors.cardNo = "Card Number is required";
 
@@ -83,7 +83,7 @@ class WeaponAdd extends Component {
       const weaponData = {
         Name: name,
         Type: type,
-        InDate: ISODate,
+        InDate: ISODate || new Date().toISOString(),
         OutDate: outDate || null, // explicitly allow null
         OfficerBadgeNo: officerBadgeNo,
         CardNo: cardNo,
@@ -136,34 +136,6 @@ class WeaponAdd extends Component {
       });
     }
   };
-
-  handleBlur = (e) => {
-    const { name, value } = e.target;
-    let errors = { ...this.state.errors };
-
-    switch (name) {
-      case "name":
-        errors.name = value.trim() === "" ? "Name is required" : "";
-        break;
-      case "type":
-        errors.type = value.trim() === "" ? "Type is required" : "";
-        break;
-      case "inDate":
-        errors.inDate = value.trim() === "" ? "In date is required" : "";
-        break;
-      case "officerBadgeNo":
-        errors.officerBadgeNo =
-          value.trim() === "" ? "Officer badge is required" : "";
-        break;
-      case "cardNo":
-        errors.cardNo = value.trim() === "" ? "Card Number is required" : "";
-        break;
-      default:
-        break;
-    }
-
-    this.setState({ errors, [name]: value });
-  };
   render() {
     const { name, type, inDate, outDate, officerBadgeNo, errors, cardNo } =
       this.state;
@@ -180,12 +152,6 @@ class WeaponAdd extends Component {
                 <div className="row mb-3">
                   <div className="col-md-4">
                     <label className="form-label fw-semibold">Type</label>
-                    {/* <Dropdown
-                      name="type"
-                      options={this.state.types}
-                      value={type}
-                      onChange={this.handleDropdownChange}
-                    /> */}
                     <Select
                       name="type"
                       options={this.state.types.map((type) => ({
@@ -200,15 +166,8 @@ class WeaponAdd extends Component {
                     />
                     <div className="text-danger">{errors.type}</div>
                   </div>
-
                   <div className="col-md-4">
                     <label className="form-label fw-semibold">Name</label>
-                    {/* <Dropdown
-                      name="name"
-                      options={this.state.names}
-                      value={name}
-                      onChange={this.handleDropdownChange}
-                    /> */}
                     <Select
                       name="name"
                       options={this.state.names.map((name) => ({
@@ -277,7 +236,6 @@ class WeaponAdd extends Component {
                       value={officerBadgeNo}
                       placeholder="Officer Badge No"
                       onChange={this.handleInputChange}
-                      onBlur={this.handleBlur}
                     />
                     <div className="text-danger">{errors.officerBadgeNo}</div>
                   </div>
@@ -290,7 +248,6 @@ class WeaponAdd extends Component {
                       value={cardNo}
                       placeholder="Card No"
                       onChange={this.handleInputChange}
-                      onBlur={this.handleBlur}
                     />
                     <div className="text-danger">{errors.cardNo}</div>
                   </div>
@@ -312,5 +269,4 @@ class WeaponAdd extends Component {
     );
   }
 }
-
 export default WeaponAdd;

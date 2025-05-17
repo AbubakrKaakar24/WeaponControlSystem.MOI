@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { NavLink, Link } from "react-router-dom";
 
 const Navbar = () => {
@@ -6,6 +6,19 @@ const Navbar = () => {
 
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
   const closeDropdown = () => setIsDropdownOpen(false);
+  const dropdownRef = useRef(null);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav
@@ -60,17 +73,69 @@ const Navbar = () => {
                 User
               </NavLink>
             </li>
-            <li className="nav-item">
-              <NavLink
-                to="/weapon"
-                className={({ isActive }) =>
-                  "nav-link" + (isActive ? " active" : "")
-                }
-                style={{ fontSize: "14px" }}
-                onClick={closeDropdown}
+            <li className="nav-item dropdown" ref={dropdownRef}>
+              <span
+                className="nav-link dropdown-toggle"
+                role="button"
+                style={{ fontSize: "14px", cursor: "pointer" }}
+                onClick={() => setIsDropdownOpen((prev) => !prev)}
               >
                 Weapon
-              </NavLink>
+              </span>
+              <ul
+                className={`dropdown-menu bg-dark ${
+                  isDropdownOpen ? "show" : ""
+                }`}
+              >
+                <li>
+                  <NavLink
+                    to="/weapon/view"
+                    className="dropdown-item"
+                    onClick={closeDropdown}
+                    style={{ color: "white", backgroundColor: "transparent" }}
+                    onMouseEnter={(e) =>
+                      (e.target.style.backgroundColor = "#343a40")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.target.style.backgroundColor = "transparent")
+                    }
+                  >
+                    View Weapons
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/weapon/history"
+                    className="dropdown-item"
+                    onClick={closeDropdown}
+                    style={{ color: "white", backgroundColor: "transparent" }}
+                    onMouseEnter={(e) =>
+                      (e.target.style.backgroundColor = "#343a40")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.target.style.backgroundColor = "transparent")
+                    }
+                  >
+                    Weapon History
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/weapon/add"
+                    className="dropdown-item"
+                    onClick={closeDropdown}
+                    style={{ color: "white", backgroundColor: "transparent" }}
+                    onMouseEnter={(e) =>
+                      (e.target.style.backgroundColor = "#343a40")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.target.style.backgroundColor = "transparent")
+                    }
+                  >
+                    Add Weapon
+                  </NavLink>
+                </li>
+              </ul>
             </li>
           </ul>
         </div>
