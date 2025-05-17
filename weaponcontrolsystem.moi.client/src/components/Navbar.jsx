@@ -89,39 +89,7 @@ const Navbar = () => {
               >
                 <li>
                   <NavLink
-                    to="/weapon/view"
-                    className="dropdown-item"
-                    onClick={closeDropdown}
-                    style={{ color: "white", backgroundColor: "transparent" }}
-                    onMouseEnter={(e) =>
-                      (e.target.style.backgroundColor = "#343a40")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.target.style.backgroundColor = "transparent")
-                    }
-                  >
-                    View Weapons
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="/weapon/history"
-                    className="dropdown-item"
-                    onClick={closeDropdown}
-                    style={{ color: "white", backgroundColor: "transparent" }}
-                    onMouseEnter={(e) =>
-                      (e.target.style.backgroundColor = "#343a40")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.target.style.backgroundColor = "transparent")
-                    }
-                  >
-                    Weapon History
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="/weapon/add"
+                    to="/weapon"
                     className="dropdown-item"
                     onClick={closeDropdown}
                     style={{ color: "white", backgroundColor: "transparent" }}
@@ -133,6 +101,38 @@ const Navbar = () => {
                     }
                   >
                     Add Weapon
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/inWeapon"
+                    className="dropdown-item"
+                    onClick={closeDropdown}
+                    style={{ color: "white", backgroundColor: "transparent" }}
+                    onMouseEnter={(e) =>
+                      (e.target.style.backgroundColor = "#343a40")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.target.style.backgroundColor = "transparent")
+                    }
+                  >
+                    Pending Weapons
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/weapon"
+                    className="dropdown-item"
+                    onClick={closeDropdown}
+                    style={{ color: "white", backgroundColor: "transparent" }}
+                    onMouseEnter={(e) =>
+                      (e.target.style.backgroundColor = "#343a40")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.target.style.backgroundColor = "transparent")
+                    }
+                  >
+                    Weapon History
                   </NavLink>
                 </li>
               </ul>

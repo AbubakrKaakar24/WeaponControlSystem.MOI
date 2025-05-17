@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import Navbar from "./Navbar";
-import Dropdown from "./DropDown"; // Your dropdown component
 import Swal from "sweetalert2";
 import ministryData from "../assets/ministryData.json";
-import Select from "react-select";
 import AddOfficerModal from "./AddOfficerModel";
 import DataTable from "react-data-table-component";
 class OfficerAdd extends Component {

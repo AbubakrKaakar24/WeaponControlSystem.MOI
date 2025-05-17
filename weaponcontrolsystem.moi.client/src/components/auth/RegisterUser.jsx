@@ -388,42 +388,38 @@ class RegisterUser extends Component {
                   }}
                 />
               </div>
-              {this.state.users.length > 0 ? (
-                <div>
-                  <h3 className="mb-4 fw-bold text-primary">List of Users</h3>
-                  <DataTable
-                    columns={columns}
-                    data={rows}
-                    pagination
-                    highlightOnHover
-                    striped
-                    responsive
-                    fixedHeader
-                    fixedHeaderScrollHeight="400px"
-                    customStyles={{
-                      rows: {
-                        style: {
-                          minHeight: "50px", // override the row height
-                        },
+              <h3 className="mb-4 fw-bold text-primary">List of Users</h3>
+              <div>
+                <DataTable
+                  columns={columns}
+                  data={rows}
+                  pagination
+                  highlightOnHover
+                  striped
+                  responsive
+                  fixedHeader
+                  fixedHeaderScrollHeight="400px"
+                  customStyles={{
+                    rows: {
+                      style: {
+                        minHeight: "50px", // override the row height
                       },
-                      headCells: {
-                        style: {
-                          backgroundColor: "#f8f9fa",
-                          fontWeight: "bold",
-                        },
+                    },
+                    headCells: {
+                      style: {
+                        backgroundColor: "#f8f9fa",
+                        fontWeight: "bold",
                       },
-                      cells: {
-                        style: {
-                          paddingLeft: "8px", // override the cell padding for data cells
-                          paddingRight: "8px",
-                        },
+                    },
+                    cells: {
+                      style: {
+                        paddingLeft: "8px", // override the cell padding for data cells
+                        paddingRight: "8px",
                       },
-                    }}
-                  />
-                </div>
-              ) : (
-                <p>No users found.</p>
-              )}
+                    },
+                  }}
+                />
+              </div>
 
               <div className="d-flex justify-content-end mb-3">
                 <button className="btn btn-primary" onClick={this.toggleModal}>
