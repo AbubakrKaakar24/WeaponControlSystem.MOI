@@ -14,6 +14,8 @@ namespace WeaponControlSystem.MOI.Core.ServiceContracts
 
         public Task<IEnumerable<OfficerResponseDTo>> GetOfficerList();
 
+        public Task<OfficerResponseDTo> UpdateOfficer(int id, OfficerAddDTo officerDTo);
+
         public Task<OfficerResponseDTo> DeleteOfficer(int? officerId);
 
     }

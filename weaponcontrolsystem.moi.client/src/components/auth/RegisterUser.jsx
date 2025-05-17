@@ -278,7 +278,7 @@ class RegisterUser extends Component {
     if (e.target.value === "") this.setState({ users: this.state.AllUsers });
     else {
       const searchTerm = e.target.value.toLowerCase();
-      const filteredUsers = this.state.users.filter((user) =>
+      const filteredUsers = this.state.AllUsers.filter((user) =>
         user.name.toLowerCase().includes(searchTerm)
       );
       this.setState({ users: filteredUsers });
@@ -325,25 +325,25 @@ class RegisterUser extends Component {
               className=" fa fa-trash fa-2x"
               style={{
                 cursor: "pointer",
-                color: "#4ED7F1", // Bootstrap danger red
+                color: "#F4631E", // Bootstrap danger red
                 transition: "color 0.3s ease",
               }}
               onClick={() => this.handleDelete(row.id)}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#c9302c")} // darker red
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#d9534f")}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#CB0404")} // darker red
+              onMouseLeave={(e) => (e.currentTarget.style.color = "#F4631E")}
             />
 
             <i
               className="fa fa-edit fa-2x"
               style={{
                 cursor: "pointer",
-                color: "#4ED7F1", // Bootstrap success green
+                color: "#FFCF50", // Bootstrap success green
                 transition: "color 0.3s ease",
                 marginTop: "4px",
               }}
               onClick={() => this.handleEdit(row.id)}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#4E71FF")} // darker green
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#4ED7F1")}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#F5C45E")} // darker green
+              onMouseLeave={(e) => (e.currentTarget.style.color = "#FFCF50")}
             />
           </div>
         ),
@@ -376,20 +376,20 @@ class RegisterUser extends Component {
         <div className="container py-5 mt-5">
           <div className="card shadow-lg border-0">
             <div className="card-body">
+              <div className="d-flex justify-content-end">
+                <input
+                  type="search"
+                  name="searchUser"
+                  placeholder="🔍 Search User"
+                  className="form-control w-50 shadow-sm rounded-pill"
+                  style={{ maxWidth: "300px" }}
+                  onChange={(e) => {
+                    this.searchUser(e);
+                  }}
+                />
+              </div>
               {this.state.users.length > 0 ? (
                 <div>
-                  <div className="d-flex justify-content-end">
-                    <input
-                      type="search"
-                      name="searchUser"
-                      placeholder="🔍 Search User"
-                      className="form-control w-50 shadow-sm rounded-pill"
-                      style={{ maxWidth: "300px" }}
-                      onChange={(e) => {
-                        this.searchUser(e);
-                      }}
-                    />
-                  </div>
                   <h3 className="mb-4 fw-bold text-primary">List of Users</h3>
                   <DataTable
                     columns={columns}

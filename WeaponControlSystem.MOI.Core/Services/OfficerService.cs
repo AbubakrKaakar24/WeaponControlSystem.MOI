@@ -50,5 +50,23 @@ namespace WeaponControlSystem.MOI.Core.Services
            var officers= await _unitOfWork.Officer.GetAll();
             return officers.Select(x => x.ToOfficerResponseDTo());
         }
+
+
+        public async Task<OfficerResponseDTo> UpdateOfficer(int id, OfficerAddDTo officerDTo)
+        {
+            var officertoUpdate= await _unitOfWork.Officer.GetFirstOrDefault(o => o.Id==id);
+            if (officertoUpdate == null)
+                throw new Exception("User not found"); ;
+
+            officertoUpdate.Name = officerDTo.Name;
+            officertoUpdate.BadgeNo = officerDTo.BadgeNo;
+            officertoUpdate.Base = officerDTo.Base;
+            officertoUpdate.Administration = officerDTo.Administration;
+            officertoUpdate.Directorate = officerDTo.Directorate;
+            officertoUpdate.Deputy_Ministry = officerDTo.Deputy_Ministry;
+           await _unitOfWork.Officer.Update(officertoUpdate);
+            await _unitOfWork.SaveChanges(CancellationToken.None);
+            return officertoUpdate.ToOfficerResponseDTo();
+        }
     }
 }

@@ -76,12 +76,14 @@ class WeaponAdd extends Component {
       this.setState({ errors });
       return;
     }
+    var InDate = inDate?.toDate();
+    var ISODate = InDate?.toISOString();
 
     try {
       const weaponData = {
         Name: name,
         Type: type,
-        InDate: inDate,
+        InDate: ISODate,
         OutDate: outDate || null, // explicitly allow null
         OfficerBadgeNo: officerBadgeNo,
         CardNo: cardNo,

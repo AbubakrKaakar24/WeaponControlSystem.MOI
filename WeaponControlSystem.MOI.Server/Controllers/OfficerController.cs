@@ -38,7 +38,18 @@ namespace WeaponControlSystem.MOI.Server.Controllers
             return await _officerService.AddOfficer(officerAddDTo);
         }
 
+        [HttpPut("{id}")]
+
+        public async Task<OfficerResponseDTo> Update(int id, OfficerAddDTo officerAddDTo) {
+
+            if (id != 0 && officerAddDTo != null) {
+            
+               return await _officerService.UpdateOfficer(id, officerAddDTo);
+            }
+
+            throw new Exception("Either id or officer is empty!");
         
+        }
 
         // DELETE api/<OfficerController>/5
         [HttpDelete("{id}")]

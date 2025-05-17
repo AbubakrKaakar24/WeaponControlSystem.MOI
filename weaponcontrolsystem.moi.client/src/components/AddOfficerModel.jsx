@@ -23,6 +23,13 @@ export default function AddOfficerModal({
   handleSelectChange,
   header,
 }) {
+  console.log({
+    badgeNo,
+    deputyMinistry,
+    directorate,
+    administration,
+    base,
+  });
   return (
     <Modal show={show} onHide={onHide} size="lg" centered>
       <Modal.Header closeButton>
@@ -97,7 +104,7 @@ export default function AddOfficerModal({
             <Col md={3}>
               <Form.Label>Directorate</Form.Label>
               <Select
-                name="directorte"
+                name="directorate"
                 value={directorateOptions.find(
                   (opt) => opt.value === directorate
                 )}

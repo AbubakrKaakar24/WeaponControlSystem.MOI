@@ -38,7 +38,6 @@ class OfficerAdd extends Component {
     const response = await fetch("https://localhost:7211/api/officer");
     const data = await response.json();
     this.setState({ officers: data, allOfficers: data });
-    console.log("Fetched users:", data);
   };
   async componentDidMount() {
     await this.fetchOfficers();
@@ -112,7 +111,7 @@ class OfficerAdd extends Component {
       this.setState({ base: value });
     }
   };
-  handleDelete = async (userId) => {
+  handleDelete = async (officerId) => {
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -135,7 +134,7 @@ class OfficerAdd extends Component {
         );
         if (response.ok) {
           Swal.fire("Deleted!", "Officer has been deleted.", "success");
-          this.fetchUsers(); // Refresh the user list
+          this.fetchOfficers();
         } else {
           const errorData = await response.json();
           console.log("Error:", errorData);
@@ -161,9 +160,18 @@ class OfficerAdd extends Component {
       `https://localhost:7211/api/officer/${userId}`
     );
     const officer = await response.json();
+    console.log(officer);
     this.setState({
+      id: userId,
       showModal: true,
       header: "Edit officer",
+      firstName: officer.name,
+      lastName: officer.name,
+      badgeNo: officer.badgeNo,
+      deputyMinistry: officer.deputy_Ministry,
+      directorate: officer.directorate,
+      administration: officer.administration,
+      base: officer.base,
     });
   };
   handleSubmit = async (e) => {
@@ -199,8 +207,14 @@ class OfficerAdd extends Component {
           BadgeNo: badgeNo,
         };
 
-        const response = await fetch("https://localhost:7211/api/officer", {
-          method: "POST",
+        var Method = this.state.header === "Add New Officer" ? "POST" : "PUT";
+        var url =
+          this.state.header === "Add New Officer"
+            ? "https://localhost:7211/api/officer"
+            : "https://localhost:7211/api/officer/" + this.state.id;
+
+        const response = await fetch(url, {
+          method: Method,
           headers: {
             "Content-Type": "application/json",
           },
@@ -243,29 +257,19 @@ class OfficerAdd extends Component {
           timer: 3000,
         });
       }
-      // Reset form
     }
   };
 
-  handleBlur = (e) => {
-    const { name, value } = e.target;
-    let errors = this.state.errors;
-
-    switch (name) {
-      case "firstName":
-        errors.firstName = value.length < 1 ? "First name is required" : "";
-        break;
-      case "lastName":
-        errors.lastName = value.length < 1 ? "Last name is required" : "";
-        break;
-      case "badgeNo":
-        errors.badgeNo = value.length < 1 ? "Badge number is required" : "";
-        break;
-      default:
-        break;
+  searchOfficer = (e) => {
+    if (e.target.value === "")
+      this.setState({ officers: this.state.allOfficers });
+    else {
+      const searchTerm = e.target.value.toLowerCase();
+      const FilteredOfficers = this.state.allOfficers.filter((officer) =>
+        officer.name.toLowerCase().includes(searchTerm)
+      );
+      this.setState({ officers: FilteredOfficers });
     }
-
-    this.setState({ errors, [name]: value });
   };
 
   render() {
@@ -328,25 +332,25 @@ class OfficerAdd extends Component {
               className=" fa fa-trash fa-2x"
               style={{
                 cursor: "pointer",
-                color: "#4ED7F1", // Bootstrap danger red
+                color: "#F4631E", // Bootstrap danger red
                 transition: "color 0.3s ease",
               }}
               onClick={() => this.handleDelete(row.id)}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#c9302c")} // darker red
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#d9534f")}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#CB0404")} // darker red
+              onMouseLeave={(e) => (e.currentTarget.style.color = "#F4631E")}
             />
 
             <i
               className="fa fa-edit fa-2x"
               style={{
                 cursor: "pointer",
-                color: "#4ED7F1", // Bootstrap success green
+                color: "#FFCF50", // Bootstrap success green
                 transition: "color 0.3s ease",
                 marginTop: "4px",
               }}
               onClick={() => this.handleEdit(row.id)}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#4E71FF")} // darker green
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#4ED7F1")}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#F5C45E")} // darker green
+              onMouseLeave={(e) => (e.currentTarget.style.color = "#FFCF50")}
             />
           </div>
         ),
@@ -362,6 +366,7 @@ class OfficerAdd extends Component {
       base: officer.base,
     }));
 
+    console.log("BadgeNo: " + this.state.badgeNo);
     return (
       <div className="bg-light min-vh-100">
         <Navbar />
@@ -369,6 +374,18 @@ class OfficerAdd extends Component {
         <div className="container py-5 mt-5">
           <div className="card shadow-lg border-0">
             <div className="card-body">
+              <div className="d-flex justify-content-end">
+                <input
+                  type="search"
+                  name="searchOfficer"
+                  placeholder="🔍 Search Officer"
+                  className="form-control w-50 shadow-sm rounded-pill"
+                  style={{ maxWidth: "300px" }}
+                  onChange={(e) => {
+                    this.searchOfficer(e);
+                  }}
+                />
+              </div>
               <h3 className="mb-4 fw-bold text-primary">List of Officers</h3>
               <DataTable
                 columns={columns}
