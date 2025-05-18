@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace WeaponControlSystem.MOI.Core.Domain.Entities
 {
     public class Weapon
-    {
+    {   
         public int Id { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }

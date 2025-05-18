@@ -33,6 +33,50 @@ function InWeapon() {
       selector: (row) => row.inDate,
       sortable: true,
     },
+    {
+      name: "Actions",
+      cell: (row) => (
+        <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+          <i
+            className=" fa fa-trash fa-2x"
+            style={{
+              cursor: "pointer",
+              color: "#F4631E", // Bootstrap danger red
+              transition: "color 0.3s ease",
+            }}
+            onClick={() => this.handleDelete(row.id)}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#CB0404")} // darker red
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#F4631E")}
+          />
+
+          <i
+            className="fa fa-edit fa-2x"
+            style={{
+              cursor: "pointer",
+              color: "#FFCF50", // Bootstrap success green
+              transition: "color 0.3s ease",
+              marginTop: "4px",
+            }}
+            onClick={() => this.handleEdit(row.id)}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#F5C45E")} // darker green
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#FFCF50")}
+          />
+          <i
+            className="fas fa-circle-right fa-2x"
+            style={{
+              cursor: "pointer",
+              color: "blue",
+              transition: "color 0.3s ease",
+              marginTop: "4px",
+              marginLeft: "50px",
+            }}
+            onClick={() => this.handleEdit(row.id)}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#F5C45E")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#FFCF50")}
+          />
+        </div>
+      ),
+    },
   ];
   const row = inWeapons.map((w) => ({
     name: w.name,

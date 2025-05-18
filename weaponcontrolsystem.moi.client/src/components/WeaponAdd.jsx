@@ -78,9 +78,6 @@ class WeaponAdd extends Component {
     newDate.setMinutes(minutes);
     newDate.setSeconds(seconds);
     newDate.setMilliseconds(0);
-    console.log("Combined (local):", newDate.toString());
-    console.log("Combined (ISO):", newDate.toISOString());
-
     return newDate;
   };
 
@@ -91,7 +88,7 @@ class WeaponAdd extends Component {
 
     if (!name) errors.name = "Name is required";
     if (!type) errors.type = "Type is required";
-    //if (!inDate) errors.inDate = "In date is required";
+    if (!inDate) errors.inDate = "In date is required";
     if (!officerBadgeNo) errors.officerBadgeNo = "Officer badge is required";
     if (!cardNo) errors.cardNo = "Card Number is required";
 
