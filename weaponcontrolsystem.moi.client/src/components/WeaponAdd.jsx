@@ -6,6 +6,7 @@ import Select from "react-select";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "../assets/persian_fa";
 import DatePicker from "react-multi-date-picker";
+import TimePicker from "react-multi-date-picker/plugins/time_picker";
 
 class WeaponAdd extends Component {
   state = {
@@ -14,6 +15,7 @@ class WeaponAdd extends Component {
     names: [],
     types: [],
     inDate: "",
+    inTime: "",
     outDate: "",
     officerBadgeNo: "",
     cardNo: "",
@@ -38,6 +40,9 @@ class WeaponAdd extends Component {
       types,
     });
   }
+  handleTimeChange = (time) => {
+    this.setState({ inTime: time });
+  };
 
   handleDropdownChange = (name, value) => {
     if (name === "type") {
@@ -60,6 +65,24 @@ class WeaponAdd extends Component {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
+  combineDateAndTime = (date, time) => {
+    if (!date || !time) return null;
+
+    const [hoursStr, minutesStr, secondsStr = "0"] = time.toString().split(":");
+    const hours = parseInt(hoursStr, 10);
+    const minutes = parseInt(minutesStr, 10);
+    const seconds = parseInt(secondsStr, 10);
+
+    const newDate = new Date(date);
+    newDate.setHours(hours);
+    newDate.setMinutes(minutes);
+    newDate.setSeconds(seconds);
+    newDate.setMilliseconds(0);
+    console.log("Combined (local):", newDate.toString());
+    console.log("Combined (ISO):", newDate.toISOString());
+
+    return newDate;
+  };
 
   handleSubmit = async (e) => {
     e.preventDefault();
@@ -77,14 +100,19 @@ class WeaponAdd extends Component {
       return;
     }
     var InDate = inDate?.toDate();
-    var ISODate = InDate?.toISOString();
+    InDate = this.combineDateAndTime(InDate, this.state.inTime);
+    // var ISODate = InDate?.toISOString();
+    if (outDate != "") {
+      var OutDate = outDate?.toDate();
+      var OutISODate = OutDate?.toISOString();
+    }
 
     try {
       const weaponData = {
         Name: name,
         Type: type,
-        InDate: ISODate || new Date().toISOString(),
-        OutDate: outDate || null, // explicitly allow null
+        InDate: InDate || new Date().toISOString(),
+        OutDate: OutISODate || null, // explicitly allow null
         OfficerBadgeNo: officerBadgeNo,
         CardNo: cardNo,
       };
@@ -150,7 +178,7 @@ class WeaponAdd extends Component {
               <h3 className="mb-4 fw-bold text-primary">Add New Weapon</h3>
               <form noValidate onSubmit={this.handleSubmit}>
                 <div className="row mb-3">
-                  <div className="col-md-4">
+                  <div className="col-md-3">
                     <label className="form-label fw-semibold">Type</label>
                     <Select
                       name="type"
@@ -166,7 +194,7 @@ class WeaponAdd extends Component {
                     />
                     <div className="text-danger">{errors.type}</div>
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-md-3">
                     <label className="form-label fw-semibold">Name</label>
                     <Select
                       name="name"
@@ -184,7 +212,7 @@ class WeaponAdd extends Component {
                     <div className="text-danger">{errors.name}</div>
                   </div>
 
-                  <div className="col-md-4 d-flex flex-column">
+                  <div className="col-md-3 d-flex flex-column">
                     <label className="form-label fw-semibold">In Date</label>
                     <DatePicker
                       value={this.state.inDate}
@@ -200,6 +228,29 @@ class WeaponAdd extends Component {
                         color: "black",
                       }}
                     />
+
+                    <div className="text-danger">{errors.inDate}</div>
+                  </div>
+                  <div className="col-md-3 d-flex flex-column">
+                    <label className="form-label fw-semibold">In time</label>
+                    <DatePicker
+                      disableDayPicker
+                      value={this.state.inTime}
+                      onChange={(value) => {
+                        this.setState({ inTime: value });
+                      }}
+                      format="hh:mm:ss "
+                      calendarposition="bottom-left"
+                      placeholder="Select In Date"
+                      plugins={[<TimePicker position="bottom" />]}
+                      style={{
+                        width: "100%",
+                        backgroundColor: "#fff",
+                        height: "130%",
+                        color: "black",
+                      }}
+                    />
+
                     <div className="text-danger">{errors.inDate}</div>
                   </div>
                 </div>

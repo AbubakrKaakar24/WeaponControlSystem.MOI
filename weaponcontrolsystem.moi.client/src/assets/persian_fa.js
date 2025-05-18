@@ -24,7 +24,7 @@ const persianFa = {
     ["جمعه"],
   ],
   digits: ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"],
-  meridiems: [["قبل از ظهر"], ["بعد از ظهر"]],
+  meridiems: ["قبل از ظهر", "بعد از ظهر"],
 };
 
 export default persianFa;
