@@ -330,25 +330,24 @@ class OfficerAdd extends Component {
               className=" fa fa-trash fa-2x"
               style={{
                 cursor: "pointer",
-                color: "#F4631E", // Bootstrap danger red
+                color: "#DC3545", // Bootstrap danger red
                 transition: "color 0.3s ease",
               }}
               onClick={() => this.handleDelete(row.id)}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#CB0404")} // darker red
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#F4631E")}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#A71D2A")} // darker red
+              onMouseLeave={(e) => (e.currentTarget.style.color = "#DC3545")}
             />
 
             <i
               className="fa fa-edit fa-2x"
               style={{
                 cursor: "pointer",
-                color: "#FFCF50", // Bootstrap success green
+                color: "#FFC107", // Bootstrap success green
                 transition: "color 0.3s ease",
-                marginTop: "4px",
               }}
               onClick={() => this.handleEdit(row.id)}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#F5C45E")} // darker green
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#FFCF50")}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#E0A800")} // darker green
+              onMouseLeave={(e) => (e.currentTarget.style.color = "#FFC107")}
             />
           </div>
         ),

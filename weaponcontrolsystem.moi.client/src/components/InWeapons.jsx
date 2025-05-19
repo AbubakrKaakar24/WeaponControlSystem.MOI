@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import DataTable from "react-data-table-component";
-import { data } from "react-router-dom";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "../assets/persian_fa";
-import DatePicker from "react-multi-date-picker";
 import DateObject from "react-date-object";
+import Swal from "sweetalert2";
+import WeaponModel from "./weaponModel";
 function InWeapon() {
   const [inWeapons, setInWeapons] = useState([]);
+  const [allInWeapons, setAllInWeapons] = useState([]);
+  const [weapon, setWeapon] = useState();
+  const [show, setShow] = useState(false);
+
+  const toggleModal = () => {
+    setShow(!show);
+  };
 
   const columns = [
     { name: "Name", selector: (row) => row.name, sortable: true },
@@ -41,44 +48,44 @@ function InWeapon() {
             className=" fa fa-trash fa-2x"
             style={{
               cursor: "pointer",
-              color: "#F4631E", // Bootstrap danger red
+              color: "#DC3545", // Bootstrap danger red
               transition: "color 0.3s ease",
             }}
-            onClick={() => this.handleDelete(row.id)}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "#CB0404")} // darker red
-            onMouseLeave={(e) => (e.currentTarget.style.color = "#F4631E")}
+            onClick={() => handleDelete(row.id)}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#A71D2A")} // darker red
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#DC3545")}
           />
 
           <i
             className="fa fa-edit fa-2x"
             style={{
               cursor: "pointer",
-              color: "#FFCF50", // Bootstrap success green
+              color: "#FFC107", // Bootstrap success green
               transition: "color 0.3s ease",
-              marginTop: "4px",
             }}
-            onClick={() => this.handleEdit(row.id)}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "#F5C45E")} // darker green
-            onMouseLeave={(e) => (e.currentTarget.style.color = "#FFCF50")}
+            onClick={() => handleEdit(row.id)}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#E0A800")} // darker green
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#FFC107")}
           />
           <i
             className="fas fa-circle-right fa-2x"
             style={{
               cursor: "pointer",
-              color: "blue",
+              color: "#0D6EFD",
               transition: "color 0.3s ease",
               marginTop: "4px",
               marginLeft: "50px",
             }}
             onClick={() => this.handleEdit(row.id)}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "#F5C45E")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "#FFCF50")}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#0A58CA")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#0D6EFD")}
           />
         </div>
       ),
     },
   ];
   const row = inWeapons.map((w) => ({
+    id: w.id,
     name: w.name,
     type: w.type,
     officerBadgeNo: w.officerBadgeNo,
@@ -91,20 +98,84 @@ function InWeapon() {
     const Data = await response.json();
 
     const convertedWeapons = Data.map((weapon) => {
-      const localDate = new Date(weapon.inDate); // Converts from UTC to local time
+      // Parse the UTC string
+      const utcDate = new Date(weapon.inDate);
 
+      // Adjust to local time manually
+      const localTime = new Date(
+        utcDate.getTime() - utcDate.getTimezoneOffset() * 60000
+      );
+
+      // Convert to Shamsi (Jalali) using local time
       const shamsiDate = new DateObject({
-        date: localDate,
+        date: localTime,
         calendar: persian,
         locale: persian_fa,
       });
+
       return {
         ...weapon,
-        inDate: shamsiDate.format("YYYY/MM/DD/hh:mm"), // Output like: 1403/02/27
+        inDate: shamsiDate.format("YYYY/MM/DD HH:mm"),
       };
     });
-
+    setAllInWeapons(convertedWeapons);
     setInWeapons(convertedWeapons);
+  };
+  const searchWeapon = (e) => {
+    if (e.target.value == "") setInWeapons(allInWeapons);
+    else {
+      const searchTerm = e.target.value;
+      const weapons = allInWeapons.filter((w) => w.cardNo == searchTerm);
+      setInWeapons(weapons);
+    }
+  };
+  const handleDelete = async (weaponId) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    });
+    if (result.isConfirmed) {
+      try {
+        const response = await fetch(
+          `https://localhost:7211/api/weapon/${weaponId}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (response.ok) {
+          Swal.fire({
+            icon: "success",
+            text: "Weapons has been deleted",
+            title: "Deleted!",
+          });
+          fetchWeapons();
+        } else {
+          const errorData = await response.json();
+          console.log("Error:", errorData);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: errorData.message,
+          });
+        }
+      } catch (error) {
+        Swal.fire({ icon: "error", title: "Error", text: error.message });
+      }
+    }
+  };
+  const handleEdit = (weaponID) => {
+    var weapon = allInWeapons.find((w) => w.id == weaponID);
+    console.log("Weapon: " + weapon.type);
+    setWeapon(weapon);
+    setShow(true);
   };
 
   useEffect(() => {
@@ -116,7 +187,19 @@ function InWeapon() {
       <div className="container py-5 mt-5">
         <div className="card shadow-lg border-0">
           <div className="card-body">
+            <div className="d-flex justify-content-end">
+              <input
+                type="search"
+                placeholder="🔍 Search Weapon"
+                className="form-control w-50 shadow-sm rounded-pill "
+                style={{
+                  maxWidth: "300px",
+                }}
+                onChange={(e) => searchWeapon(e)}
+              />
+            </div>
             <h3 className="mb-4 fw-bold text-primary"> List of in weapons</h3>
+
             <DataTable
               columns={columns}
               data={row}
@@ -145,6 +228,7 @@ function InWeapon() {
                 },
               }}
             />
+            <WeaponModel show={show} weapon={weapon} onHide={toggleModal} />
           </div>
         </div>
       </div>
