@@ -6,6 +6,7 @@ import RegisterUser from "./components/auth/RegisterUser";
 import WeaponAdd from "./components/WeaponAdd";
 import "./App.css";
 import InWeapon from "./components/InWeapons";
+import WeaponHistory from "./components/WeaponHistory";
 function App() {
   return (
     <Router>
@@ -17,6 +18,7 @@ function App() {
         <Route path="/register" element={<RegisterUser />} />
         <Route path="/weapon" element={<WeaponAdd />} />
         <Route path="/inWeapon" element={<InWeapon />} />
+        <Route path="/weaponHistory" element={<WeaponHistory />} />
       </Routes>
     </Router>
   );

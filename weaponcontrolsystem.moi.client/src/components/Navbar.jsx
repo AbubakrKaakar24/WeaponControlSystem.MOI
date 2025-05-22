@@ -121,7 +121,7 @@ const Navbar = () => {
                 </li>
                 <li>
                   <NavLink
-                    to="/weapon"
+                    to="/weaponHistory"
                     className="dropdown-item"
                     onClick={closeDropdown}
                     style={{ color: "white", backgroundColor: "transparent" }}

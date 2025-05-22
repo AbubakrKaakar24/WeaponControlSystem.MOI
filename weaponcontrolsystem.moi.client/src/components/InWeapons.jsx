@@ -14,7 +14,10 @@ function InWeapon() {
 
   const toggleModal = () => {
     setShow(!show);
+    setWeapon({});
   };
+
+  const handleCheckout = () => {};
 
   const columns = [
     { name: "Name", selector: (row) => row.name, sortable: true },
@@ -76,7 +79,7 @@ function InWeapon() {
               marginTop: "4px",
               marginLeft: "50px",
             }}
-            onClick={() => this.handleEdit(row.id)}
+            onClick={() => handleCheckout}
             onMouseEnter={(e) => (e.currentTarget.style.color = "#0A58CA")}
             onMouseLeave={(e) => (e.currentTarget.style.color = "#0D6EFD")}
           />
@@ -105,8 +108,6 @@ function InWeapon() {
       const localTime = new Date(
         utcDate.getTime() - utcDate.getTimezoneOffset() * 60000
       );
-
-      // Convert to Shamsi (Jalali) using local time
       const shamsiDate = new DateObject({
         date: localTime,
         calendar: persian,
@@ -198,7 +199,7 @@ function InWeapon() {
                 onChange={(e) => searchWeapon(e)}
               />
             </div>
-            <h3 className="mb-4 fw-bold text-primary"> List of in weapons</h3>
+            <h3 className="mb-4 fw-bold text-primary"> Pending weapons</h3>
 
             <DataTable
               columns={columns}

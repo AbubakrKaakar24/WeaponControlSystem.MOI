@@ -8,17 +8,15 @@ import persian_fa from "../assets/persian_fa";
 import DatePicker from "react-multi-date-picker";
 import Swal from "sweetalert2"; // Make sure you import this
 import TimePicker from "react-multi-date-picker/plugins/time_picker"; // Not used in UI
-
+import DateObject from "react-date-object";
 export default function WeaponModel({ show, onHide, weapon }) {
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [inDate, setInDate] = useState("");
-  const [outDate, setOutDate] = useState("");
   const [inTime, setInTime] = useState("");
   const [officerBadgeNo, setOfficerBadgeNo] = useState("");
   const [cardNo, setCardNo] = useState("");
   const [errors, setErrors] = useState({});
-
   const [types, setTypes] = useState([]);
   const [names, setNames] = useState([]);
   useEffect(() => {
@@ -26,15 +24,20 @@ export default function WeaponModel({ show, onHide, weapon }) {
       .map((weaponType) => weaponType.weapons)
       .flat();
     const types = weaponData.weaponTypes.map((weaponType) => weaponType.type);
+    const timeString = "11:12:43";
+    const timeObject = new DateObject({ format: "hh:mm:ss", date: timeString });
+    setInTime(timeObject);
+    console.log("In Time inside Modal: " + inTime);
     if (weapon) {
       setName(weapon.name || "");
       setType(weapon.type || "");
       setCardNo(weapon.cardNo || "");
       setInDate(weapon.inDate || "");
+      setOfficerBadgeNo(weapon.officerBadgeNo);
     }
     setNames(names);
     setTypes(types);
-  }, []);
+  }, [weapon]);
   const combineDateAndTime = (date, time) => {
     if (!date || !time) return null;
 
@@ -86,6 +89,7 @@ export default function WeaponModel({ show, onHide, weapon }) {
     if (!name) temperrors.name = "Name is required";
     if (!type) temperrors.type = "Type is required";
     if (!inDate) temperrors.inDate = "In date is required";
+    if (!inTime) temperrors.inTime = "In Time is required";
     if (!officerBadgeNo)
       temperrors.officerBadgeNo = "Officer badge is required";
     if (!cardNo) temperrors.cardNo = "Card number is required";
@@ -98,14 +102,11 @@ export default function WeaponModel({ show, onHide, weapon }) {
     let inDateObj = inDate?.toDate?.() || new Date();
     let combinedInDate = combineDateAndTime(inDateObj, inTime);
 
-    let outDateObj = outDate ? outDate?.toDate?.() : null;
-    let outISODate = outDateObj ? outDateObj.toISOString() : null;
-
     const weaponPayload = {
       Name: name,
       Type: type,
       InDate: combinedInDate?.toISOString() || new Date().toISOString(),
-      OutDate: outISODate,
+      OutDate: null,
       OfficerBadgeNo: officerBadgeNo,
       CardNo: cardNo,
     };
@@ -129,7 +130,6 @@ export default function WeaponModel({ show, onHide, weapon }) {
         setName("");
         setType("");
         setInDate("");
-        setOutDate("");
         setInTime("");
         setOfficerBadgeNo("");
         setCardNo("");
@@ -193,7 +193,10 @@ export default function WeaponModel({ show, onHide, weapon }) {
               <Form.Label>In Date</Form.Label>
               <DatePicker
                 value={inDate}
-                onChange={(value) => setInDate(value)}
+                onChange={(value) => {
+                  console.log("VAlue: " + value.toString);
+                  setInDate(value);
+                }}
                 calendar={persian}
                 locale={persian_fa}
                 calendarPosition="bottom-left"
@@ -236,6 +239,8 @@ export default function WeaponModel({ show, onHide, weapon }) {
                   fontSize: "1rem",
                 }}
               />
+
+              <div className="text-danger">{errors.inTime}</div>
             </Col>
             <Col md={4}>
               <Form.Label>Officer Badge No</Form.Label>

@@ -16,7 +16,6 @@ class WeaponAdd extends Component {
     types: [],
     inDate: "",
     inTime: "",
-    outDate: "",
     officerBadgeNo: "",
     cardNo: "",
     errors: {
@@ -89,6 +88,7 @@ class WeaponAdd extends Component {
     if (!name) errors.name = "Name is required";
     if (!type) errors.type = "Type is required";
     if (!inDate) errors.inDate = "In date is required";
+    if (!inTime) errors.inTime = "In Time is required";
     if (!officerBadgeNo) errors.officerBadgeNo = "Officer badge is required";
     if (!cardNo) errors.cardNo = "Card Number is required";
 
@@ -98,18 +98,12 @@ class WeaponAdd extends Component {
     }
     var InDate = inDate?.toDate();
     InDate = this.combineDateAndTime(InDate, this.state.inTime);
-    // var ISODate = InDate?.toISOString();
-    if (outDate != "") {
-      var OutDate = outDate?.toDate();
-      var OutISODate = OutDate?.toISOString();
-    }
-
     try {
       const weaponData = {
         Name: name,
         Type: type,
         InDate: InDate || new Date().toISOString(),
-        OutDate: OutISODate || null, // explicitly allow null
+        OutDate: null, // explicitly allow null
         OfficerBadgeNo: officerBadgeNo,
         CardNo: cardNo,
       };
@@ -132,7 +126,6 @@ class WeaponAdd extends Component {
           name: "",
           type: "",
           inDate: "",
-          outDate: "",
           officerBadgeNo: "",
           cardNo: "",
           errors: {
@@ -238,7 +231,7 @@ class WeaponAdd extends Component {
                       }}
                       format="hh:mm:ss "
                       calendarposition="bottom-left"
-                      placeholder="Select In Date"
+                      placeholder="Select In Time"
                       plugins={[<TimePicker position="bottom" />]}
                       style={{
                         width: "100%",
@@ -248,32 +241,12 @@ class WeaponAdd extends Component {
                       }}
                     />
 
-                    <div className="text-danger">{errors.inDate}</div>
+                    <div className="text-danger">{errors.inTime}</div>
                   </div>
                 </div>
 
                 <div className="row mb-3">
-                  <div className="col-md-4 d-flex flex-column">
-                    <label className="form-label fw-semibold">
-                      Out Date (optional)
-                    </label>
-
-                    <DatePicker
-                      value={this.state.outDate}
-                      onChange={(value) => this.setState({ outDate: value })}
-                      calendar={persian}
-                      locale={persian_fa}
-                      placeholder="Select Out Date"
-                      style={{
-                        width: "100%",
-                        backgroundColor: "#fff",
-                        color: "black",
-                        height: "130%",
-                      }}
-                    />
-                  </div>
-
-                  <div className="col-md-4">
+                  <div className="col-md-3">
                     <label className="form-label fw-semibold">
                       Officer Badge No
                     </label>
@@ -287,7 +260,7 @@ class WeaponAdd extends Component {
                     />
                     <div className="text-danger">{errors.officerBadgeNo}</div>
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-md-3">
                     <label className="form-label fw-semibold">Card No</label>
                     <input
                       type="text"
