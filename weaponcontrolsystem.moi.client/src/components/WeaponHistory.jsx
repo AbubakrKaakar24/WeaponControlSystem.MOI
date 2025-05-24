@@ -4,7 +4,6 @@ import DataTable from "react-data-table-component";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "../assets/persian_fa";
 import DateObject from "react-date-object";
-import Swal from "sweetalert2";
 
 const WeaponHistory = () => {
   const [weapons, setWeapons] = useState([]);
@@ -74,7 +73,7 @@ const WeaponHistory = () => {
   }, []);
 
   return (
-    <div>
+    <div className="bg-light min-vh-100">
       <Navbar />
       <div className="container py-5 mt-5">
         <div className="card shadow-lg border-0">
