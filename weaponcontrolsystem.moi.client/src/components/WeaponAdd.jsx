@@ -15,7 +15,6 @@ class WeaponAdd extends Component {
     names: [],
     types: [],
     inDate: "",
-    inTime: "",
     officerBadgeNo: "",
     cardNo: "",
     errors: {
@@ -39,9 +38,6 @@ class WeaponAdd extends Component {
       types,
     });
   }
-  handleTimeChange = (time) => {
-    this.setState({ inTime: time });
-  };
 
   handleDropdownChange = (name, value) => {
     if (name === "type") {
@@ -64,21 +60,6 @@ class WeaponAdd extends Component {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
-  combineDateAndTime = (date, time) => {
-    if (!date || !time) return null;
-
-    const [hoursStr, minutesStr, secondsStr = "0"] = time.toString().split(":");
-    const hours = parseInt(hoursStr, 10);
-    const minutes = parseInt(minutesStr, 10);
-    const seconds = parseInt(secondsStr, 10);
-
-    const newDate = new Date(date);
-    newDate.setHours(hours);
-    newDate.setMinutes(minutes);
-    newDate.setSeconds(seconds);
-    newDate.setMilliseconds(0);
-    return newDate;
-  };
 
   handleSubmit = async (e) => {
     e.preventDefault();
@@ -88,7 +69,6 @@ class WeaponAdd extends Component {
     if (!name) errors.name = "Name is required";
     if (!type) errors.type = "Type is required";
     if (!inDate) errors.inDate = "In date is required";
-    if (!inTime) errors.inTime = "In Time is required";
     if (!officerBadgeNo) errors.officerBadgeNo = "Officer badge is required";
     if (!cardNo) errors.cardNo = "Card Number is required";
 
@@ -97,7 +77,6 @@ class WeaponAdd extends Component {
       return;
     }
     var InDate = inDate?.toDate();
-    InDate = this.combineDateAndTime(InDate, this.state.inTime);
     try {
       const weaponData = {
         Name: name,
@@ -211,27 +190,7 @@ class WeaponAdd extends Component {
                       locale={persian_fa}
                       calendarposition="bottom-left"
                       placeholder="Select In Date"
-                      style={{
-                        width: "100%",
-                        backgroundColor: "#fff",
-                        height: "130%",
-                        color: "black",
-                      }}
-                    />
-
-                    <div className="text-danger">{errors.inDate}</div>
-                  </div>
-                  <div className="col-md-3 d-flex flex-column">
-                    <label className="form-label fw-semibold">In time</label>
-                    <DatePicker
-                      disableDayPicker
-                      value={this.state.inTime}
-                      onChange={(value) => {
-                        this.setState({ inTime: value });
-                      }}
-                      format="hh:mm:ss "
-                      calendarposition="bottom-left"
-                      placeholder="Select In Time"
+                      format="YYYY/MM/DD hh:mm:ss"
                       plugins={[<TimePicker position="bottom" />]}
                       style={{
                         width: "100%",
@@ -241,7 +200,7 @@ class WeaponAdd extends Component {
                       }}
                     />
 
-                    <div className="text-danger">{errors.inTime}</div>
+                    <div className="text-danger">{errors.inDate}</div>
                   </div>
                 </div>
 

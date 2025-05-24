@@ -174,7 +174,6 @@ function InWeapon() {
   };
   const handleEdit = (weaponID) => {
     var weapon = allInWeapons.find((w) => w.id == weaponID);
-    console.log("Weapon: " + weapon.type);
     setWeapon(weapon);
     setShow(true);
   };

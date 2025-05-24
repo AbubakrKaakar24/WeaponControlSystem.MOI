@@ -201,6 +201,8 @@ export default function WeaponModel({ show, onHide, weapon }) {
                 locale={persian_fa}
                 calendarPosition="bottom-left"
                 placeholder="Select In Date"
+                format="YYYY/MM/DD hh:mm:ss"
+                plugins={[<TimePicker position="bottom" />]}
                 style={{
                   width: "115%",
                   backgroundColor: "#fff",
@@ -218,30 +220,6 @@ export default function WeaponModel({ show, onHide, weapon }) {
           </Row>
 
           <Row className="mb-2">
-            <Col md={4}>
-              <Form.Label>In Time</Form.Label>
-              <DatePicker
-                disableDayPicker
-                value={inTime}
-                onChange={(value) => setInTime(value)}
-                format="hh:mm:ss"
-                calendarPosition="bottom-left"
-                placeholder="Select In Time"
-                plugins={[<TimePicker position="bottom" />]}
-                style={{
-                  width: "115%",
-                  backgroundColor: "#fff",
-                  height: "38px",
-                  color: "black",
-                  border: "1px solid #ced4da",
-                  borderRadius: "0.375rem",
-                  padding: "0.375rem 0.75rem",
-                  fontSize: "1rem",
-                }}
-              />
-
-              <div className="text-danger">{errors.inTime}</div>
-            </Col>
             <Col md={4}>
               <Form.Label>Officer Badge No</Form.Label>
               <Form.Control

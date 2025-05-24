@@ -12,7 +12,7 @@ namespace WeaponControlSystem.MOI.Core.Domain.Entities
         public string Type { get; set; }
        public DateTime InDate { get; set; }
        public DateTime? OutDate { get; set; }
-      public  string OfficerBadgeNo { get; set; } // FK to Officer's BadgeNo
+       public  string OfficerBadgeNo { get; set; } // FK to Officer's BadgeNo
 
         // Navigation property (optional)
         public Officer Officer { get; set; }
