@@ -9,7 +9,13 @@ import DatePicker from "react-multi-date-picker";
 import Swal from "sweetalert2"; // Make sure you import this
 import TimePicker from "react-multi-date-picker/plugins/time_picker"; // Not used in UI
 import DateObject from "react-date-object";
-export default function WeaponModel({ show, onHide, weapon }) {
+export default function WeaponModel({
+  show,
+  onHide,
+  weapon,
+  id,
+  fetchWeapons,
+}) {
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [inDate, setInDate] = useState("");
@@ -38,21 +44,6 @@ export default function WeaponModel({ show, onHide, weapon }) {
     setNames(names);
     setTypes(types);
   }, [weapon]);
-  const combineDateAndTime = (date, time) => {
-    if (!date || !time) return null;
-
-    const [hoursStr, minutesStr, secondsStr = "0"] = time.toString().split(":");
-    const hours = parseInt(hoursStr, 10);
-    const minutes = parseInt(minutesStr, 10);
-    const seconds = parseInt(secondsStr, 10);
-
-    const newDate = new Date(date);
-    newDate.setHours(hours);
-    newDate.setMinutes(minutes);
-    newDate.setSeconds(seconds);
-    newDate.setMilliseconds(0);
-    return newDate;
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -89,7 +80,6 @@ export default function WeaponModel({ show, onHide, weapon }) {
     if (!name) temperrors.name = "Name is required";
     if (!type) temperrors.type = "Type is required";
     if (!inDate) temperrors.inDate = "In date is required";
-    if (!inTime) temperrors.inTime = "In Time is required";
     if (!officerBadgeNo)
       temperrors.officerBadgeNo = "Officer badge is required";
     if (!cardNo) temperrors.cardNo = "Card number is required";
@@ -100,20 +90,19 @@ export default function WeaponModel({ show, onHide, weapon }) {
     }
 
     let inDateObj = inDate?.toDate?.() || new Date();
-    let combinedInDate = combineDateAndTime(inDateObj, inTime);
 
     const weaponPayload = {
       Name: name,
       Type: type,
-      InDate: combinedInDate?.toISOString() || new Date().toISOString(),
+      InDate: inDateObj.toISOString() || new Date().toISOString(),
       OutDate: null,
       OfficerBadgeNo: officerBadgeNo,
       CardNo: cardNo,
     };
 
     try {
-      const response = await fetch("https://localhost:7211/api/weapon", {
-        method: "POST",
+      const response = await fetch("https://localhost:7211/api/weapon/" + id, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(weaponPayload),
       });
@@ -121,8 +110,8 @@ export default function WeaponModel({ show, onHide, weapon }) {
       if (response.ok) {
         Swal.fire({
           icon: "success",
-          title: "Weapon Added",
-          text: "The weapon has been added successfully!",
+          title: "Weapon Updated",
+          text: "The weapon has been updated successfully!",
           timer: 3000,
         });
 
@@ -135,6 +124,8 @@ export default function WeaponModel({ show, onHide, weapon }) {
         setCardNo("");
         setErrors({});
         onHide();
+
+        fetchWeapons();
       } else {
         Swal.fire({
           icon: "error",

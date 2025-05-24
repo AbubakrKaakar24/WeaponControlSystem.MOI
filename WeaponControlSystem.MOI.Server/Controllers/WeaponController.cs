@@ -36,7 +36,16 @@ namespace WeaponControlSystem.MOI.Server.Controllers
             return await _weaponService.AddWeapon(weaponAddDTo);
         }
 
-      
+        [HttpPut("{id}")]
+        public async Task<WeaponResponseDTo> Update(int id, [FromBody] WeaponAddDTo weaponAddDTo)
+        {    
+                if(id>0&& weaponAddDTo != null)
+            {
+                  return await _weaponService.UpdateWeapon(id, weaponAddDTo);
+            }
+            return null;
+             
+        }
 
         // DELETE api/<WeaponController>/5
         [HttpDelete("{id}")]

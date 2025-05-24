@@ -32,7 +32,7 @@ namespace WeaponControlSystem.MOI.Server.Controllers
 
         // POST api/<WeaponHandoverController>
         [HttpPost]
-        public async Task<WeaponHandoverAddDTo> Post(WeaponHandoverAddDTo weaponHandoverAddDTo)
+        public async Task<WeaponHandoverAddDTo> Post([FromBody]WeaponHandoverAddDTo weaponHandoverAddDTo)
         {
             return await _weaponHandoverService.AddWeaponHandover(weaponHandoverAddDTo);
 

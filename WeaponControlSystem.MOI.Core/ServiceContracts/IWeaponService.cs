@@ -16,5 +16,7 @@ namespace WeaponControlSystem.MOI.Core.ServiceContracts
 
         public Task<WeaponResponseDTo> DeleteWeapon(int? weaponId);
 
+        public Task<WeaponResponseDTo> UpdateWeapon(int id, WeaponAddDTo weaponAddDTo);
+
     }
 }

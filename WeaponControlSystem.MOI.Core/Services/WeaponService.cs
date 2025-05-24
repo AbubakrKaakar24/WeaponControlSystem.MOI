@@ -43,5 +43,22 @@ namespace WeaponControlSystem.MOI.Core.Services
             var weapons = await _unitOfWork.Weapon.GetAll();
             return weapons.Select(x => x.ToWeaponResponseDTo());
         }
+
+        public async Task<WeaponResponseDTo> UpdateWeapon(int id, WeaponAddDTo weaponAddDTo)
+        {   var weaponToUpdate= await _unitOfWork.Weapon.GetFirstOrDefault(w=>w.Id==id);
+            if (weaponToUpdate!=null)
+            { weaponToUpdate.InDate=weaponAddDTo.InDate;
+              weaponToUpdate.CardNo=weaponAddDTo.CardNo;
+              weaponToUpdate.Name=weaponAddDTo.Name;
+                weaponToUpdate.OfficerBadgeNo = weaponAddDTo.OfficerBadgeNo;
+                await _unitOfWork.Weapon.Update(weaponToUpdate);
+                await _unitOfWork.SaveChanges(CancellationToken.None);
+                return weaponToUpdate.ToWeaponResponseDTo();
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }
