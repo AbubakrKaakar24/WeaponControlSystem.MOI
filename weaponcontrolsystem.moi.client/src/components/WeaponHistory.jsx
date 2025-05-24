@@ -50,13 +50,7 @@ const WeaponHistory = () => {
 
       setWeapons(convertedWeapons);
       setFilteredWeapons(convertedWeapons);
-    } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Error Fetching Data",
-        text: err.message,
-      });
-    }
+    } catch (err) {}
   };
 
   const handleSearch = (e) => {
