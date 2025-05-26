@@ -28,20 +28,20 @@ function Home() {
       <div className="container my-5">
         <div className="row g-4 justify-content-center">
           {/* Find Officer Card */}
-          <div className="col-md-4">
-            <div className="card shadow-sm rounded-4 border-success">
-              <div className="card-body">
-                <h5 className="card-title text-success">
+          <div className="col-md-4 d-flex">
+            <div className="card shadow-lg rounded-3 w-100 h-100 d-flex flex-column bg-success bg-gradient text-white">
+              <div className="card-body d-flex flex-column">
+                <h5 className="card-title">
                   <FaSearch className="me-2" />
                   Find Officer
                 </h5>
                 <input
                   type="search"
                   placeholder="🔍 Search Officer"
-                  className="form-control shadow-sm rounded-pill mb-3"
+                  className="form-control shadow-sm rounded-pill mb-3 text-dark"
                 />
-                <div className="d-grid">
-                  <button className="btn btn-success rounded-pill">
+                <div className="mt-auto">
+                  <button className="btn btn-outline-light rounded-pill w-100 fw-bold">
                     Search
                   </button>
                 </div>
@@ -51,26 +51,30 @@ function Home() {
 
           {/* Pending Weapons Stat Card */}
           <div className="col-md-4">
-            <div className="card shadow-sm rounded-4 border-warning">
-              <div className="card-body text-center">
-                <h5 className="card-title text-warning">
-                  <FaClipboardList className="me-2" />
+            <div className="card shadow-lg border-0 rounded-3 hover-effect bg-warning bg-gradient">
+              <div className="card-body text-center p-4">
+                <div className="icon-container bg-white-20 d-inline-flex rounded-circle p-3 mb-3">
+                  <FaClipboardList className="fs-2 text-white" />
+                </div>
+                <h6 className="text-uppercase text-white letter-spacing-1 mb-2">
                   Pending Weapons
-                </h5>
-                <h1 className="text-dark">54</h1>
+                </h6>
+                <h1 className="text-white mb-0">54</h1>
               </div>
             </div>
           </div>
 
           {/* Next Card Number */}
           <div className="col-md-4">
-            <div className="card shadow-sm rounded-4 border-info">
-              <div className="card-body text-center">
-                <h5 className="card-title text-info">
-                  <FaIdCard className="me-2" />
-                  Next Card
-                </h5>
-                <h1 className="text-dark">42</h1>
+            <div className="card shadow-lg border-0 rounded-3 hover-effect bg-primary bg-gradient">
+              <div className="card-body text-center p-4">
+                <div className="icon-container bg-white-20 d-inline-flex rounded-circle p-3 mb-3">
+                  <FaIdCard className="fs-2 text-white" />
+                </div>
+                <h6 className="text-uppercase text-white letter-spacing-1 mb-2">
+                  Next Card Number
+                </h6>
+                <h1 className="text-white mb-0">12345</h1>
               </div>
             </div>
           </div>
