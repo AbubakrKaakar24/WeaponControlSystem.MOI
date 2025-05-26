@@ -75,7 +75,10 @@ const WeaponHistory = () => {
   return (
     <div className="bg-light min-vh-100">
       <Navbar />
-      <div className="container py-5 mt-5">
+      <div
+        className="container py-5 mt-5"
+        style={{ width: "100vw", height: "100vh" }}
+      >
         <div className="card shadow-lg border-0">
           <div className="card-body">
             <div className="d-flex justify-content-end mb-3">
