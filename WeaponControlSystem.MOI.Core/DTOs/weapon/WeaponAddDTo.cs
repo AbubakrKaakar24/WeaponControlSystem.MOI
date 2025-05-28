@@ -10,20 +10,19 @@ namespace WeaponControlSystem.MOI.Core.DTOs.weapon
     {
         public string Name { get; set; }
         public string Type { get; set; }
-        public DateTime InDate { get; set; }
-        public DateTime? OutDate { get; set; }
-        public string OfficerBadgeNo { get; set; } // FK to Officer's BadgeNo
-        public string CardNo { get; set; }
+        public string SerialNo { get; set; }
+        public bool In { get; set; } // Indicates if the weapon is in or out
+        public int OfficerID { get; set; } // FK to Officer's BadgeNo
         public Weapon toWeapon()
         {
             return new Weapon
             {
                 Name = Name,
                 Type = Type,
-                InDate = InDate,
-                OutDate = OutDate,
-                OfficerBadgeNo = OfficerBadgeNo,
-                CardNo = CardNo
+                SerialNo= SerialNo,
+                OfficerId = OfficerID,
+                In = In
+
             };
         }
     }

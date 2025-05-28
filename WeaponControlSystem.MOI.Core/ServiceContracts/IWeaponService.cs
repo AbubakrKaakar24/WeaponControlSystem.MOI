@@ -18,5 +18,7 @@ namespace WeaponControlSystem.MOI.Core.ServiceContracts
 
         public Task<WeaponResponseDTo> UpdateWeapon(int id, WeaponAddDTo weaponAddDTo);
 
+        public Task<IEnumerable<WeaponResponseDTo>> GetByOfficerId(int id);
+
     }
 }

@@ -13,7 +13,10 @@ namespace WeaponControlSystem.MOI.Core.DTOs.weaponHandover
         public string Type { get; set; }
         public DateTime InDate { get; set; }
         public DateTime? OutDate { get; set; }
-        public string OfficerBadgeNo { get; set; } // FK to Officer's BadgeNo
+        public string OfficerName { get; set; }
+        public string InBy { get; set; } // Name of the user who took the weapon
+        public string? OutBy { get; set; }
+
     }
 
     public static class WeaponHandoverExtensions
@@ -27,7 +30,9 @@ namespace WeaponControlSystem.MOI.Core.DTOs.weaponHandover
                 Type = weaponHandover.Type,
                 InDate = weaponHandover.InDate,
                 OutDate = weaponHandover.OutDate,
-                OfficerBadgeNo = weaponHandover.OfficerBadgeNo
+                OfficerName = weaponHandover.OfficerName,
+                InBy = weaponHandover.InBy,
+                OutBy = weaponHandover.OutBy,
             };
         }
     }

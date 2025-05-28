@@ -53,5 +53,13 @@ namespace WeaponControlSystem.MOI.Server.Controllers
         {
             return await _weaponService.DeleteWeapon(id);
         }
+
+        [HttpGet("byOfficer/{officerId}")]
+        public async Task<IEnumerable<WeaponResponseDTo>> GetByOfficerId(int officerId) {
+           
+            return await _weaponService.GetByOfficerId(officerId);
+        
+        }
+
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using WeaponControlSystem.MOI.Core.Domain.RepositoryContracts.Base;
 using WeaponControlSystem.MOI.Core.DTOs.weapon;
 using WeaponControlSystem.MOI.Core.ServiceContracts;
@@ -32,6 +28,13 @@ namespace WeaponControlSystem.MOI.Core.Services
             return weapon.ToWeaponResponseDTo();
         }
 
+        public async Task<IEnumerable<WeaponResponseDTo>> GetByOfficerId(int id)
+        {
+            var weapons = await _unitOfWork.Weapon.GetAll(w => w.OfficerId == id);
+            return weapons.Select(w => w.ToWeaponResponseDTo());
+
+        }
+
         public async Task<WeaponResponseDTo> GetWeaponById(int? WeaponId)
         {
           var weapon= await _unitOfWork.Weapon.GetById(WeaponId.Value);
@@ -47,10 +50,11 @@ namespace WeaponControlSystem.MOI.Core.Services
         public async Task<WeaponResponseDTo> UpdateWeapon(int id, WeaponAddDTo weaponAddDTo)
         {   var weaponToUpdate= await _unitOfWork.Weapon.GetFirstOrDefault(w=>w.Id==id);
             if (weaponToUpdate!=null)
-            { weaponToUpdate.InDate=weaponAddDTo.InDate;
-              weaponToUpdate.CardNo=weaponAddDTo.CardNo;
+            { 
               weaponToUpdate.Name=weaponAddDTo.Name;
-                weaponToUpdate.OfficerBadgeNo = weaponAddDTo.OfficerBadgeNo;
+                weaponToUpdate.Type = weaponAddDTo.Type;
+                weaponToUpdate.SerialNo = weaponAddDTo.SerialNo;
+                weaponToUpdate.In = weaponAddDTo.In;
                 await _unitOfWork.Weapon.Update(weaponToUpdate);
                 await _unitOfWork.SaveChanges(CancellationToken.None);
                 return weaponToUpdate.ToWeaponResponseDTo();

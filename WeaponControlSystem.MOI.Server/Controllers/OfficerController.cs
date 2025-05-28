@@ -25,10 +25,15 @@ namespace WeaponControlSystem.MOI.Server.Controllers
         }
 
         // GET api/<OfficerController>/5
-        [HttpGet("{id}")]
-        public async Task<OfficerResponseDTo> Get(int id)
+        [HttpGet("by-Id/{id}")]
+        public async Task<OfficerResponseDTo> GetById(int id)
         {
            return await _officerService.GetOfficerById(id);
+        }
+        [HttpGet("by-Phone/{phoneNo}")]
+        public async Task<OfficerResponseDTo> GetBYPhone(string phoneNo)
+        {
+            return await _officerService.GetOfficerByPhone(phoneNo);
         }
 
         // POST api/<OfficerController>

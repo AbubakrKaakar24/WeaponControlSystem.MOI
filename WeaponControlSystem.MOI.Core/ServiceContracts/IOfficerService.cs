@@ -18,5 +18,7 @@ namespace WeaponControlSystem.MOI.Core.ServiceContracts
 
         public Task<OfficerResponseDTo> DeleteOfficer(int? officerId);
 
+        public Task<OfficerResponseDTo> GetOfficerByPhone(string phoneNo);
+
     }
 }

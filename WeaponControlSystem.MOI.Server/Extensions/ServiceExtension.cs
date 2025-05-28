@@ -23,6 +23,7 @@ namespace WeaponControlSystem.MOI.Server.Extensions
             services.AddScoped<IWeaponService, WeaponService>();
             services.AddScoped<IWeaponHandoverService, WeaponHandoverService>();
             services.AddScoped<IOfficerService, OfficerService>();
+            services.AddScoped<ICardService, CardService>();
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowReactApp",

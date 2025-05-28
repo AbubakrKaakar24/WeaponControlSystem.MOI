@@ -14,6 +14,7 @@ namespace WeaponControlSystem.MOI.Core.DTOs.officer
         public string Directorate { get; set; } // Directorate where the officer is stationed
         public string Administration { get; set; } // Administration where the officer is stationed
         public string BadgeNo { get; set; }
+        public string PhoneNo { get; set; }
         public Officer toOfficer()
         {
             return new Officer
@@ -23,7 +24,9 @@ namespace WeaponControlSystem.MOI.Core.DTOs.officer
                 Deputy_Ministry = Deputy_Ministry,
                 Directorate = Directorate,
                 Administration = Administration,
-                BadgeNo = BadgeNo
+                BadgeNo = BadgeNo,
+                PhoneNo = PhoneNo,
+            
             };
         }
     }

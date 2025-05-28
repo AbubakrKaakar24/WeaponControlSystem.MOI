@@ -9,19 +9,12 @@ import DatePicker from "react-multi-date-picker";
 import Swal from "sweetalert2"; // Make sure you import this
 import TimePicker from "react-multi-date-picker/plugins/time_picker"; // Not used in UI
 import DateObject from "react-date-object";
-export default function WeaponModel({
-  show,
-  onHide,
-  weapon,
-  id,
-  fetchWeapons,
-}) {
+import { set } from "date-fns";
+export default function WeaponModel({ show, onHide, id }) {
   const [name, setName] = useState("");
   const [type, setType] = useState("");
-  const [inDate, setInDate] = useState("");
-  const [inTime, setInTime] = useState("");
-  const [officerBadgeNo, setOfficerBadgeNo] = useState("");
-  const [cardNo, setCardNo] = useState("");
+  const [serialNo, setSerialNo] = useState("");
+  const [OfficerID, setOfficerID] = useState("");
   const [errors, setErrors] = useState({});
   const [types, setTypes] = useState([]);
   const [names, setNames] = useState([]);
@@ -30,37 +23,21 @@ export default function WeaponModel({
       .map((weaponType) => weaponType.weapons)
       .flat();
     const types = weaponData.weaponTypes.map((weaponType) => weaponType.type);
-    const timeString = "11:12:43";
-    const timeObject = new DateObject({ format: "hh:mm:ss", date: timeString });
-    setInTime(timeObject);
-    console.log("In Time inside Modal: " + inTime);
-    if (weapon) {
-      setName(weapon.name || "");
-      setType(weapon.type || "");
-      setCardNo(weapon.cardNo || "");
-      setInDate(weapon.inDate || "");
-      setOfficerBadgeNo(weapon.officerBadgeNo);
-    }
+    // const timeString = "11:12:43";
+    // const timeObject = new DateObject({ format: "hh:mm:ss", date: timeString });
+    // setInTime(timeObject);
+    // console.log("In Time inside Modal: " + inTime);
+    // if (weapon) {
+    //   setName(weapon.name || "");
+    //   setType(weapon.type || "");
+    //   setCardNo(weapon.cardNo || "");
+    //   setInDate(weapon.inDate || "");
+    //   setOfficerBadgeNo(weapon.officerBadgeNo);
+    // }
     setNames(names);
     setTypes(types);
-  }, [weapon]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    switch (name) {
-      case "officerBadgeNo":
-        setOfficerBadgeNo(value);
-        break;
-      case "cardNo":
-        setCardNo(value);
-        break;
-      case "inTime":
-        setInTime(value);
-        break;
-      default:
-        break;
-    }
-  };
+    setOfficerID(id);
+  }, []);
   const handleDropdownChange = (name, value) => {
     if (name === "type") {
       const selectedType = weaponData.weaponTypes.find((w) => w.type === value);
@@ -79,30 +56,29 @@ export default function WeaponModel({
     const temperrors = {};
     if (!name) temperrors.name = "Name is required";
     if (!type) temperrors.type = "Type is required";
-    if (!inDate) temperrors.inDate = "In date is required";
-    if (!officerBadgeNo)
-      temperrors.officerBadgeNo = "Officer badge is required";
-    if (!cardNo) temperrors.cardNo = "Card number is required";
+    if (!serialNo) temperrors.serialNo = "Card number is required";
 
     if (Object.keys(temperrors).length > 0) {
       setErrors(temperrors);
       return;
     }
 
-    let inDateObj = inDate?.toDate?.() || new Date();
+    // let inDateObj = inDate?.toDate?.() || new Date();
 
     const weaponPayload = {
       Name: name,
       Type: type,
-      InDate: inDateObj.toISOString() || new Date().toISOString(),
-      OutDate: null,
-      OfficerBadgeNo: officerBadgeNo,
-      CardNo: cardNo,
+      // InDate: inDateObj.toISOString() || new Date().toISOString(),
+      // OutDate: null,
+      // OfficerBadgeNo: officerBadgeNo,
+      // CardNo: cardNo,
+      SerialNo: serialNo,
+      OfficerID: OfficerID,
     };
 
     try {
-      const response = await fetch("https://localhost:7211/api/weapon/" + id, {
-        method: "PUT",
+      const response = await fetch("https://localhost:7211/api/weapon", {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(weaponPayload),
       });
@@ -110,22 +86,21 @@ export default function WeaponModel({
       if (response.ok) {
         Swal.fire({
           icon: "success",
-          title: "Weapon Updated",
-          text: "The weapon has been updated successfully!",
+          title: "Weapon Added",
+          text: "The weapon has been Added successfully!",
           timer: 3000,
         });
 
         // Reset form
         setName("");
         setType("");
-        setInDate("");
-        setInTime("");
-        setOfficerBadgeNo("");
-        setCardNo("");
+        // setInDate("");
+        // setInTime("");
+        // setOfficerBadgeNo("");
+        // setCardNo("");
+        setSerialNo("");
         setErrors({});
         onHide();
-
-        fetchWeapons();
       } else {
         Swal.fire({
           icon: "error",
@@ -181,6 +156,20 @@ export default function WeaponModel({
               <div className="text-danger">{errors.name}</div>
             </Col>
             <Col md={4}>
+              <Form.Label>Serial No</Form.Label>
+              <Form.Control
+                type="text"
+                name="cardNo"
+                value={serialNo}
+                onChange={(value) => setSerialNo(value.target.value)}
+                isInvalid={!!errors.serialNo}
+                placeholder="Enter Serial No"
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.serialNo}
+              </Form.Control.Feedback>
+            </Col>
+            {/* <Col md={4}>
               <Form.Label>In Date</Form.Label>
               <DatePicker
                 value={inDate}
@@ -207,10 +196,10 @@ export default function WeaponModel({
               />
 
               <div className="text-danger">{errors.inDate}</div>
-            </Col>
+            </Col> */}
           </Row>
 
-          <Row className="mb-2">
+          {/* <Row className="mb-2">
             <Col md={4}>
               <Form.Label>Officer Badge No</Form.Label>
               <Form.Control
@@ -237,7 +226,7 @@ export default function WeaponModel({
                 {errors.cardNo}
               </Form.Control.Feedback>
             </Col>
-          </Row>
+          </Row> */}
         </Form>
       </Modal.Body>
       <Modal.Footer>

@@ -18,6 +18,7 @@ namespace WeaponControlSystem.MOI.Infrastructure.Repository.Base
             Weapon = new WeaponRepository(_dbContext);
             Officer = new OfficerRepository(_dbContext);
             WeaponHandover = new WeaponHandoverRepository(_dbContext);
+            Card = new CardRepository(_dbContext);
 
         }
       
@@ -28,6 +29,8 @@ namespace WeaponControlSystem.MOI.Infrastructure.Repository.Base
         public IWeaponRepository Weapon { get; private set; }
 
         public IOfficerRepository Officer { get; private set; }
+
+        public ICardRepository Card { get; private set; }
 
         public async Task SaveChanges(CancellationToken cancellationToken)
         {

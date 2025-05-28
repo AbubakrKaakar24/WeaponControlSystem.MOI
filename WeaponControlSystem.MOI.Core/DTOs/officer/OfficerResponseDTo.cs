@@ -16,6 +16,8 @@ namespace WeaponControlSystem.MOI.Core.DTOs.officer
         public string Directorate { get; set; } // Directorate where the officer is stationed
         public string Administration { get; set; } // Administration where the officer is stationed
         public string BadgeNo { get; set; }
+        public string PhoneNo { get; set; }
+    
     }
     public static class OfficerExtensions
     {
@@ -29,7 +31,10 @@ namespace WeaponControlSystem.MOI.Core.DTOs.officer
                 Deputy_Ministry = officer.Deputy_Ministry,
                 Directorate = officer.Directorate,
                 Administration = officer.Administration,
-                BadgeNo = officer.BadgeNo
+                BadgeNo = officer.BadgeNo,
+                PhoneNo = officer.PhoneNo,
+              
+
             };
         }
     }

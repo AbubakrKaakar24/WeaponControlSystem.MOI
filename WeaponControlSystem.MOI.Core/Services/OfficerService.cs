@@ -45,6 +45,12 @@ namespace WeaponControlSystem.MOI.Core.Services
             return officer.ToOfficerResponseDTo();
         }
 
+        public async Task<OfficerResponseDTo> GetOfficerByPhone(string phoneNo)
+        {
+            var officer=await _unitOfWork.Officer.GetFirstOrDefault(x => x.PhoneNo == phoneNo);
+            return officer?.ToOfficerResponseDTo() ?? throw new Exception("Officer not found with the provided phone number.");
+        }
+
         public async Task<IEnumerable<OfficerResponseDTo>> GetOfficerList()
         {
            var officers= await _unitOfWork.Officer.GetAll();
@@ -64,6 +70,7 @@ namespace WeaponControlSystem.MOI.Core.Services
             officertoUpdate.Administration = officerDTo.Administration;
             officertoUpdate.Directorate = officerDTo.Directorate;
             officertoUpdate.Deputy_Ministry = officerDTo.Deputy_Ministry;
+            officertoUpdate.PhoneNo = officerDTo.PhoneNo;
            await _unitOfWork.Officer.Update(officertoUpdate);
             await _unitOfWork.SaveChanges(CancellationToken.None);
             return officertoUpdate.ToOfficerResponseDTo();

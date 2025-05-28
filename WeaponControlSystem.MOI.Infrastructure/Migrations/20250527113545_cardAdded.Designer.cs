@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WeaponControlSystem.MOI.Infrastructure.dbContext;
 
@@ -11,9 +12,11 @@ using WeaponControlSystem.MOI.Infrastructure.dbContext;
 namespace WeaponControlSystem.MOI.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250527113545_cardAdded")]
+    partial class cardAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,10 +42,6 @@ namespace WeaponControlSystem.MOI.Infrastructure.Migrations
 
                     b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("datetime2");
-
-                    b.PrimitiveCollection<string>("Weaponsid")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -153,14 +152,11 @@ namespace WeaponControlSystem.MOI.Infrastructure.Migrations
                     b.Property<int?>("CardId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("In")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("OfficerId")
+                    b.Property<int>("OfficerID")
                         .HasColumnType("int");
 
                     b.Property<string>("SerialNo")
@@ -174,8 +170,6 @@ namespace WeaponControlSystem.MOI.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CardId");
-
-                    b.HasIndex("OfficerId");
 
                     b.ToTable("Weapons");
                 });
@@ -221,19 +215,13 @@ namespace WeaponControlSystem.MOI.Infrastructure.Migrations
             modelBuilder.Entity("WeaponControlSystem.MOI.Core.Domain.Entities.Weapon", b =>
                 {
                     b.HasOne("WeaponControlSystem.MOI.Core.Domain.Entities.Card", null)
-                        .WithMany("Weapons")
+                        .WithMany("weapons")
                         .HasForeignKey("CardId");
-
-                    b.HasOne("WeaponControlSystem.MOI.Core.Domain.Entities.Officer", "Officer")
-                        .WithMany()
-                        .HasForeignKey("OfficerId");
-
-                    b.Navigation("Officer");
                 });
 
             modelBuilder.Entity("WeaponControlSystem.MOI.Core.Domain.Entities.Card", b =>
                 {
-                    b.Navigation("Weapons");
+                    b.Navigation("weapons");
                 });
 #pragma warning restore 612, 618
         }

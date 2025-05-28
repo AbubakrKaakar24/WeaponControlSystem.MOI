@@ -12,7 +12,7 @@ namespace WeaponControlSystem.MOI.Core.Domain.RepositoryContracts.Base
         IWeaponHandoverRepository WeaponHandover { get; }
         IWeaponRepository Weapon { get; }
         IOfficerRepository Officer { get; }
-
+        ICardRepository Card { get; }
         Task SaveChanges(CancellationToken cancellationToken);
         
     }

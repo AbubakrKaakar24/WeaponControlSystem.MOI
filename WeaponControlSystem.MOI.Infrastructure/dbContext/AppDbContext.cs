@@ -9,14 +9,11 @@ namespace WeaponControlSystem.MOI.Infrastructure.dbContext
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseSqlServer("Data Source=(localdb)\\ProjectModels;Initial Catalog=WeaponDatabase;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
-        //}
         public DbSet<WeaponHandover> WeaponHandovers { get; set; }
         public DbSet<Weapon> Weapons { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Officer> Officers { get; set; }
+        public DbSet<Card> Cards { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,17 +22,10 @@ namespace WeaponControlSystem.MOI.Infrastructure.dbContext
             modelBuilder.Entity<Officer>()
             .HasIndex(o => o.BadgeNo)
              .IsUnique();
-            modelBuilder.Entity<Weapon>()
-    .HasOne(w => w.Officer)
-    .WithMany(o => o.Weapons)
-    .HasForeignKey(w => w.OfficerBadgeNo)
-    .HasPrincipalKey(o => o.BadgeNo); // Important: tells EF to match FK to BadgeNo
+            modelBuilder.Entity<Card>().HasIndex(C => C.CardNo).IsUnique();
 
-            modelBuilder.Entity<WeaponHandover>()
-    .HasOne(wh => wh.Officer)
-    .WithMany(o => o.WeaponHandovers)
-    .HasForeignKey(wh => wh.OfficerBadgeNo)
-    .HasPrincipalKey(o => o.BadgeNo);
+
+
             modelBuilder.Entity<User>()
         .HasIndex(u => new { u.Name, u.LastName })
         .IsUnique();
