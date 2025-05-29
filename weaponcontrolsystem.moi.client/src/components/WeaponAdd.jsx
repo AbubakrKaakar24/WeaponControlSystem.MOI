@@ -11,6 +11,8 @@ import { useLocation } from "react-router-dom";
 import { withRouter } from "./withRouter";
 import DataTable from "react-data-table-component";
 import WeaponModel from "./weaponModel";
+import { t } from "i18next";
+import { Card } from "react-bootstrap";
 
 class WeaponAdd extends Component {
   state = {
@@ -102,11 +104,10 @@ class WeaponAdd extends Component {
   };
   handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting weapon data...");
     const { Weapons } = this.state;
-    console.log("Weapons to submit:", Weapons);
 
     try {
+      const tempIds = [];
       for (const weapon of Weapons) {
         if (weapon) {
           console.log("Submitting weapon:", weapon);
@@ -128,6 +129,9 @@ class WeaponAdd extends Component {
               text: `Weapons updated successfully!`,
               timer: 3000,
             });
+            if (weapon.in) {
+              tempIds.push(weapon.id);
+            }
           } else {
             Swal.fire({
               icon: "error",
@@ -136,6 +140,41 @@ class WeaponAdd extends Component {
               timer: 3000,
             });
           }
+        }
+      }
+      console.log("Temp IDs:", tempIds);
+      if (Object.keys(tempIds).length > 0) {
+        const tempCard = {
+          cardNo: "",
+          issueDate: new Date().toISOString(),
+          returnDate: null,
+          weaponsId: tempIds,
+        };
+        const response = await fetch(`https://localhost:7211/api/card`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify(tempCard),
+        });
+        console.log("Response:", response);
+        if (response.ok) {
+          const data = await response.json();
+          Swal.fire({
+            icon: "success",
+            title: "Card number is " + data,
+            timer: 5000,
+            timerProgressBar: true,
+          });
+          this.props.router.navigate("/home");
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: `Error creating card.`,
+            timer: 3000,
+          });
         }
       }
     } catch (error) {

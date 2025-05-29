@@ -89,22 +89,6 @@ const Navbar = () => {
               >
                 <li>
                   <NavLink
-                    to="/weapon"
-                    className="dropdown-item"
-                    onClick={closeDropdown}
-                    style={{ color: "white", backgroundColor: "transparent" }}
-                    onMouseEnter={(e) =>
-                      (e.target.style.backgroundColor = "#343a40")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.target.style.backgroundColor = "transparent")
-                    }
-                  >
-                    Add Weapon
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
                     to="/inWeapon"
                     className="dropdown-item"
                     onClick={closeDropdown}

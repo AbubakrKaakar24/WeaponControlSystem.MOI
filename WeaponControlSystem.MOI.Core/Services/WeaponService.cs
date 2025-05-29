@@ -20,6 +20,11 @@ namespace WeaponControlSystem.MOI.Core.Services
             return weaponAddDTo;
         }
 
+        public async Task<int> Count()
+        {   var total= await _unitOfWork.Weapon.GetAll(w => w.In == true);
+            return total.Count;
+        }
+
         public async Task<WeaponResponseDTo> DeleteWeapon(int? weaponId)
         {
             var weapon =await _unitOfWork.Weapon.GetById(weaponId.Value);

@@ -16,28 +16,40 @@ namespace WeaponControlSystem.MOI.Core.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<CardAddDto> AddCard(CardAddDto cardAddDto)
+        public async Task<int> AddCard(CardAddDto cardAddDto)
         {   Card card = cardAddDto.toCard();
+            int count = await _unitOfWork.Card.Count();
+            if (count >= 100)
+            {
+                throw new InvalidOperationException("Card limit reached. Cannot add more cards.");
+            }
+            card.CardNo= (count + 1).ToString(); // Assuming CardNo is a sequential number based on the count
             await _unitOfWork.Card.Add(card);
             await _unitOfWork.SaveChanges(CancellationToken.None);
-            return cardAddDto;
+            return count+1;
         }
 
         public async Task<CardResponseDto> DeleteCard(int? cardId)
-        {
-            var card = await _unitOfWork.Card.GetById(cardId.Value);
+        {   
+            if (cardId == null)
+                throw new ArgumentNullException(nameof(cardId), "Card No cannot be null.");
+
+            string cardNo = cardId.ToString();
+
+            var card = await _unitOfWork.Card.GetFirstOrDefault(c => c.CardNo == cardNo);
             if (card == null)
-            {
-                throw new ArgumentException("Card not found");
-            }
+                throw new ArgumentException($"Card with ID {cardNo} not found.");
+
             await _unitOfWork.Card.Remove(card);
             await _unitOfWork.SaveChanges(CancellationToken.None);
+
             return card.ToCardResponseDto();
         }
 
+
         public async Task<CardResponseDto> GetCardById(int? cardId)
-        {
-            var card= await _unitOfWork.Card.GetById(cardId.Value);
+        {   var No= cardId.ToString();
+            var card= await _unitOfWork.Card.GetFirstOrDefault(c => c.CardNo == No);
             if (card == null)
             {
                 throw new ArgumentException("Card not found");

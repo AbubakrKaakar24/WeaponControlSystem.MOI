@@ -72,8 +72,8 @@ namespace WeaponControlSystem.MOI.Server.Controllers
         // POST: api/Card
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<CardAddDto> AddCard(CardAddDto card)
-        {
+        public async Task<int> AddCard(CardAddDto card)
+        {  
            return await _cardService.AddCard(card);
         }
 

@@ -20,5 +20,7 @@ namespace WeaponControlSystem.MOI.Core.ServiceContracts
 
         public Task<IEnumerable<WeaponResponseDTo>> GetByOfficerId(int id);
 
+        public Task<int> Count();
+
     }
 }

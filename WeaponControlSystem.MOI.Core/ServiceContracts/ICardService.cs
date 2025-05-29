@@ -9,7 +9,7 @@ namespace WeaponControlSystem.MOI.Core.ServiceContracts
 {
     public  interface ICardService
     {
-        Task<CardAddDto> AddCard(CardAddDto cardAddDto);
+        Task<int> AddCard(CardAddDto cardAddDto);
         Task<CardResponseDto> GetCardById(int? cardId);
         Task<IEnumerable<CardResponseDto>> GetCardList();
         Task<CardResponseDto> UpdateCard(int id, CardAddDto cardDTo);

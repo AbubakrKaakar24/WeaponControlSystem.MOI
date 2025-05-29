@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,5 +18,12 @@ namespace WeaponControlSystem.MOI.Infrastructure.Repository
         {
             _dbContext = dbContext;
         }
+
+        public async Task<int> Count()
+        {
+            return await _dbContext.Cards.CountAsync();
+        }
+
+       
     }
 }

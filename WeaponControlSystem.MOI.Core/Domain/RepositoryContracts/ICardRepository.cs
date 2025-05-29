@@ -9,5 +9,6 @@ namespace WeaponControlSystem.MOI.Core.Domain.RepositoryContracts
 {
     public  interface ICardRepository:IGenericRepository<Card>
     {
+        public Task<int> Count();
     }
 }
