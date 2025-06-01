@@ -21,8 +21,7 @@ class WeaponAdd extends Component {
       serialNo: "",
     },
   };
-  async componentDidMount() {
-    // Access the weaponTypes array from the weaponData object
+  fetchWeapons = async () => {
     const { officer } = this.props.router.location.state || {};
     if (officer) {
       const response = await fetch(
@@ -34,11 +33,14 @@ class WeaponAdd extends Component {
         Weapons: data,
       });
     }
+  };
+  async componentDidMount() {
+    // Access the weaponTypes array from the weaponData object
+    await this.fetchWeapons();
     const names = weaponData.weaponTypes
       .map((weaponType) => weaponType.weapons)
       .flat();
     const types = weaponData.weaponTypes.map((weaponType) => weaponType.type);
-
     this.setState({
       names,
       types,
@@ -113,25 +115,6 @@ class WeaponAdd extends Component {
               body: JSON.stringify(weapon),
             }
           );
-
-          if (response.ok) {
-            Swal.fire({
-              icon: "success",
-              title: "Weapon Updated",
-              text: `Weapons updated successfully!`,
-              timer: 3000,
-            });
-            if (weapon.in) {
-              tempIds.push(weapon.id);
-            }
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "Error",
-              text: `Error updating weapons.`,
-              timer: 3000,
-            });
-          }
         }
       }
       console.log("Temp IDs:", tempIds);
@@ -164,7 +147,7 @@ class WeaponAdd extends Component {
           Swal.fire({
             icon: "error",
             title: "Error",
-            text: `Error creating card.`,
+            text: response.statusText,
             timer: 3000,
           });
         }
@@ -275,6 +258,7 @@ class WeaponAdd extends Component {
                 show={this.state.showModal}
                 onHide={this.toggleModal}
                 id={officer}
+                fetchWeapons={this.fetchWeapons}
               />
 
               <div className="d-flex justify-content-end mb-3">

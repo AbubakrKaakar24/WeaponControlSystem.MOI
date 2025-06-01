@@ -10,7 +10,7 @@ import Swal from "sweetalert2"; // Make sure you import this
 import TimePicker from "react-multi-date-picker/plugins/time_picker"; // Not used in UI
 import DateObject from "react-date-object";
 import { set } from "date-fns";
-export default function WeaponModel({ show, onHide, id }) {
+export default function WeaponModel({ show, onHide, id, fetchWeapons }) {
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [serialNo, setSerialNo] = useState("");
@@ -90,7 +90,7 @@ export default function WeaponModel({ show, onHide, id }) {
           text: "The weapon has been Added successfully!",
           timer: 3000,
         });
-
+        fetchWeapons(); // Assuming you have a function to refresh the weapon list
         // Reset form
         setName("");
         setType("");

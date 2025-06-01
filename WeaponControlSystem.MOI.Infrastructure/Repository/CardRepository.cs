@@ -21,9 +21,16 @@ namespace WeaponControlSystem.MOI.Infrastructure.Repository
 
         public async Task<int> Count()
         {
-            return await _dbContext.Cards.CountAsync();
+            var card = await _dbContext.Cards
+                .OrderByDescending(c => c.Id)
+                .FirstOrDefaultAsync();
+            if (card != null)
+                return int.Parse(card?.CardNo);
+            else
+                return 0;
         }
 
-       
+
+
     }
 }

@@ -19,6 +19,7 @@ namespace WeaponControlSystem.MOI.Core.Services
         public async Task<int> AddCard(CardAddDto cardAddDto)
         {   Card card = cardAddDto.toCard();
             int count = await _unitOfWork.Card.Count();
+            
             if (count >= 100)
             {
                 throw new InvalidOperationException("Card limit reached. Cannot add more cards.");

@@ -16,8 +16,6 @@ namespace WeaponControlSystem.MOI.Core.Domain.Entities
         public string Administration { get; set; } // Administration where the officer is stationed
         public string BadgeNo { get; set; }
         public string PhoneNo { get; set; }
-
-
     }
 
 }

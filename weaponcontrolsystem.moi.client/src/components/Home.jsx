@@ -4,6 +4,7 @@ import { FaSearch, FaClipboardList, FaIdCard } from "react-icons/fa";
 import StatCard from "./StatsCard";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 //import { fa } from "jalaali-react-date-picker/lib/core/constants/translations";
 function Home() {
   const [phoneNo, setphoneNo] = useState("");
@@ -33,6 +34,15 @@ function Home() {
       var response = await fetch(
         `https://localhost:7211/api/officer/by-Phone/${phoneNo}`
       );
+      if (!response.ok) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: `Officer with phone number ${phoneNo} not found.`,
+          timer: 3000,
+        });
+        return;
+      }
       var data = await response.json();
       console.log(data);
       if (data) {
@@ -50,87 +60,119 @@ function Home() {
   };
   const checkoutWeapon = async () => {
     console.log("Card No: " + cardNo);
-    const cardData = await fetch(`https://localhost:7211/api/card/${cardNo}`);
-    const card = await cardData.json();
-    const weaponResponse = await fetch(`https://localhost:7211/api/weapon`);
-    const weapons = await weaponResponse.json();
-    var Ids = card.weaponsid;
-    console.log("Ids: " + Ids);
-    weapons.forEach((weapon) => {
-      if (Ids.includes(weapon.id)) {
-        weapon.in = false;
-      }
-    });
-
-    const updatedWeapons = weapons
-      .filter((weapon) => Ids.includes(weapon.id))
-      .map((weapon) => ({
-        id: weapon.id,
-        name: weapon.name,
-        type: weapon.type,
-        serialNo: weapon.serialNo,
-        officerId: weapon.officerID,
-        in: false,
-      }));
-
-    var a = 0;
-    for (const weapon of updatedWeapons) {
-      if (a == 0) {
-        var officerData = await fetch(
-          `https://localhost:7211/api/officer/by-id/${weapon.officerId}`
-        );
-        var officer = await officerData.json();
-        console.log("Officer name: " + officer.name);
-        setOfficerName(officer.name);
-        a++;
-      }
-      await fetch(`https://localhost:7211/api/weapon/${weapon.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(weapon),
-      });
-      var res = await fetch(`https://localhost:7211/api/weaponHandover`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          Name: weapon.name,
-          Type: weapon.type,
-          SerialNo: weapon.serialNo,
-          InDate: card.issueDate,
-          OutDate: new Date().toISOString(),
-          OfficerName: officerName, // Placeholder, replace with actual officer name if available
-          InBy: "Admin", // Placeholder, replace with actual user name if available
-        }),
-      });
-      if (!res.ok) {
-        console.error("Failed to update weapon:", weapon.id);
-        alert("Failed to update weapon: " + weapon.id);
+    if (cardNo.trim() !== "") {
+      const cardData = await fetch(`https://localhost:7211/api/card/${cardNo}`);
+      if (!cardData.ok) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: `Card with number ${cardNo} not found.`,
+          timer: 3000,
+        });
         return;
+      } else if (cardData.ok) {
+        Swal.fire({
+          icon: "success",
+          title: "Card Found",
+          text: `Card with number ${cardNo} found.`,
+          timer: 3000,
+        });
       }
-    }
-    a = 0;
+      const card = await cardData.json();
 
-    const response = await fetch(`https://localhost:7211/api/card/${cardNo}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (response.ok) {
-      const data = await response.json();
-      console.log(data);
-      alert("Weapon checked out successfully");
-      setCardNo("");
+      const weaponResponse = await fetch(`https://localhost:7211/api/weapon`);
+      const weapons = await weaponResponse.json();
+      var Ids = card.weaponsid;
+      console.log("Ids: " + Ids);
+      weapons.forEach((weapon) => {
+        if (Ids.includes(weapon.id)) {
+          weapon.in = false;
+        }
+      });
+
+      const updatedWeapons = weapons
+        .filter((weapon) => Ids.includes(weapon.id))
+        .map((weapon) => ({
+          id: weapon.id,
+          name: weapon.name,
+          type: weapon.type,
+          serialNo: weapon.serialNo,
+          officerId: weapon.officerID,
+          in: false,
+        }));
+
+      var a = 0;
+      for (const weapon of updatedWeapons) {
+        if (a == 0) {
+          var officerData = await fetch(
+            `https://localhost:7211/api/officer/by-id/${weapon.officerId}`
+          );
+          var officer = await officerData.json();
+          setOfficerName(officer.name);
+          a++;
+        }
+        await fetch(`https://localhost:7211/api/weapon/${weapon.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(weapon),
+        });
+        var res = await fetch(`https://localhost:7211/api/weaponHandover`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            Name: weapon.name,
+            Type: weapon.type,
+            SerialNo: weapon.serialNo,
+            InDate: card.issueDate,
+            OutDate: new Date().toISOString(),
+            OfficerName: officerName, // Placeholder, replace with actual officer name if available
+            InBy: "Admin", // Placeholder, replace with actual user name if available
+          }),
+        });
+        if (!res.ok) {
+          alert("Failed to update weapon: " + weapon.id);
+          return;
+        }
+      }
+      a = 0;
+
+      const response = await fetch(
+        `https://localhost:7211/api/card/${cardNo}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        Swal.fire({
+          icon: "success",
+          title: "Checkout Successful",
+          text: `Weapons checked out successfully for ${officerName}.`,
+          timer: 3000,
+        });
+        setCardNo("");
+      }
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Please enter a valid card number.",
+        timer: 3000,
+      });
     }
+    pendingWeapons();
   };
   const pendingWeapons = async () => {
     const response = await fetch("https://localhost:7211/api/weapon/count");
     var data = await response.json();
-    console.log(data);
     setPendingWeaponsCount(data);
   };
   return (
