@@ -12,15 +12,24 @@ const WeaponHistory = () => {
   const columns = [
     { name: "Name", selector: (row) => row.name, sortable: true },
     { name: "Type", selector: (row) => row.type, sortable: true },
+    { name: "Serial No", selector: (row) => row.serialNo, sortable: true },
     {
-      name: "Officer Badge No",
-      selector: (row) => row.officerBadgeNo,
+      name: "Officer Name",
+      selector: (row) => row.officerName,
       sortable: true,
     },
     { name: "In Date", selector: (row) => row.inDate, sortable: true },
     { name: "Out Date", selector: (row) => row.outDate, sortable: true },
   ];
-
+  const row = weapons.map((w) => ({
+    id: w.id,
+    name: w.name,
+    type: w.type,
+    serialNo: w.serialNo,
+    officerName: w.officerName,
+    inDate: w.inDate,
+    outDate: w.outDate,
+  }));
   const fetchWeapons = async () => {
     try {
       const response = await fetch("https://localhost:7211/api/weaponHandover");
@@ -95,7 +104,7 @@ const WeaponHistory = () => {
 
             <DataTable
               columns={columns}
-              data={filteredWeapons}
+              data={row}
               pagination
               highlightOnHover
               responsive

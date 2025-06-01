@@ -22,6 +22,7 @@ export default function AddOfficerModal({
   handleChange,
   handleSelectChange,
   header,
+  phoneNo,
 }) {
   console.log({
     badgeNo,
@@ -83,6 +84,22 @@ export default function AddOfficerModal({
               </Form.Control.Feedback>
             </Col>
             <Col md={3}>
+              <Form.Label>Phone No</Form.Label>
+              <Form.Control
+                type="text"
+                name="phoneNo"
+                value={phoneNo}
+                onChange={handleChange}
+                isInvalid={!!errors.phoneNo}
+                placeholder="Phone No"
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.phoneNo}
+              </Form.Control.Feedback>
+            </Col>
+          </Row>
+          <Row className="mb-2">
+            <Col md={3}>
               <Form.Label>Deputy Ministry</Form.Label>
               <Select
                 name="deputyMinistry"
@@ -99,8 +116,6 @@ export default function AddOfficerModal({
               />
               <div className="text-danger">{errors.deputyMinistry}</div>
             </Col>
-          </Row>
-          <Row className="mb-2">
             <Col md={3}>
               <Form.Label>Directorate</Form.Label>
               <Select

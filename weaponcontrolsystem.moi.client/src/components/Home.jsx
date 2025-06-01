@@ -9,6 +9,7 @@ function Home() {
   const [phoneNo, setphoneNo] = useState("");
   const [cardNo, setCardNo] = useState("");
   const [pendingWeaponsCount, setPendingWeaponsCount] = useState(0);
+  const [officerName, setOfficerName] = useState("");
   useEffect(() => {
     // Set body background image when component mounts
     pendingWeapons();
@@ -68,18 +69,21 @@ function Home() {
         name: weapon.name,
         type: weapon.type,
         serialNo: weapon.serialNo,
-        officerId: weapon.officerId,
+        officerId: weapon.officerID,
         in: false,
       }));
-    var officerId = updatedWeapons.FirstOrDefault((w) => w.id == Ids[0]);
-    console.log("Officer ID: " + officerId);
 
-    // var officerData = await fetch(
-    //   `https://localhost:7211/api/officer/${updatedWeapons[0].officerId}`
-    // );
-    // var officer = await officerData.json();
-
+    var a = 0;
     for (const weapon of updatedWeapons) {
+      if (a == 0) {
+        var officerData = await fetch(
+          `https://localhost:7211/api/officer/by-id/${weapon.officerId}`
+        );
+        var officer = await officerData.json();
+        console.log("Officer name: " + officer.name);
+        setOfficerName(officer.name);
+        a++;
+      }
       await fetch(`https://localhost:7211/api/weapon/${weapon.id}`, {
         method: "PUT",
         headers: {
@@ -95,9 +99,10 @@ function Home() {
         body: JSON.stringify({
           Name: weapon.name,
           Type: weapon.type,
+          SerialNo: weapon.serialNo,
           InDate: card.issueDate,
           OutDate: new Date().toISOString(),
-          OfficerName: "Officer Name", // Placeholder, replace with actual officer name if available
+          OfficerName: officerName, // Placeholder, replace with actual officer name if available
           InBy: "Admin", // Placeholder, replace with actual user name if available
         }),
       });
@@ -107,6 +112,7 @@ function Home() {
         return;
       }
     }
+    a = 0;
 
     const response = await fetch(`https://localhost:7211/api/card/${cardNo}`, {
       method: "DELETE",
@@ -173,7 +179,6 @@ function Home() {
                   value={cardNo}
                   onChange={(e) => setCardNo(e.target.value)}
                 />
-
                 <div className="mt-auto">
                   <button
                     className="btn btn-outline-light rounded-pill w-100 fw-bold"

@@ -39,13 +39,14 @@ function InWeapon() {
       sortable: true,
     },
     {
-      name: "Officer badge No",
-      selector: (row) => row.officerBadgeNo,
+      name: "Serial No",
+
+      selector: (row) => row.serialNo,
       sortable: true,
     },
     {
-      name: "Card No",
-      selector: (row) => row.cardNo,
+      name: "Officer ID",
+      selector: (row) => row.officerId,
       sortable: true,
     },
     {
@@ -53,56 +54,14 @@ function InWeapon() {
       selector: (row) => row.inDate,
       sortable: true,
     },
-    {
-      name: "Actions",
-      cell: (row) => (
-        <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-          <i
-            className=" fa fa-trash fa-2x"
-            style={{
-              cursor: "pointer",
-              color: "#DC3545", // Bootstrap danger red
-              transition: "color 0.3s ease",
-            }}
-            onClick={() => handleDelete(row.id)}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "#A71D2A")} // darker red
-            onMouseLeave={(e) => (e.currentTarget.style.color = "#DC3545")}
-          />
-
-          <i
-            className="fa fa-edit fa-2x"
-            style={{
-              cursor: "pointer",
-              color: "#FFC107", // Bootstrap success green
-              transition: "color 0.3s ease",
-            }}
-            onClick={() => handleEdit(row.id)}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "#E0A800")} // darker green
-            onMouseLeave={(e) => (e.currentTarget.style.color = "#FFC107")}
-          />
-          <i
-            className="fas fa-circle-right fa-2x"
-            style={{
-              cursor: "pointer",
-              color: "#0D6EFD",
-              transition: "color 0.3s ease",
-              marginTop: "4px",
-              marginLeft: "50px",
-            }}
-            onClick={() => handleCheckout(row.id)}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "#0A58CA")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "#0D6EFD")}
-          />
-        </div>
-      ),
-    },
   ];
+
   const row = inWeapons.map((w) => ({
     id: w.id,
     name: w.name,
     type: w.type,
-    officerBadgeNo: w.officerBadgeNo,
-    cardNo: w.cardNo,
+    serialNo: w.serialNo,
+    officerId: w.officerID || "N/A",
     inDate: w.inDate,
   }));
 
@@ -129,8 +88,9 @@ function InWeapon() {
         inDate: shamsiDate.format("YYYY/MM/DD HH:mm"),
       };
     });
-    setAllInWeapons(convertedWeapons);
-    setInWeapons(convertedWeapons);
+
+    setAllInWeapons(convertedWeapons.filter((w) => w.in == true));
+    setInWeapons(convertedWeapons.filter((w) => w.in == true));
   };
   const searchWeapon = (e) => {
     if (e.target.value == "") setInWeapons(allInWeapons);
@@ -140,54 +100,54 @@ function InWeapon() {
       setInWeapons(weapons);
     }
   };
-  const handleDelete = async (weaponId) => {
-    const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    });
-    if (result.isConfirmed) {
-      try {
-        const response = await fetch(
-          `https://localhost:7211/api/weapon/${weaponId}`,
-          {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        if (response.ok) {
-          Swal.fire({
-            icon: "success",
-            text: "Weapons has been deleted",
-            title: "Deleted!",
-          });
-          fetchWeapons();
-        } else {
-          const errorData = await response.json();
-          console.log("Error:", errorData);
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: errorData.message,
-          });
-        }
-      } catch (error) {
-        Swal.fire({ icon: "error", title: "Error", text: error.message });
-      }
-    }
-  };
-  const handleEdit = (weaponID) => {
-    var weapon = allInWeapons.find((w) => w.id == weaponID);
-    setWeapon(weapon);
-    setShow(true);
-    setID(weaponID);
-  };
+  // const handleDelete = async (weaponId) => {
+  //   const result = await Swal.fire({
+  //     title: "Are you sure?",
+  //     text: "You won't be able to revert this!",
+  //     icon: "warning",
+  //     showCancelButton: true,
+  //     confirmButtonColor: "#3085d6",
+  //     cancelButtonColor: "#d33",
+  //     confirmButtonText: "Yes, delete it!",
+  //   });
+  //   if (result.isConfirmed) {
+  //     try {
+  //       const response = await fetch(
+  //         `https://localhost:7211/api/weapon/${weaponId}`,
+  //         {
+  //           method: "DELETE",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //         }
+  //       );
+  //       if (response.ok) {
+  //         Swal.fire({
+  //           icon: "success",
+  //           text: "Weapons has been deleted",
+  //           title: "Deleted!",
+  //         });
+  //         fetchWeapons();
+  //       } else {
+  //         const errorData = await response.json();
+  //         console.log("Error:", errorData);
+  //         Swal.fire({
+  //           icon: "error",
+  //           title: "Error",
+  //           text: errorData.message,
+  //         });
+  //       }
+  //     } catch (error) {
+  //       Swal.fire({ icon: "error", title: "Error", text: error.message });
+  //     }
+  //   }
+  // };
+  // const handleEdit = (weaponID) => {
+  //   var weapon = allInWeapons.find((w) => w.id == weaponID);
+  //   setWeapon(weapon);
+  //   setShow(true);
+  //   setID(weaponID);
+  // };
 
   useEffect(() => {
     fetchWeapons();
@@ -239,7 +199,7 @@ function InWeapon() {
                 },
               }}
             />
-            <WeaponModel
+            {/* <WeaponModel
               show={show}
               weapon={weapon}
               onHide={toggleModal}
@@ -251,7 +211,7 @@ function InWeapon() {
               onHide={checkoutToggle}
               weapon={weapon}
               fetchWeapons={fetchWeapons}
-            />
+            /> */}
           </div>
         </div>
       </div>

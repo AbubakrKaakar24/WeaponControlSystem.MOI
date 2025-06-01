@@ -13,7 +13,7 @@ namespace WeaponControlSystem.MOI.Core.DTOs.weapon
         public string Type { get; set; }
         public string SerialNo { get; set; }
         public bool In { get; set; } // Indicates if the weapon is in or out
-        public int OfficerID { get; set; } // FK to Officer's BadgeNo
+        public int? OfficerID { get; set; } // FK to Officer's BadgeNo
 
     }
     public static class WeaponExtensions
@@ -26,7 +26,7 @@ namespace WeaponControlSystem.MOI.Core.DTOs.weapon
                 Name = weapon.Name,
                 Type = weapon.Type,
                 SerialNo = weapon.SerialNo,
-                OfficerID = (int)weapon.OfficerId,
+                OfficerID = weapon.OfficerId,
                 In = weapon.In,
             };
         }

@@ -9,7 +9,7 @@ namespace WeaponControlSystem.MOI.Core.ServiceContracts
 {
     public interface IOfficerService
     {
-        public Task<OfficerAddDTo> AddOfficer(OfficerAddDTo officerAddDTo);
+        public Task<int> AddOfficer(OfficerAddDTo officerAddDTo);
         public Task<OfficerResponseDTo> GetOfficerById(int? officerId);
 
         public Task<IEnumerable<OfficerResponseDTo>> GetOfficerList();

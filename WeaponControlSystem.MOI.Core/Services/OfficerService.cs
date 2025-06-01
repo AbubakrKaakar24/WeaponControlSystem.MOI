@@ -15,7 +15,7 @@ namespace WeaponControlSystem.MOI.Core.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<OfficerAddDTo> AddOfficer(OfficerAddDTo officerAddDTo)
+        public async Task<int> AddOfficer(OfficerAddDTo officerAddDTo)
         {
           await  _unitOfWork.Officer.Add(officerAddDTo.toOfficer());
             await _unitOfWork.SaveChanges(CancellationToken.None);

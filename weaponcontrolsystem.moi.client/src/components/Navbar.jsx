@@ -27,7 +27,7 @@ const Navbar = () => {
     >
       <div className="container-fluid">
         {/* Logo on the left */}
-        <Link to="/" className="navbar-brand">
+        <Link to="/home" className="navbar-brand">
           <img
             src="/moi.png"
             alt="Logo"

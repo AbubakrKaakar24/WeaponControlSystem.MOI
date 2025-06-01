@@ -2,17 +2,9 @@ import React, { Component } from "react";
 import Navbar from "./Navbar";
 import Swal from "sweetalert2";
 import weaponData from "../assets/weaponData.json";
-import Select from "react-select";
-import persian from "react-date-object/calendars/persian";
-import persian_fa from "../assets/persian_fa";
-import DatePicker from "react-multi-date-picker";
-import TimePicker from "react-multi-date-picker/plugins/time_picker";
-import { useLocation } from "react-router-dom";
 import { withRouter } from "./withRouter";
 import DataTable from "react-data-table-component";
 import WeaponModel from "./weaponModel";
-import { t } from "i18next";
-import { Card } from "react-bootstrap";
 
 class WeaponAdd extends Component {
   state = {

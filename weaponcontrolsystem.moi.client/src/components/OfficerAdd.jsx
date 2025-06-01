@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import ministryData from "../assets/ministryData.json";
 import AddOfficerModal from "./AddOfficerModel";
 import DataTable from "react-data-table-component";
+import { withRouter } from "./withRouter";
 class OfficerAdd extends Component {
   state = {
     header: "Add New Officer",
@@ -21,6 +22,7 @@ class OfficerAdd extends Component {
     directorates: [],
     administrations: [],
     bases: [],
+    phoneNo: "",
 
     errors: {
       firstName: "",
@@ -30,6 +32,7 @@ class OfficerAdd extends Component {
       directorate: "",
       administration: "",
       base: "",
+      phoneNo: "",
     },
   };
   fetchOfficers = async () => {
@@ -174,6 +177,7 @@ class OfficerAdd extends Component {
   };
   handleSubmit = async (e) => {
     e.preventDefault();
+    const navigate = this.props.router.navigate;
     const {
       firstName,
       lastName,
@@ -182,6 +186,7 @@ class OfficerAdd extends Component {
       directorate,
       administration,
       base,
+      phoneNo,
     } = this.state;
     const errors = {};
     if (!firstName) errors.firstName = "First name is required";
@@ -191,6 +196,7 @@ class OfficerAdd extends Component {
     if (!directorate) errors.directorate = "Directorate is required";
     if (!administration) errors.administration = "Administration is required";
     if (!base) errors.base = "Base is required";
+    if (!phoneNo) errors.phoneNo = "Phone number is required";
 
     if (Object.keys(errors).length > 0) {
       this.setState({ errors });
@@ -203,6 +209,7 @@ class OfficerAdd extends Component {
           Directorate: directorate,
           Administration: administration,
           BadgeNo: badgeNo,
+          PhoneNo: phoneNo,
         };
 
         var Method = this.state.header === "Add New Officer" ? "POST" : "PUT";
@@ -226,6 +233,10 @@ class OfficerAdd extends Component {
             text: "The officer has been added successfully!",
             timer: 3000,
           });
+          const officerTemp = await fetch(
+            "https://localhost:7211/api/officer/by-phone/" + phoneNo
+          );
+          const tempofficer = await officerTemp.json();
           this.setState({
             firstName: "",
             lastName: "",
@@ -234,10 +245,14 @@ class OfficerAdd extends Component {
             directorate: "",
             administration: "",
             base: "",
+            phoneNo: "",
             errors: {},
             showModal: false,
           });
           this.fetchOfficers();
+          navigate("/weapon", {
+            state: { officer: tempofficer.id },
+          });
         } else {
           Swal.fire({
             icon: "error",
@@ -436,6 +451,7 @@ class OfficerAdd extends Component {
                 handleChange={this.handleInputChange}
                 handleSelectChange={this.handleDropdownChange}
                 header={this.state.header}
+                phoneNo={this.state.phoneNo}
               />
             </div>
           </div>
@@ -444,4 +460,4 @@ class OfficerAdd extends Component {
     );
   }
 }
-export default OfficerAdd;
+export default withRouter(OfficerAdd);

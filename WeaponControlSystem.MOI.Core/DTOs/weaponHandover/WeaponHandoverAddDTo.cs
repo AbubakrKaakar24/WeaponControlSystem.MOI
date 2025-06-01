@@ -10,6 +10,7 @@ namespace WeaponControlSystem.MOI.Core.DTOs.weaponHandover
     {
         public string name { get; set; }
         public string Type { get; set; }
+        public string SerialNo { get; set; }
         public DateTime InDate { get; set; }
         public DateTime? OutDate { get; set; }
         public string OfficerName { get; set; }
@@ -23,13 +24,12 @@ namespace WeaponControlSystem.MOI.Core.DTOs.weaponHandover
             {
                 name = name,
                 Type = Type,
+                SerialNo= SerialNo,
                 InDate = InDate,
                 OutDate = OutDate,
                 OfficerName = OfficerName,
                 InBy = InBy,
                 OutBy = OutBy,
-
-
             };
         }
     }

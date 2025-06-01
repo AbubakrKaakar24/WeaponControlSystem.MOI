@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using WeaponControlSystem.MOI.Infrastructure.Repository.Base;
 using WeaponControlSystem.MOI.Core.Domain.Entities;
 using WeaponControlSystem.MOI.Core.Domain.RepositoryContracts;
-using WeaponControlSystem.MOI.Core.Domain.RepositoryContracts.Base;
 using WeaponControlSystem.MOI.Infrastructure.dbContext;
 namespace WeaponControlSystem.MOI.Infrastructure.Repository
 {

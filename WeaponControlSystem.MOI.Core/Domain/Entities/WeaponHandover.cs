@@ -10,6 +10,7 @@ namespace WeaponControlSystem.MOI.Core.Domain.Entities
     {   public int id { get; set; } // PK
         public string name { get; set; }
         public string Type { get; set; }
+        public string SerialNo { get; set; }
         public DateTime InDate { get; set; }
         public DateTime? OutDate { get; set; }
         public string OfficerName { get; set; }   
