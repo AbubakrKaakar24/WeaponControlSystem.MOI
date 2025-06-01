@@ -23,9 +23,11 @@ namespace WeaponControlSystem.MOI.Server.Controllers
     {
        
         private readonly IUserService _userService;
-        public UsersController(IUserService userService)
+        private readonly ITokenService _tokenService;
+        public UsersController(IUserService userService, ITokenService tokenService)
         {
             _userService = userService;
+            _tokenService = tokenService;
         }
 
         // GET: api/Users
@@ -37,7 +39,7 @@ namespace WeaponControlSystem.MOI.Server.Controllers
 
 
         [HttpPost("login")]
-        public async Task<ActionResult> Login(LoginInfo info)
+        public async Task<ActionResult<LoginResponse>> Login(LoginInfo info)
         {
             if (info == null)
             {
@@ -47,7 +49,15 @@ namespace WeaponControlSystem.MOI.Server.Controllers
             var user = await _userService.Auth(info);
             if (user)
             {
-                return Ok();
+                var token = _tokenService.GenerateToken(info.Email);
+                var response = new LoginResponse
+                {
+                    Username = info.Email,
+                    AccessToken = token,
+                    ExpiresIn = 3600 // 1 hour in seconds
+                };
+                return Ok(response);
+
             }
             else
             {

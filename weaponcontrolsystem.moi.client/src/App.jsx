@@ -7,18 +7,21 @@ import WeaponAdd from "./components/WeaponAdd";
 import "./App.css";
 import InWeapon from "./components/InWeapons";
 import WeaponHistory from "./components/WeaponHistory";
+import ProtectedRoute from "./components/ProtectedRoute";
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/officer" element={<OfficerAdd />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/register" element={<RegisterUser />} />
-        <Route path="/weapon" element={<WeaponAdd />} />
-        <Route path="/inWeapon" element={<InWeapon />} />
-        <Route path="/weaponHistory" element={<WeaponHistory />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/officer" element={<OfficerAdd />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/register" element={<RegisterUser />} />
+          <Route path="/weapon" element={<WeaponAdd />} />
+          <Route path="/inWeapon" element={<InWeapon />} />
+          <Route path="/weaponHistory" element={<WeaponHistory />} />
+        </Route>
       </Routes>
     </Router>
   );

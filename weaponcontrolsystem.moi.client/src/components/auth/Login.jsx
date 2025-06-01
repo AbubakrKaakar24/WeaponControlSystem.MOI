@@ -73,6 +73,11 @@ class Login extends Component {
           body: JSON.stringify(LoginInfo),
         });
         if (response.ok) {
+          const data = await response.json();
+          const token = data.accessToken;
+          localStorage.setItem("token", token);
+          localStorage.setItem("userName", data.username);
+          console.log("Login successful:", data);
           this.setState({
             email: "",
             password: "",

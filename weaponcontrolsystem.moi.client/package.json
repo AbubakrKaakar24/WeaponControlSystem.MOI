@@ -19,6 +19,7 @@
     "i18next": "^25.1.2",
     "i18next-browser-languagedetector": "^8.1.0",
     "jalaali-react-date-picker": "^1.0.19",
+    "jwt-decode": "^4.0.0",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.9",
     "react-data-table-component": "^7.7.0",

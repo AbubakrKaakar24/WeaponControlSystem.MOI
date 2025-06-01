@@ -24,6 +24,7 @@ namespace WeaponControlSystem.MOI.Server.Extensions
             services.AddScoped<IWeaponHandoverService, WeaponHandoverService>();
             services.AddScoped<IOfficerService, OfficerService>();
             services.AddScoped<ICardService, CardService>();
+            services.AddScoped<ITokenService, TokenService>();
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowReactApp",
@@ -36,7 +37,7 @@ namespace WeaponControlSystem.MOI.Server.Extensions
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
-        {
+        {    
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
@@ -46,6 +47,8 @@ namespace WeaponControlSystem.MOI.Server.Extensions
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]))
         };
     });
+
+            services.AddAuthorization();
 
 
             services.AddControllers();
