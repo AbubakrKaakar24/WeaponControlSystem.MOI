@@ -23,7 +23,7 @@ namespace WeaponControlSystem.MOI.Core.Services
         }
 
         public string GenerateToken(string username)
-        {
+        {  
             var claims = new[]
             {
             new Claim(ClaimTypes.Name, username),
@@ -32,13 +32,17 @@ namespace WeaponControlSystem.MOI.Core.Services
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:SecretKey"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+            var expiry = DateTime.UtcNow.AddMinutes(60);
+            Console.WriteLine($"Generating token with expiry: {expiry:o}");  // ISO8601 format
+
             var token = new JwtSecurityToken(
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddHours(1),
+                expires: expiry,
                 signingCredentials: creds
             );
+
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }

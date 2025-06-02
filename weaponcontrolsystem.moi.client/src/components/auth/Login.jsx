@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { Navigate } from "react-router-dom";
 import Swal from "sweetalert2";
-
+import { withTranslation } from "react-i18next";
+import "../../i18n"; // Import your i18n configuration
+import { t } from "i18next";
 class Login extends Component {
   state = {
     email: "",
@@ -12,6 +14,22 @@ class Login extends Component {
     },
     redirect: false,
   };
+  componentDidMount() {
+    document.body.style.backgroundImage = `
+    linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+    url('/moi.jpg')
+  `;
+    document.body.style.backgroundSize = "cover";
+    document.body.style.backgroundPosition = "center";
+    document.body.style.backgroundRepeat = "no-repeat";
+  }
+
+  componentWillUnmount() {
+    document.body.style.backgroundImage = "";
+    document.body.style.backgroundSize = "";
+    document.body.style.backgroundPosition = "";
+    document.body.style.backgroundRepeat = "";
+  }
 
   handleBlur = (e) => {
     const { name, value } = e.target;
@@ -21,17 +39,17 @@ class Login extends Component {
       case "email":
         errors.email =
           value.length < 1
-            ? "Email is required"
+            ? t("Error email required")
             : !/\S+@\S+\.\S+/.test(value)
-            ? "Email is invalid"
+            ? t("Error email invalid")
             : "";
         break;
       case "password":
         errors.password =
           value.length < 1
-            ? "Password is required"
+            ? t("Error password required")
             : value.length < 6
-            ? "Password must be at least 6 characters"
+            ? t("Password must be at least 6 characters")
             : "";
         break;
       default:
@@ -45,14 +63,15 @@ class Login extends Component {
     e.preventDefault();
     const { email, password } = this.state;
     const errors = {};
-
+    const { t } = this.props; // Translation function from withTranslation HOC
     // Manual validation for email and password
-    if (!email) errors.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(email)) errors.email = "Email is invalid";
+    if (!email) errors.email = t("Error email required");
+    else if (!/\S+@\S+\.\S+/.test(email))
+      errors.email = t("Error email invalid");
 
-    if (!password) errors.password = "Password is required";
+    if (!password) errors.password = t("Error password required");
     else if (password.length < 6)
-      errors.password = "Password must be at least 6 characters";
+      errors.password = t("Password must be at least 6 characters");
 
     // If errors exist, set them in state
     if (Object.keys(errors).length > 0) {
@@ -115,22 +134,27 @@ class Login extends Component {
     if (this.state.redirect) {
       return <Navigate to="/home" />;
     }
-
+    const { t } = this.props; // Translation function from withTranslation HOC
     return (
-      <div
-        style={{ backgroundImage: "url('/moi.jpg')", backgroundSize: "cover" }}
-        className="d-flex justify-content-center align-items-center vh-100"
-      >
+      <div className="d-flex justify-content-center align-items-center vh-100">
         <div className="card shadow" style={{ width: "24rem" }}>
           <div className="card-body">
-            <h4 className="text-center mb-4">Login</h4>
+            <img
+              src="/moi.png"
+              alt="Logo"
+              className="img-fluid mb-3"
+              style={{ height: "150px", display: "block", margin: "0 auto" }}
+            />
+            <h5 className="text-center mb-4">
+              {t("Ministry of Internal Affairs")}
+            </h5>
+            <h4 className="text-center mb-4">{t("Login")}</h4>
             <form onSubmit={this.handleSubmit}>
               <div className="mb-3">
-                <label className="form-label">Email</label>
                 <input
                   type="email"
                   className="form-control"
-                  placeholder="Enter email"
+                  placeholder={t("Enter Email")}
                   name="email"
                   value={this.state.email}
                   onChange={this.handleInputChange}
@@ -138,12 +162,11 @@ class Login extends Component {
                 />
                 <div className="text-danger">{this.state.errors.email}</div>
               </div>
-              <div className="mb-3">
-                <label className="form-label">Password</label>
+              <div className="mb-3 mt-3">
                 <input
                   type="password"
                   className="form-control"
-                  placeholder="Enter password"
+                  placeholder={t("Enter Password")}
                   name="password"
                   value={this.state.password}
                   onChange={this.handleInputChange}
@@ -151,8 +174,8 @@ class Login extends Component {
                 />
                 <div className="text-danger">{this.state.errors.password}</div>
               </div>
-              <button className="btn btn-primary w-100" type="submit">
-                Login
+              <button className="btn btn-primary w-100 mt-2" type="submit">
+                {t("Login")}
               </button>
             </form>
           </div>
@@ -162,4 +185,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default withTranslation()(Login);

@@ -105,6 +105,9 @@ class WeaponAdd extends Component {
       for (const weapon of Weapons) {
         if (weapon) {
           console.log("Submitting weapon:", weapon);
+          if (weapon.in) {
+            tempIds.push(weapon.id);
+          }
           const response = await fetch(
             `https://localhost:7211/api/weapon/${weapon.id}`,
             {

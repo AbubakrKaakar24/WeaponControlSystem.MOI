@@ -2,6 +2,7 @@
 import React from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import Select from "react-select";
+import { useTranslation } from "react-i18next";
 
 export default function AddOfficerModal({
   show,
@@ -24,74 +25,94 @@ export default function AddOfficerModal({
   header,
   phoneNo,
 }) {
-  console.log({
-    badgeNo,
-    deputyMinistry,
-    directorate,
-    administration,
-    base,
-  });
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.dir() === "rtl";
+
+  const customSelectStyles = {
+    control: (provided) => ({
+      ...provided,
+      direction: isRTL ? "rtl" : "ltr",
+    }),
+    menu: (provided) => ({
+      ...provided,
+      direction: isRTL ? "rtl" : "ltr",
+      textAlign: isRTL ? "right" : "left",
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      textAlign: isRTL ? "right" : "left",
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      textAlign: isRTL ? "right" : "left",
+    }),
+  };
+
   return (
     <Modal show={show} onHide={onHide} size="lg" centered>
-      <Modal.Header closeButton>
-        <Modal.Title className="mb-4 fw-bold text-primary">
+      <Modal.Header closeButton dir={isRTL ? "rtl" : "ltr"}>
+        <Modal.Title
+          className={`mb-4 fw-bold text-primary ${
+            isRTL ? "text-end w-100" : ""
+          }`}
+        >
           {header}
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body dir={isRTL ? "rtl" : "ltr"}>
         <Form noValidate onSubmit={onSubmit}>
           <Row className="mb-2">
             <Col md={3}>
-              <Form.Label>First Name</Form.Label>
               <Form.Control
                 type="text"
                 name="firstName"
                 value={firstName}
                 onChange={handleChange}
                 isInvalid={!!errors.firstName}
-                placeholder="First Name"
+                placeholder={t("First name")}
+                style={{ textAlign: isRTL ? "right" : "left" }}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.firstName}
               </Form.Control.Feedback>
             </Col>
             <Col md={3}>
-              <Form.Label>Last Name</Form.Label>
               <Form.Control
                 type="text"
                 name="lastName"
                 value={lastName}
                 onChange={handleChange}
                 isInvalid={!!errors.lastName}
-                placeholder="Last Name"
+                placeholder={t("Last name")}
+                style={{ textAlign: isRTL ? "right" : "left" }}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.lastName}
               </Form.Control.Feedback>
             </Col>
             <Col md={3}>
-              <Form.Label>Badge No</Form.Label>
               <Form.Control
                 type="text"
                 name="badgeNo"
                 value={badgeNo}
                 onChange={handleChange}
                 isInvalid={!!errors.badgeNo}
-                placeholder="Badge No"
+                placeholder={t("Badge no")}
+                style={{ textAlign: isRTL ? "right" : "left" }}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.badgeNo}
               </Form.Control.Feedback>
             </Col>
             <Col md={3}>
-              <Form.Label>Phone No</Form.Label>
               <Form.Control
                 type="text"
                 name="phoneNo"
                 value={phoneNo}
                 onChange={handleChange}
                 isInvalid={!!errors.phoneNo}
-                placeholder="Phone No"
+                placeholder={t("Phone no")}
+                style={{ textAlign: isRTL ? "right" : "left" }}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.phoneNo}
@@ -100,7 +121,6 @@ export default function AddOfficerModal({
           </Row>
           <Row className="mb-2">
             <Col md={3}>
-              <Form.Label>Deputy Ministry</Form.Label>
               <Select
                 name="deputyMinistry"
                 value={deputyOptions.find(
@@ -113,11 +133,12 @@ export default function AddOfficerModal({
                   )
                 }
                 options={deputyOptions}
+                placeholder={t("Select deputy ministry")}
+                styles={customSelectStyles}
               />
               <div className="text-danger">{errors.deputyMinistry}</div>
             </Col>
             <Col md={3}>
-              <Form.Label>Directorate</Form.Label>
               <Select
                 name="directorate"
                 value={directorateOptions.find(
@@ -130,11 +151,12 @@ export default function AddOfficerModal({
                   )
                 }
                 options={directorateOptions}
+                placeholder={t("Select directorate")}
+                styles={customSelectStyles}
               />
               <div className="text-danger">{errors.directorate}</div>
             </Col>
             <Col md={3}>
-              <Form.Label>Administration</Form.Label>
               <Select
                 name="administration"
                 value={administrationOptions.find(
@@ -147,11 +169,12 @@ export default function AddOfficerModal({
                   )
                 }
                 options={administrationOptions}
+                placeholder={t("Select administration")}
+                styles={customSelectStyles}
               />
               <div className="text-danger">{errors.administration}</div>
             </Col>
             <Col md={3}>
-              <Form.Label>Base</Form.Label>
               <Select
                 name="base"
                 value={baseOptions.find((opt) => opt.value === base)}
@@ -159,18 +182,20 @@ export default function AddOfficerModal({
                   handleSelectChange("base", selected ? selected.value : "")
                 }
                 options={baseOptions}
+                placeholder={t("Select base")}
+                styles={customSelectStyles}
               />
               <div className="text-danger">{errors.base}</div>
             </Col>
           </Row>
         </Form>
       </Modal.Body>
-      <Modal.Footer>
+      <Modal.Footer dir={isRTL ? "rtl" : "ltr"}>
         <Button variant="secondary" onClick={onHide}>
-          Cancel
+          {t("Cancel")}
         </Button>
         <Button variant="primary" onClick={onSubmit}>
-          Submit
+          {t("Save")}
         </Button>
       </Modal.Footer>
     </Modal>

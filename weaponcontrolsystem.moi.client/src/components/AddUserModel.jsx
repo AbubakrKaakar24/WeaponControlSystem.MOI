@@ -2,6 +2,7 @@
 import React from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import Select from "react-select";
+import { useTranslation } from "react-i18next";
 
 export default function AddUserModal({
   show,
@@ -15,63 +16,94 @@ export default function AddUserModal({
   handleSelectChange,
   header,
 }) {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.dir() === "rtl";
+
+  const customSelectStyles = {
+    control: (provided) => ({
+      ...provided,
+      direction: isRTL ? "rtl" : "ltr",
+    }),
+    menu: (provided) => ({
+      ...provided,
+      direction: isRTL ? "rtl" : "ltr",
+      textAlign: isRTL ? "right" : "left",
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      textAlign: isRTL ? "right" : "left",
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      textAlign: isRTL ? "right" : "left",
+    }),
+  };
+
   return (
     <Modal show={show} onHide={onHide} size="lg" centered>
-      <Modal.Header closeButton>
-        <Modal.Title className="mb-4 fw-bold text-primary">
+      <Modal.Header closeButton dir={isRTL ? "rtl" : "ltr"}>
+        <Modal.Title
+          className={`mb-4 fw-bold text-primary ${
+            isRTL ? "text-end w-100" : ""
+          }`}
+        >
           {header}
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body dir={isRTL ? "rtl" : "ltr"}>
         <Form noValidate onSubmit={onSubmit}>
           <Row className="mb-2">
             <Col md={3}>
-              <Form.Label>First Name</Form.Label>
               <Form.Control
                 type="text"
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleChange}
                 isInvalid={!!errors.firstName}
+                placeholder={t("Enter first name")}
+                style={{ textAlign: isRTL ? "right" : "left" }}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.firstName}
               </Form.Control.Feedback>
             </Col>
             <Col md={3}>
-              <Form.Label>Last Name</Form.Label>
               <Form.Control
                 type="text"
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
                 isInvalid={!!errors.lastName}
+                placeholder={t("Enter last name")}
+                style={{ textAlign: isRTL ? "right" : "left" }}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.lastName}
               </Form.Control.Feedback>
             </Col>
             <Col md={3}>
-              <Form.Label>Phone No</Form.Label>
               <Form.Control
                 type="text"
                 name="phoneNo"
                 value={formData.phoneNo}
                 onChange={handleChange}
                 isInvalid={!!errors.phoneNo}
+                placeholder={t("Enter phone number")}
+                style={{ textAlign: isRTL ? "right" : "left" }}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.phoneNo}
               </Form.Control.Feedback>
             </Col>
             <Col md={3}>
-              <Form.Label>Email</Form.Label>
               <Form.Control
                 type="text"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
                 isInvalid={!!errors.email}
+                placeholder={t("Enter Email")}
+                style={{ textAlign: isRTL ? "right" : "left" }}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.email}
@@ -80,7 +112,6 @@ export default function AddUserModal({
           </Row>
           <Row className="mb-2">
             <Col md={3}>
-              <Form.Label>Role</Form.Label>
               <Select
                 name="role"
                 value={roleOptions.find((opt) => opt.value === formData.role)}
@@ -88,11 +119,12 @@ export default function AddUserModal({
                   handleSelectChange("role", selected ? selected.value : "")
                 }
                 options={roleOptions}
+                placeholder={t("Select role")}
+                styles={customSelectStyles}
               />
               <div className="text-danger">{errors.role}</div>
             </Col>
             <Col md={3}>
-              <Form.Label>Gate</Form.Label>
               <Select
                 name="gate"
                 value={gateOptions.find((opt) => opt.value === formData.gate)}
@@ -100,30 +132,34 @@ export default function AddUserModal({
                   handleSelectChange("gate", selected ? selected.value : "")
                 }
                 options={gateOptions}
+                placeholder={t("Select gate")}
+                styles={customSelectStyles}
               />
               <div className="text-danger">{errors.gate}</div>
             </Col>
             <Col md={3}>
-              <Form.Label>Password</Form.Label>
               <Form.Control
                 type="password"
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
                 isInvalid={!!errors.password}
+                placeholder={t("Enter Password")}
+                style={{ textAlign: isRTL ? "right" : "left" }}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.password}
               </Form.Control.Feedback>
             </Col>
             <Col md={3}>
-              <Form.Label>Confirm Password</Form.Label>
               <Form.Control
                 type="password"
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 isInvalid={!!errors.confirmPassword}
+                placeholder={t("Confirm password")}
+                style={{ textAlign: isRTL ? "right" : "left" }}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.confirmPassword}
@@ -132,12 +168,12 @@ export default function AddUserModal({
           </Row>
         </Form>
       </Modal.Body>
-      <Modal.Footer>
+      <Modal.Footer dir={isRTL ? "rtl" : "ltr"}>
         <Button variant="secondary" onClick={onHide}>
-          Cancel
+          {t("Cancel")}
         </Button>
         <Button variant="primary" onClick={onSubmit}>
-          Submit
+          {t("Save")}
         </Button>
       </Modal.Footer>
     </Modal>

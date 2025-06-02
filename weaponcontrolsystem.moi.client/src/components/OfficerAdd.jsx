@@ -5,9 +5,10 @@ import ministryData from "../assets/ministryData.json";
 import AddOfficerModal from "./AddOfficerModel";
 import DataTable from "react-data-table-component";
 import { withRouter } from "./withRouter";
+import { withTranslation } from "react-i18next";
 class OfficerAdd extends Component {
   state = {
-    header: "Add New Officer",
+    header: this.props.t("Add New Officer"),
     showModal: false,
     officers: [],
     allOfficers: [],
@@ -71,7 +72,7 @@ class OfficerAdd extends Component {
   toggleModal = () => {
     this.setState((prevState) => ({
       showModal: !prevState.showModal,
-      header: "Add New Officer",
+      header: this.props.t("Add New Officer"),
       id: "",
       firstName: "",
       lastName: "",
@@ -460,4 +461,4 @@ class OfficerAdd extends Component {
     );
   }
 }
-export default withRouter(OfficerAdd);
+export default withTranslation()(withRouter(OfficerAdd));
