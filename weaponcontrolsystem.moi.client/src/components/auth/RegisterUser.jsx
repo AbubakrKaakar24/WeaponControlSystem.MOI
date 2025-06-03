@@ -300,7 +300,12 @@ class RegisterUser extends Component {
       role: user.role,
       gate: user.gate,
     }));
-
+    const paginationOptions = {
+      rowsPerPageText: t("RowsPerPage"),
+      rangeSeparatorText: t("Of"),
+      selectAllRowsItem: true,
+      selectAllRowsItemText: t("All"),
+    };
     return (
       <div className="bg-light min-vh-100" dir={isRTL ? "rtl" : "ltr"}>
         <Navbar />
@@ -327,6 +332,8 @@ class RegisterUser extends Component {
                 persistTableHead
                 striped
                 highlightOnHover
+                paginationComponentOptions={paginationOptions}
+                noDataComponent={t("No Data")}
               />
               <div className="text-start">
                 <button

@@ -4,22 +4,23 @@ import DataTable from "react-data-table-component";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "../assets/persian_fa";
 import DateObject from "react-date-object";
-
+import { useTranslation } from "react-i18next";
 const WeaponHistory = () => {
   const [weapons, setWeapons] = useState([]);
   const [filteredWeapons, setFilteredWeapons] = useState([]);
-
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.dir() === "rtl";
   const columns = [
-    { name: "Name", selector: (row) => row.name, sortable: true },
-    { name: "Type", selector: (row) => row.type, sortable: true },
-    { name: "Serial No", selector: (row) => row.serialNo, sortable: true },
+    { name: t("Name"), selector: (row) => row.name, sortable: true },
+    { name: t("Type"), selector: (row) => row.type, sortable: true },
+    { name: t("Serial no"), selector: (row) => row.serialNo, sortable: true },
     {
-      name: "Officer Name",
+      name: t("Officer name"),
       selector: (row) => row.officerName,
       sortable: true,
     },
-    { name: "In Date", selector: (row) => row.inDate, sortable: true },
-    { name: "Out Date", selector: (row) => row.outDate, sortable: true },
+    { name: t("In date"), selector: (row) => row.inDate, sortable: true },
+    { name: t("Out date"), selector: (row) => row.outDate, sortable: true },
   ];
   const row = weapons.map((w) => ({
     id: w.id,
@@ -80,9 +81,14 @@ const WeaponHistory = () => {
   useEffect(() => {
     fetchWeapons();
   }, []);
-
+  const paginationOptions = {
+    rowsPerPageText: t("RowsPerPage"),
+    rangeSeparatorText: t("Of"),
+    selectAllRowsItem: true,
+    selectAllRowsItemText: t("All"),
+  };
   return (
-    <div className="bg-light min-vh-100">
+    <div className="bg-light min-vh-100" dir={isRTL ? "rtl" : "ltr"}>
       <Navbar />
       <div
         className="container py-5 mt-5"
@@ -93,14 +99,16 @@ const WeaponHistory = () => {
             <div className="d-flex justify-content-end mb-3">
               <input
                 type="search"
-                placeholder="🔍 Search Weapon"
+                placeholder={t("Search Weapon") + "🔍"}
                 className="form-control w-50 shadow-sm rounded-pill"
                 style={{ maxWidth: "300px" }}
                 onChange={handleSearch}
               />
             </div>
 
-            <h3 className="mb-4 fw-bold text-primary">History of Weapons</h3>
+            <h3 className="mb-4 fw-bold text-primary">
+              {t("Weapon History") + " 📜"}
+            </h3>
 
             <DataTable
               columns={columns}
@@ -127,6 +135,9 @@ const WeaponHistory = () => {
                   },
                 },
               }}
+              direction={isRTL ? "rtl" : "ltr"}
+              noDataComponent={t("No Data")}
+              paginationComponentOptions={paginationOptions}
             />
           </div>
         </div>

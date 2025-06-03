@@ -10,6 +10,7 @@ import Swal from "sweetalert2"; // Make sure you import this
 import TimePicker from "react-multi-date-picker/plugins/time_picker"; // Not used in UI
 import DateObject from "react-date-object";
 import { set } from "date-fns";
+import { useTranslation } from "react-i18next";
 export default function WeaponModel({ show, onHide, id, fetchWeapons }) {
   const [name, setName] = useState("");
   const [type, setType] = useState("");
@@ -18,6 +19,8 @@ export default function WeaponModel({ show, onHide, id, fetchWeapons }) {
   const [errors, setErrors] = useState({});
   const [types, setTypes] = useState([]);
   const [names, setNames] = useState([]);
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.dir() === "rtl";
   useEffect(() => {
     const names = weaponData.weaponTypes
       .map((weaponType) => weaponType.weapons)
@@ -123,14 +126,13 @@ export default function WeaponModel({ show, onHide, id, fetchWeapons }) {
     <Modal show={show} onHide={onHide} size="lg" centered>
       <Modal.Header closeButton>
         <Modal.Title className="mb-4 fw-bold text-primary">
-          Add Weapon
+          {t("Add Weapon")}
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body dir={isRTL ? "rtl" : "ltr"}>
         <Form noValidate onSubmit={handleSubmit}>
           <Row className="mb-2">
             <Col md={4}>
-              <Form.Label>Type</Form.Label>
               <Select
                 name="type"
                 options={types.map((t) => ({ value: t, label: t }))}
@@ -138,12 +140,11 @@ export default function WeaponModel({ show, onHide, id, fetchWeapons }) {
                 onChange={(selectedOption) =>
                   handleDropdownChange("type", selectedOption.value)
                 }
-                placeholder="Select Type"
+                placeholder={t("Select type")}
               />
               <div className="text-danger">{errors.type}</div>
             </Col>
             <Col md={4}>
-              <Form.Label>Name</Form.Label>
               <Select
                 name="name"
                 options={names.map((n) => ({ value: n, label: n }))}
@@ -151,19 +152,18 @@ export default function WeaponModel({ show, onHide, id, fetchWeapons }) {
                 onChange={(selectedOption) =>
                   handleDropdownChange("name", selectedOption.value)
                 }
-                placeholder="Select Name"
+                placeholder={t("Select name")}
               />
               <div className="text-danger">{errors.name}</div>
             </Col>
             <Col md={4}>
-              <Form.Label>Serial No</Form.Label>
               <Form.Control
                 type="text"
                 name="cardNo"
                 value={serialNo}
                 onChange={(value) => setSerialNo(value.target.value)}
                 isInvalid={!!errors.serialNo}
-                placeholder="Enter Serial No"
+                placeholder={t("Enter serial no")}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.serialNo}
@@ -229,12 +229,12 @@ export default function WeaponModel({ show, onHide, id, fetchWeapons }) {
           </Row> */}
         </Form>
       </Modal.Body>
-      <Modal.Footer>
+      <Modal.Footer dir={isRTL ? "rtl" : "ltr"}>
         <Button variant="secondary" onClick={onHide}>
-          Cancel
+          {t("Cancel")}
         </Button>
         <Button variant="primary" onClick={handleSubmit}>
-          Submit
+          {t("Submit")}
         </Button>
       </Modal.Footer>
     </Modal>

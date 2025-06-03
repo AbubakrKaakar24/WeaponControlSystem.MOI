@@ -146,6 +146,9 @@ class Login extends Component {
               style={{ height: "150px", display: "block", margin: "0 auto" }}
             />
             <h5 className="text-center mb-4">
+              {t("Islamic Emirate of Afghanistan")}
+            </h5>
+            <h5 className="text-center mb-4">
               {t("Ministry of Internal Affairs")}
             </h5>
             <h4 className="text-center mb-4">{t("Login")}</h4>

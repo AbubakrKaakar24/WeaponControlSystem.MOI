@@ -24,6 +24,8 @@ class OfficerAdd extends Component {
     administrations: [],
     bases: [],
     phoneNo: "",
+    id: "",
+    phoneNo: "",
 
     errors: {
       firstName: "",
@@ -81,6 +83,7 @@ class OfficerAdd extends Component {
       directorate: "",
       administration: "",
       base: "",
+      phoneNo: "",
       errors: {},
     }));
   };
@@ -114,14 +117,16 @@ class OfficerAdd extends Component {
     }
   };
   handleDelete = async (officerId) => {
+    const { t } = this.props;
     const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: t("Are you sure?"),
+      text: t("You won't be able to revert this!"),
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: t("Yes, delete it!"),
+      cancelButtonText: t("Cancel"),
     });
     if (result.isConfirmed) {
       try {
@@ -135,14 +140,13 @@ class OfficerAdd extends Component {
           }
         );
         if (response.ok) {
-          Swal.fire("Deleted!", "Officer has been deleted.", "success");
+          Swal.fire(t("Deleted!"), t("Officer has been deleted!"), "success");
           this.fetchOfficers();
         } else {
           const errorData = await response.json();
-          console.log("Error:", errorData);
           Swal.fire({
             icon: "error",
-            title: "Error",
+            title: t("Error"),
             text: errorData.message,
           });
         }
@@ -150,8 +154,8 @@ class OfficerAdd extends Component {
         console.error("Error deleting user:", error);
         Swal.fire({
           icon: "error",
-          title: "Error",
-          text: "Failed to delete user.",
+          title: t("Error"),
+          text: t("An error occurred while deleting the officer."),
         });
       }
     }
@@ -159,14 +163,14 @@ class OfficerAdd extends Component {
   // Handle edit user
   handleEdit = async (userId) => {
     const response = await fetch(
-      `https://localhost:7211/api/officer/${userId}`
+      `https://localhost:7211/api/officer/by-id/${userId}`
     );
     const officer = await response.json();
     console.log(officer);
     this.setState({
       id: userId,
       showModal: true,
-      header: "Edit officer",
+      header: this.props.t("Edit Officer"),
       firstName: officer.name,
       lastName: officer.name,
       badgeNo: officer.badgeNo,
@@ -174,6 +178,7 @@ class OfficerAdd extends Component {
       directorate: officer.directorate,
       administration: officer.administration,
       base: officer.base,
+      phoneNo: officer.phoneNo,
     });
   };
   handleSubmit = async (e) => {
@@ -213,9 +218,12 @@ class OfficerAdd extends Component {
           PhoneNo: phoneNo,
         };
 
-        var Method = this.state.header === "Add New Officer" ? "POST" : "PUT";
+        var Method =
+          this.state.header === this.props.t("Add New Officer")
+            ? "POST"
+            : "PUT";
         var url =
-          this.state.header === "Add New Officer"
+          this.state.header === this.props.t("Add New Officer")
             ? "https://localhost:7211/api/officer"
             : "https://localhost:7211/api/officer/" + this.state.id;
 
@@ -252,7 +260,7 @@ class OfficerAdd extends Component {
           });
           this.fetchOfficers();
           navigate("/weapon", {
-            state: { officer: tempofficer.id },
+            state: { officer: tempofficer },
           });
         } else {
           Swal.fire({
@@ -287,6 +295,8 @@ class OfficerAdd extends Component {
   };
 
   render() {
+    const { t, i18n } = this.props;
+    const isRTL = i18n.dir() === "rtl";
     const deputyOptions = this.state.deputies.map((deputy) => ({
       label: deputy,
       value: deputy,
@@ -308,38 +318,43 @@ class OfficerAdd extends Component {
 
     const columns = [
       {
-        name: "Name",
+        name: t("Name"),
         selector: (row) => row.name,
         sortable: true,
       },
       {
-        name: "Badge No",
+        name: t("Badge no"),
         selector: (row) => row.badgeNo,
         sortable: true,
       },
       {
-        name: "Deputy Ministry",
+        name: t("Phone number"),
+        selector: (row) => row.phoneNo,
+        sortable: true,
+      },
+      {
+        name: t("Deputy Ministry"),
         selector: (row) => row.deputyMinistry,
         sortable: true,
         minWidth: "250px",
       },
       {
-        name: "Directorate",
+        name: t("Directorate"),
         selector: (row) => row.directorate,
         sortable: true,
       },
       {
-        name: "Administration",
+        name: t("Administration"),
         selector: (row) => row.administration,
         sortable: true,
       },
       {
-        name: "Base",
+        name: t("Base"),
         selector: (row) => row.base,
         sortable: true,
       },
       {
-        name: "Actions",
+        name: t("Actions"),
         cell: (row) => (
           <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
             <i
@@ -377,11 +392,16 @@ class OfficerAdd extends Component {
       directorate: officer.directorate,
       administration: officer.administration,
       base: officer.base,
+      phoneNo: officer.phoneNo,
     }));
-
-    console.log("BadgeNo: " + this.state.badgeNo);
+    const paginationOptions = {
+      rowsPerPageText: t("RowsPerPage"),
+      rangeSeparatorText: t("Of"),
+      selectAllRowsItem: true,
+      selectAllRowsItemText: t("All"),
+    };
     return (
-      <div className="bg-light min-vh-100">
+      <div className="bg-light min-vh-100" dir={isRTL ? "rtl" : "ltr"}>
         <Navbar />
 
         <div className="container py-5 mt-5">
@@ -391,7 +411,7 @@ class OfficerAdd extends Component {
                 <input
                   type="search"
                   name="searchOfficer"
-                  placeholder="🔍 Search Officer"
+                  placeholder={t("Search Officer") + " 🔍"}
                   className="form-control w-50 shadow-sm rounded-pill"
                   style={{ maxWidth: "300px" }}
                   onChange={(e) => {
@@ -399,7 +419,9 @@ class OfficerAdd extends Component {
                   }}
                 />
               </div>
-              <h3 className="mb-4 fw-bold text-primary">List of Officers</h3>
+              <h3 className="mb-4 fw-bold text-primary">
+                {t("List of Officers")}
+              </h3>
               <DataTable
                 columns={columns}
                 data={rows}
@@ -427,10 +449,14 @@ class OfficerAdd extends Component {
                     },
                   },
                 }}
+                direction={isRTL ? "rtl" : "ltr"}
+                noDataComponent={t("No Data")}
+                pagination
+                paginationComponentOptions={paginationOptions}
               />
               <div className="d-flex justify-content-end mb-3">
                 <button className="btn btn-primary" onClick={this.toggleModal}>
-                  Add officer
+                  {this.props.t("Add New Officer")}
                 </button>
               </div>
               <AddOfficerModal

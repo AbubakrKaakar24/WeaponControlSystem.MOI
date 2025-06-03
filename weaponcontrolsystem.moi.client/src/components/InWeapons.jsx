@@ -4,9 +4,7 @@ import DataTable from "react-data-table-component";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "../assets/persian_fa";
 import DateObject from "react-date-object";
-import Swal from "sweetalert2";
-import WeaponModel from "./weaponModel";
-import WeaponCheckoutModel from "./weaponCheckoutModel";
+import { useTranslation } from "react-i18next";
 function InWeapon() {
   const [inWeapons, setInWeapons] = useState([]);
   const [allInWeapons, setAllInWeapons] = useState([]);
@@ -14,43 +12,31 @@ function InWeapon() {
   const [show, setShow] = useState(false);
   const [id, setID] = useState(0);
   const [showCheckout, setShowCheckout] = useState(false);
-
-  const toggleModal = () => {
-    setShow(!show);
-    setWeapon({});
-  };
-  const checkoutToggle = () => {
-    setShowCheckout(!showCheckout);
-  };
-  const handleCheckout = async (weaponID) => {
-    var response = await fetch("https://localhost:7211/api/weapon/" + weaponID);
-    const weapond = await response.json();
-    if (weapond) setWeapon(weapond);
-    setShowCheckout(true);
-  };
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.dir() === "rtl";
 
   const columns = [
-    { name: "Name", selector: (row) => row.name, sortable: true },
+    { name: t("Name"), selector: (row) => row.name, sortable: true },
 
     {
-      name: "Type",
+      name: t("Type"),
 
       selector: (row) => row.type,
       sortable: true,
     },
     {
-      name: "Serial No",
+      name: t("Serial no"),
 
       selector: (row) => row.serialNo,
       sortable: true,
     },
     {
-      name: "Officer ID",
+      name: t("Officer ID"),
       selector: (row) => row.officerId,
       sortable: true,
     },
     {
-      name: "In Date",
+      name: t("In date"),
       selector: (row) => row.inDate,
       sortable: true,
     },
@@ -96,64 +82,21 @@ function InWeapon() {
     if (e.target.value == "") setInWeapons(allInWeapons);
     else {
       const searchTerm = e.target.value;
-      const weapons = allInWeapons.filter((w) => w.cardNo == searchTerm);
+      const weapons = allInWeapons.filter((w) => w.name.includes(searchTerm));
       setInWeapons(weapons);
     }
   };
-  // const handleDelete = async (weaponId) => {
-  //   const result = await Swal.fire({
-  //     title: "Are you sure?",
-  //     text: "You won't be able to revert this!",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Yes, delete it!",
-  //   });
-  //   if (result.isConfirmed) {
-  //     try {
-  //       const response = await fetch(
-  //         `https://localhost:7211/api/weapon/${weaponId}`,
-  //         {
-  //           method: "DELETE",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //         }
-  //       );
-  //       if (response.ok) {
-  //         Swal.fire({
-  //           icon: "success",
-  //           text: "Weapons has been deleted",
-  //           title: "Deleted!",
-  //         });
-  //         fetchWeapons();
-  //       } else {
-  //         const errorData = await response.json();
-  //         console.log("Error:", errorData);
-  //         Swal.fire({
-  //           icon: "error",
-  //           title: "Error",
-  //           text: errorData.message,
-  //         });
-  //       }
-  //     } catch (error) {
-  //       Swal.fire({ icon: "error", title: "Error", text: error.message });
-  //     }
-  //   }
-  // };
-  // const handleEdit = (weaponID) => {
-  //   var weapon = allInWeapons.find((w) => w.id == weaponID);
-  //   setWeapon(weapon);
-  //   setShow(true);
-  //   setID(weaponID);
-  // };
-
+  const paginationOptions = {
+    rowsPerPageText: t("RowsPerPage"),
+    rangeSeparatorText: t("Of"),
+    selectAllRowsItem: true,
+    selectAllRowsItemText: t("All"),
+  };
   useEffect(() => {
     fetchWeapons();
   }, []);
   return (
-    <div className="bg-light min-vh-100">
+    <div className="bg-light min-vh-100" dir={isRTL ? "rtl" : "ltr"}>
       <Navbar />
       <div className="container py-5 mt-5">
         <div className="card shadow-lg border-0">
@@ -161,7 +104,7 @@ function InWeapon() {
             <div className="d-flex justify-content-end">
               <input
                 type="search"
-                placeholder="🔍 Search Weapon"
+                placeholder={t("Search Weapon") + "🔍"}
                 className="form-control w-50 shadow-sm rounded-pill "
                 style={{
                   maxWidth: "300px",
@@ -169,7 +112,10 @@ function InWeapon() {
                 onChange={(e) => searchWeapon(e)}
               />
             </div>
-            <h3 className="mb-4 fw-bold text-primary"> Pending weapons</h3>
+            <h3 className="mb-4 fw-bold text-primary">
+              {" "}
+              {t("Pending Weapons")}
+            </h3>
 
             <DataTable
               columns={columns}
@@ -198,20 +144,10 @@ function InWeapon() {
                   },
                 },
               }}
+              direction={isRTL ? "rtl" : "ltr"}
+              noDataComponent={t("No Data")}
+              paginationComponentOptions={paginationOptions}
             />
-            {/* <WeaponModel
-              show={show}
-              weapon={weapon}
-              onHide={toggleModal}
-              id={id}
-              fetchWeapons={fetchWeapons}
-            />
-            <WeaponCheckoutModel
-              show={showCheckout}
-              onHide={checkoutToggle}
-              weapon={weapon}
-              fetchWeapons={fetchWeapons}
-            /> */}
           </div>
         </div>
       </div>

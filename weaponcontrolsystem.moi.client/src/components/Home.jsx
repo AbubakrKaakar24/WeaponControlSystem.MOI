@@ -39,19 +39,26 @@ function Home() {
       if (!response.ok) {
         Swal.fire({
           icon: "error",
-          title: "Error",
-          text: `افسر با این شماره ${phoneNo} پیدا نشد.`,
+          title: t("Error"),
+          text: t("Officer not found"),
+          confirmButtonText: t("Ok"),
           timer: 3000,
         });
         return;
       }
       const data = await response.json();
       if (data) {
-        navigate("/weapon", { state: { officer: data.id } });
-      } else {
-        alert("افسر پیدا نشد");
+        navigate("/weapon", { state: { officer: data } });
       }
       setphoneNo("");
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: t("Error"),
+        text: t("Please enter a valid phone number"),
+        confirmButtonText: t("Ok"),
+        timer: 3000,
+      });
     }
   };
 
@@ -61,8 +68,9 @@ function Home() {
       if (!cardData.ok) {
         Swal.fire({
           icon: "error",
-          title: "Error",
-          text: `کارت با شماره ${cardNo} پیدا نشد.`,
+          title: t("Error"),
+          text: t("Card not found"),
+          confirmButtonText: t("Ok"),
           timer: 3000,
         });
         return;
@@ -110,11 +118,6 @@ function Home() {
             InBy: "Admin",
           }),
         });
-
-        if (!res.ok) {
-          alert("ناموفق در بروزرسانی سلاح: " + weapon.id);
-          return;
-        }
       }
 
       const response = await fetch(
@@ -128,17 +131,19 @@ function Home() {
       if (response.ok) {
         Swal.fire({
           icon: "success",
-          title: "خروج موفقانه",
-          text: `سلاح‌ها برای ${officerName} موفقانه خارج شدند.`,
+          title: t("Checkout Successful"),
           timer: 3000,
+          timerProgressBar: true,
+          confirmButtonText: t("Ok"),
         });
         setCardNo("");
       }
     } else {
       Swal.fire({
         icon: "error",
-        title: "Error",
-        text: "لطفاً یک شماره کارت معتبر وارد کنید.",
+        title: t("Error"),
+        text: t("Please enter a valid card number"),
+        confirmButtonText: t("Ok"),
         timer: 3000,
       });
     }
@@ -161,13 +166,9 @@ function Home() {
           <div className="col-md-3 d-flex">
             <div className="card shadow-lg rounded-3 w-100 h-100 d-flex flex-column bg-success bg-gradient text-white">
               <div className="card-body d-flex flex-column">
-                <h5 className="card-title">
-                  <FaSearch className="ms-2" />
-                  {t("Find Officer")}
-                </h5>
                 <input
                   type="search"
-                  placeholder={t("Search Officer")}
+                  placeholder={t("Search Officer") + "🔍"}
                   className="form-control shadow-sm rounded-pill mb-3 text-dark"
                   value={phoneNo}
                   onChange={(e) => setphoneNo(e.target.value)}
@@ -188,13 +189,9 @@ function Home() {
           <div className="col-md-3 d-flex">
             <div className="card shadow-lg rounded-3 w-100 h-100 d-flex flex-column bg-success bg-gradient text-white">
               <div className="card-body d-flex flex-column">
-                <h5 className="card-title">
-                  <FaSearch className="ms-2" />
-                  {t("Checkout Weapon")}
-                </h5>
                 <input
                   type="search"
-                  placeholder={t("Search Card")}
+                  placeholder={t("Search Card") + "🔍"}
                   className="form-control shadow-sm rounded-pill mb-3 text-dark"
                   value={cardNo}
                   onChange={(e) => setCardNo(e.target.value)}

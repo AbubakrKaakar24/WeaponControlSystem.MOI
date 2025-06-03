@@ -5,6 +5,8 @@ import weaponData from "../assets/weaponData.json";
 import { withRouter } from "./withRouter";
 import DataTable from "react-data-table-component";
 import WeaponModel from "./weaponModel";
+import { withTranslation } from "react-i18next";
+import { t } from "i18next";
 
 class WeaponAdd extends Component {
   state = {
@@ -25,7 +27,7 @@ class WeaponAdd extends Component {
     const { officer } = this.props.router.location.state || {};
     if (officer) {
       const response = await fetch(
-        `https://localhost:7211/api/weapon/byOfficer/${officer}`
+        `https://localhost:7211/api/weapon/byOfficer/${officer.id}`
       );
       const data = await response.json();
       console.log(data);
@@ -104,7 +106,6 @@ class WeaponAdd extends Component {
       const tempIds = [];
       for (const weapon of Weapons) {
         if (weapon) {
-          console.log("Submitting weapon:", weapon);
           if (weapon.in) {
             tempIds.push(weapon.id);
           }
@@ -120,7 +121,6 @@ class WeaponAdd extends Component {
           );
         }
       }
-      console.log("Temp IDs:", tempIds);
       if (Object.keys(tempIds).length > 0) {
         const tempCard = {
           cardNo: "",
@@ -136,30 +136,29 @@ class WeaponAdd extends Component {
 
           body: JSON.stringify(tempCard),
         });
-        console.log("Response:", response);
         if (response.ok) {
           const data = await response.json();
           Swal.fire({
             icon: "success",
-            title: "Card number is " + data,
+            title: t("Card no") + data,
             timer: 5000,
             timerProgressBar: true,
+            confirmButtonText: t("Ok"),
           });
           this.props.router.navigate("/home");
         } else {
           Swal.fire({
             icon: "error",
-            title: "Error",
+            title: t("Error"),
             text: response.statusText,
             timer: 3000,
           });
         }
       }
     } catch (error) {
-      console.log("Errors:", error);
       Swal.fire({
         icon: "error",
-        title: "Error",
+        title: t("Error"),
         text: error.message,
         timer: 3000,
       });
@@ -183,12 +182,14 @@ class WeaponAdd extends Component {
     this.setState({ Weapons: updatedWeapons });
   };
   render() {
+    const { t, i18n } = this.props;
+    const isRTL = i18n.dir() === "rtl";
     const { name, type, errors, serialNo } = this.state;
     const { officer } = this.props.router.location.state || {};
 
     const Columns = [
       {
-        name: "Actions",
+        name: t("Actions"),
         cell: (row) => (
           <div className="d-flex justify-content-center">
             <div className="form-check form-switch">
@@ -206,11 +207,11 @@ class WeaponAdd extends Component {
           </div>
         ),
       },
-      { name: "Name", selector: (row) => row.name, sortable: true },
-      { name: "Type", selector: (row) => row.type, sortable: true },
-      { name: "Serial No", selector: (row) => row.serialNo, sortable: true },
+      { name: t("Name"), selector: (row) => row.name, sortable: true },
+      { name: t("Type"), selector: (row) => row.type, sortable: true },
+      { name: t("Serial no"), selector: (row) => row.serialNo, sortable: true },
       {
-        name: "Actions",
+        name: t("Actions"),
         cell: (row) => (
           <div className="d-flex justify-content-center">
             <i
@@ -237,36 +238,52 @@ class WeaponAdd extends Component {
       serialNo: weapon.serialNo,
       in: weapon.in,
     }));
-
+    const paginationOptions = {
+      rowsPerPageText: t("RowsPerPage"),
+      rangeSeparatorText: t("Of"),
+      selectAllRowsItem: true,
+      selectAllRowsItemText: t("All"),
+    };
     return (
-      <div className="bg-light min-vh-100">
+      <div className="bg-light min-vh-100" dir={isRTL ? "rtl" : "ltr"}>
         <Navbar />
 
         <div className="container py-5 mt-5">
           <div className="card shadow-lg border-0">
             <div className="card-body">
-              <h3 className="mb-4 fw-bold text-primary">Select the Weapons</h3>
+              <h3 className="mb-4 fw-bold text-primary">
+                {t("Select Weapon")}
+              </h3>
+              <div className="d-flex justify-content-end mb-3">
+                <h6 className="mb-4 fw-bold text-primary text-start">
+                  {this.props.router.location.state?.officer?.name ||
+                    t("Officer")}
+                </h6>
+              </div>
               <div className="d-flex justify-content-end mb-3">
                 <button className="btn btn-primary" onClick={this.toggleModal}>
-                  Add
+                  {t("Add Weapon")}
                 </button>
               </div>
               <DataTable
                 columns={Columns}
                 data={rows}
-                pagination
                 highlightOnHover
+                direction={isRTL ? "rtl" : "ltr"}
+                noDataComponent={t("No Data")}
+                pagination
+                paginationComponentOptions={paginationOptions}
               />
               <WeaponModel
                 show={this.state.showModal}
                 onHide={this.toggleModal}
-                id={officer}
+                id={officer.id}
                 fetchWeapons={this.fetchWeapons}
               />
 
               <div className="d-flex justify-content-end mb-3">
                 <button className="btn btn-primary" onClick={this.handleSubmit}>
-                  OK
+                  {t("Submit")}
                 </button>
               </div>
             </div>
@@ -276,4 +293,4 @@ class WeaponAdd extends Component {
     );
   }
 }
-export default withRouter(WeaponAdd);
+export default withTranslation()(withRouter(WeaponAdd));
