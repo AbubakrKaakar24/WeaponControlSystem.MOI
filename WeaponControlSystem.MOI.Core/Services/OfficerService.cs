@@ -24,13 +24,26 @@ namespace WeaponControlSystem.MOI.Core.Services
 
         public async Task<OfficerResponseDTo> DeleteOfficer(int? officerId)
         {
+            if (officerId == null)
+                return null;
+
             var officer = await _unitOfWork.Officer.GetById(officerId.Value);
             if (officer == null)
-            {
                 return null;
+
+            var weapons = await _unitOfWork.Weapon.GetAll(w => w.OfficerId == officerId.Value);
+            if (weapons != null)
+            {
+                foreach (var weapon in weapons)
+                {
+                    await _unitOfWork.Weapon.Remove(weapon);
+                }
+                await _unitOfWork.SaveChanges(CancellationToken.None);
             }
+
             await _unitOfWork.Officer.Remove(officer);
             await _unitOfWork.SaveChanges(CancellationToken.None);
+
             return officer.ToOfficerResponseDTo();
 
         }

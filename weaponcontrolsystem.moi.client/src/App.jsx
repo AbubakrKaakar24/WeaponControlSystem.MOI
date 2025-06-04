@@ -5,6 +5,7 @@ import OfficerAdd from "./components/OfficerAdd";
 import RegisterUser from "./components/auth/RegisterUser";
 import WeaponAdd from "./components/WeaponAdd";
 import "./App.css";
+import "./assets/fonts/fonts.css";
 import InWeapon from "./components/InWeapons";
 import WeaponHistory from "./components/WeaponHistory";
 import ProtectedRoute from "./components/ProtectedRoute";

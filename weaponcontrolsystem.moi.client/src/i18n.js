@@ -13,16 +13,15 @@ i18n
     interpolation: {
       escapeValue: false,
     },
+    detection: {
+      // Ensures language is saved after switching
+      order: ["localStorage", "cookie", "navigator"],
+      caches: ["localStorage", "cookie"], // <-- this saves the language
+    },
     resources: {
-      fa: {
-        translation: faTranslation,
-      },
-      ps: {
-        translation: psTranslation,
-      },
-      en: {
-        translation: enTranslation,
-      },
+      fa: { translation: faTranslation },
+      ps: { translation: psTranslation },
+      en: { translation: enTranslation },
     },
   });
 

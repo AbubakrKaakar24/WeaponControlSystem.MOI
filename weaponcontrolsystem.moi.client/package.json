@@ -15,13 +15,12 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "axios": "^1.9.0",
     "bootstrap": "^5.3.5",
-    "bootstrap-rtl": "^3.3.4",
+    "bootstrap-rtl": "^3.3.1",
     "date-fns": "^4.1.0",
     "font-awesome": "^4.7.0",
     "framer-motion": "^12.9.7",
     "i18next": "^25.1.2",
     "i18next-browser-languagedetector": "^8.1.0",
-    "jalaali-react-date-picker": "^1.0.19",
     "jwt-decode": "^4.0.0",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.9",
@@ -37,7 +36,7 @@
     "react-router-dom": "^7.5.3",
     "react-select": "^5.10.1",
     "react-time-picker": "^7.0.0",
-    "sweetalert2": "^11.21.0"
+    "sweetalert2": "^11.6.13"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
@@ -51,6 +50,7 @@
     "globals": "^16.0.0",
     "postcss": "^8.5.3",
     "tailwindcss": "^4.1.7",
+    "typescript": "^5.4.5",
     "vite": "^6.3.1"
   }
 }

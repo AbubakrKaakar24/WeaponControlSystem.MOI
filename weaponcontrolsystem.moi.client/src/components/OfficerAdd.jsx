@@ -25,8 +25,6 @@ class OfficerAdd extends Component {
     bases: [],
     phoneNo: "",
     id: "",
-    phoneNo: "",
-
     errors: {
       firstName: "",
       lastName: "",
