@@ -1,97 +1,100 @@
 ﻿
+using Microsoft.AspNetCore.Identity;
 using WeaponControlSystem.MOI.Core.Domain.Entities;
 using WeaponControlSystem.MOI.Core.Domain.RepositoryContracts.Base;
 using WeaponControlSystem.MOI.Core.DTOs.loginInfo;
 using WeaponControlSystem.MOI.Core.DTOs.user;
 using WeaponControlSystem.MOI.Core.ServiceContracts;
-//using Microsoft.AspNetCore.Identity;
 namespace WeaponControlSystem.MOI.Core.Services
 {
     public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public UserService(IUnitOfWork unitOfWork)
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
+        public UserService(UserManager<ApplicationUser> userManager,RoleManager<ApplicationRole> roleManager,IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            _userManager = userManager;
+            _roleManager = roleManager;
+
         }
         public async Task<UserAddDto> AddUser(UserAddDto userAddDto)
         {
-            //var passwordHasher = new PasswordHasher<User>();
-            //string hashedPassword = passwordHasher.HashPassword(user, plainTextPassword);
-
-
-            await _unitOfWork.User.Add(userAddDto.ToUser());
-            await _unitOfWork.SaveChanges(CancellationToken.None);
+            var user= userAddDto.ToUser();
+            if (user != null)
+            {
+                var result= await _userManager.CreateAsync(user,userAddDto.Password);
+                if (!result.Succeeded)
+                    throw new Exception("User Creation failed");
+            }
             return userAddDto;
         }
 
-        public async Task<UserResponseDTo> DeleteUser(int? UserId)
-        {   var user = await _unitOfWork.User.GetById(UserId.Value);
-            await _unitOfWork.User.Remove(user);
-            await _unitOfWork.SaveChanges(CancellationToken.None);
-            return user.ToUserResponseDTo();
-        }
-
-        public async Task<UserResponseDTo> GetUserById(int? userId)
-        {
-            var user= await _unitOfWork.User.GetById(userId.Value);
-            return user.ToUserResponseDTo();
-        }
-
-        public async Task<bool> Login(string user,string password) {
+        public async Task<UserResponseDTo> DeleteUser(string? UserId)
+        {   var user= await _userManager.FindByIdAsync(UserId);
+            if (user == null)
+                throw new Exception("User Not Found!");
+            var result= await _userManager.DeleteAsync(user);
+            if (!result.Succeeded)
+                throw new Exception("User Could not be deleted");
             
-            return false;
-        
-        } 
+ 
+            return user.ToUserResponseDTo();
+        }
+
+        public async Task<UserResponseDTo> GetUserById(string? userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            return user.ToUserResponseDTo();
+        }
+
+     
         public async Task<IEnumerable<UserResponseDTo>> GetUserList()
         {
-            var users=await _unitOfWork.User.GetAll();
+            var users =  _userManager.Users.ToList();
             return users.Select(x => x.ToUserResponseDTo());
         }
+        public async Task<bool> Login(string email, string password)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null) return false;
 
+            return await _userManager.CheckPasswordAsync(user, password);
+        }
         public async Task<bool> Auth(LoginInfo info)
         {
-            var user= await _unitOfWork.User.GetFirstOrDefault( x=>x.Email==info.Email&& x.Password == info.Pass);
-            if (user != null)
-            {   
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return await Login(info.Email, info.Pass);
+
         }
 
-        public async Task<UserResponseDTo> UpdateUser(int userId, UserAddDto user)
+        public async Task<UserResponseDTo> UpdateUser(string userId, UserAddDto updatedDto)
         {
-
-            var userToUpdate = await _unitOfWork.User.GetById(userId);
-            if (userToUpdate == null)
-            {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
                 throw new Exception("User not found");
-            }
-            userToUpdate.Name = user.Name;
-            userToUpdate.Email = user.Email;
-            userToUpdate.Password = user.Password;
-            userToUpdate.Phone= user.Phone;
-            userToUpdate.LastName = user.LastName;
-            userToUpdate.Gate = user.Gate;
-            userToUpdate.Role = user.Role;
 
+            user.Name = updatedDto.Name;
+            user.LastName = updatedDto.LastName;
+            user.Email = updatedDto.Email;
+            user.PhoneNumber = updatedDto.Phone;
+            user.Gate = updatedDto.Gate;
+            user.UserName = updatedDto.Email; // Important for Identity consistency
 
-            await _unitOfWork.User.Update(userToUpdate);
-            await _unitOfWork.SaveChanges(CancellationToken.None);
-            return userToUpdate.ToUserResponseDTo();
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+                throw new Exception("User update failed: " + string.Join(", ", result.Errors.Select(e => e.Description)));
+
+            return user.ToUserResponseDTo();
         }
+
 
         public async Task<UserResponseDTo> getUserByName(string name)
         {
-           
-            var user = await _unitOfWork.User.GetUserByName(name);
+            var user = _userManager.Users.FirstOrDefault(u => u.Name == name);
             if (user == null)
-            {
                 throw new Exception("User not found");
-            }
+
             return user.ToUserResponseDTo();
         }
     }

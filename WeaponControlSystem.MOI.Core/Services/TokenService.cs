@@ -33,8 +33,6 @@ namespace WeaponControlSystem.MOI.Core.Services
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var expiry = DateTime.UtcNow.AddMinutes(60);
-            Console.WriteLine($"Generating token with expiry: {expiry:o}");  // ISO8601 format
-
             var token = new JwtSecurityToken(
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Audience"],

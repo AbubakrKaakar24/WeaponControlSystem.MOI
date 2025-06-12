@@ -12,20 +12,18 @@ namespace WeaponControlSystem.MOI.Core.DTOs.user
         public string LastName { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
-        public string Role { get; set; }
         public string Gate { get; set; }
         public string Password { get; set; }
-        public User ToUser()
-        {
-            return new User
+        public ApplicationUser ToUser()
+        {    
+            return new ApplicationUser
             {
                 Name = Name,
                 LastName = LastName,
-                Phone = Phone,
+                PhoneNumber = Phone,
                 Email = Email,
-                Role = Role,
                 Gate = Gate,
-                Password = Password
+             
             };
         }
     }

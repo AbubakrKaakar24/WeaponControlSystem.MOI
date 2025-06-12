@@ -26,17 +26,6 @@ export default function WeaponModel({ show, onHide, id, fetchWeapons }) {
       .map((weaponType) => weaponType.weapons)
       .flat();
     const types = weaponData.weaponTypes.map((weaponType) => weaponType.type);
-    // const timeString = "11:12:43";
-    // const timeObject = new DateObject({ format: "hh:mm:ss", date: timeString });
-    // setInTime(timeObject);
-    // console.log("In Time inside Modal: " + inTime);
-    // if (weapon) {
-    //   setName(weapon.name || "");
-    //   setType(weapon.type || "");
-    //   setCardNo(weapon.cardNo || "");
-    //   setInDate(weapon.inDate || "");
-    //   setOfficerBadgeNo(weapon.officerBadgeNo);
-    // }
     setNames(names);
     setTypes(types);
     setOfficerID(id);
@@ -89,8 +78,9 @@ export default function WeaponModel({ show, onHide, id, fetchWeapons }) {
       if (response.ok) {
         Swal.fire({
           icon: "success",
-          title: "Weapon Added",
-          text: "The weapon has been Added successfully!",
+          title: t("Weapon Added"),
+          text: t("The weapon has been Added successfully!"),
+          confirmButtonText: t("Ok"),
           timer: 3000,
         });
         fetchWeapons(); // Assuming you have a function to refresh the weapon list
@@ -107,15 +97,15 @@ export default function WeaponModel({ show, onHide, id, fetchWeapons }) {
       } else {
         Swal.fire({
           icon: "error",
-          title: "Error",
-          text: "There was an error adding the weapon.",
+          title: t("Error"),
+          text: t("There was an error adding the weapon."),
           timer: 3000,
         });
       }
     } catch (error) {
       Swal.fire({
         icon: "error",
-        title: "Error",
+        title: t("Error"),
         text: error.message,
         timer: 3000,
       });

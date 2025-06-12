@@ -2,11 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faGlobe,
-  faSignOutAlt,
-  faUser,
-} from "@fortawesome/free-solid-svg-icons"; // free solid icons
+import { faGlobe, faSignOutAlt } from "@fortawesome/free-solid-svg-icons"; // free solid icons
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 const Navbar = () => {
@@ -23,8 +19,10 @@ const Navbar = () => {
   };
 
   const changeLanguage = (langCode) => {
+    console.log(`Changing language to ${langCode}`);
     i18n.changeLanguage(langCode);
     setIsLangDropdownOpen(false);
+    console.log(`Language changed to ${i18n.language}`);
   };
   const navigate = useNavigate();
 
@@ -91,7 +89,7 @@ const Navbar = () => {
             >
               <FontAwesomeIcon
                 icon={faSignOutAlt}
-                size="lg"
+                size="2x"
                 style={{ transform: "scaleX(-1)" }}
               />
             </span>
@@ -105,19 +103,19 @@ const Navbar = () => {
               onClick={toggleLangDropdown}
               style={{ cursor: "pointer" }}
             >
-              <FontAwesomeIcon icon={faGlobe} size="lg" />
+              <FontAwesomeIcon icon={faGlobe} size="2x" />
             </span>
             <ul
               className={`dropdown-menu dropdown-menu-dark ${
                 isLangDropdownOpen ? "show" : ""
               }`}
               style={{ textAlign: isRTL ? "right" : "left" }}
+              ref={languageRef}
             >
               <li>
                 <button
                   className="dropdown-item"
                   onClick={() => changeLanguage("fa")}
-                  ref={languageRef}
                 >
                   Dari
                 </button>
@@ -128,14 +126,6 @@ const Navbar = () => {
                   onClick={() => changeLanguage("ps")}
                 >
                   Pashto
-                </button>
-              </li>
-              <li>
-                <button
-                  className="dropdown-item"
-                  onClick={() => changeLanguage("en")}
-                >
-                  English
                 </button>
               </li>
             </ul>
@@ -166,7 +156,7 @@ const Navbar = () => {
                   className={({ isActive }) =>
                     "nav-link" + (isActive ? " active" : "")
                   }
-                  style={{ fontSize: "14px" }}
+                  style={{ fontSize: "20px" }}
                   onClick={closeDropdown}
                 >
                   {t("User")}
@@ -178,7 +168,7 @@ const Navbar = () => {
                   className={({ isActive }) =>
                     "nav-link" + (isActive ? " active" : "")
                   }
-                  style={{ fontSize: "14px" }}
+                  style={{ fontSize: "20px" }}
                   onClick={closeDropdown}
                 >
                   {t("Officer")}
@@ -190,7 +180,7 @@ const Navbar = () => {
                 <span
                   className="nav-link dropdown-toggle"
                   role="button"
-                  style={{ fontSize: "14px", cursor: "pointer" }}
+                  style={{ fontSize: "20px", cursor: "pointer" }}
                   onClick={toggleDropdown}
                 >
                   {t("Weapon")}
@@ -245,7 +235,7 @@ const Navbar = () => {
               {/* Logo */}
               <li className="nav-item ms-2">
                 <Link to="/home" className="navbar-brand">
-                  <img src="/moi.png" alt="Logo" style={{ height: "60px" }} />
+                  <img src="/moi.png" alt="Logo" style={{ height: "80px" }} />
                 </Link>
               </li>
             </ul>

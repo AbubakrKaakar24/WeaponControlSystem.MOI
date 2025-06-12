@@ -6,7 +6,7 @@ using WeaponControlSystem.MOI.Core.ServiceContracts;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace WeaponControlSystem.MOI.Server.Controllers
-{
+{    
     [Route("api/[controller]")]
     [ApiController]
     public class OfficerController : ControllerBase
@@ -59,7 +59,7 @@ namespace WeaponControlSystem.MOI.Server.Controllers
         // DELETE api/<OfficerController>/5
         [HttpDelete("{id}")]
         public async Task<OfficerResponseDTo> Delete(int id)
-        {
+        {   
             return await _officerService.DeleteOfficer(id);
         }
     }

@@ -50,36 +50,53 @@ class WeaponAdd extends Component {
   }
 
   handleDelete = async (id) => {
-    try {
-      const response = await fetch(`https://localhost:7211/api/weapon/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (response.ok) {
-        Swal.fire({
-          icon: "success",
-          title: "Weapon Deleted",
-          text: "The weapon has been deleted successfully!",
-          timer: 3000,
-        });
-      } else {
+    const result = await Swal.fire({
+      title: t("Are you sure?"),
+      text: t("You won't be able to revert this!"),
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: t("Yes, delete it!"),
+      cancelButtonText: t("Cancel"),
+    });
+    if (result.isConfirmed) {
+      try {
+        const response = await fetch(
+          `https://localhost:7211/api/weapon/${id}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (response.ok) {
+          Swal.fire({
+            icon: "success",
+            title: t("Weapon Deleted"),
+            text: t("The weapon has been deleted successfully!"),
+            timer: 3000,
+            timerProgressBar: true,
+            confirmButtonText: t("Ok"),
+          });
+          this.fetchWeapons(); // Refresh the weapons list after deletion
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: t("Error"),
+            text: t("There was an error deleting the weapon."),
+            timer: 3000,
+          });
+        }
+      } catch (error) {
         Swal.fire({
           icon: "error",
-          title: "Error",
-          text: "There was an error deleting the weapon.",
+          title: t("Error"),
+          text: t("There was an error deleting the weapon."),
           timer: 3000,
         });
       }
-    } catch (error) {
-      console.error("Error deleting weapon:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "An error occurred while deleting the weapon.",
-        timer: 3000,
-      });
     }
   };
   handleDropdownChange = (name, value) => {
