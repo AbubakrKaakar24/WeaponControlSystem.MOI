@@ -9,29 +9,26 @@ namespace WeaponControlSystem.MOI.Core.DTOs.user
 {
     public  class UserResponseDTo
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public string LastName { get; set; }
-        public string Phone { get; set; }
-        public string Email { get; set; }
-        public string Role { get; set; }
+        public string? Phone { get; set; }
+        public string? Email { get; set; }
         public string Gate { get; set; }
-        public string Password { get; set; }
     }
     public static class UserExtensions
     {
-        public static UserResponseDTo ToUserResponseDTo(this User user)
+        public static UserResponseDTo ToUserResponseDTo(this ApplicationUser user)
         {
             return new UserResponseDTo
             {
                 Id = user.Id,
                 Name = user.Name,
                 LastName = user.LastName,
-                Phone = user.Phone,
+                Phone = user.PhoneNumber,
                 Email = user.Email,
-                Role = user.Role,
                 Gate = user.Gate,
-                Password = user.Password,
+               
             };
         }
     }

@@ -10,7 +10,7 @@ using WeaponControlSystem.MOI.Infrastructure.dbContext;
 using Microsoft.EntityFrameworkCore;
 namespace WeaponControlSystem.MOI.Infrastructure.Repository
 {
-    public class UserRepository:GenericRepository<User>,IUserRepository
+    public class UserRepository:GenericRepository<ApplicationUser>,IUserRepository
     {
         private readonly AppDbContext _dbContext;
         public UserRepository(AppDbContext dbContext) : base(dbContext)
@@ -18,7 +18,7 @@ namespace WeaponControlSystem.MOI.Infrastructure.Repository
             _dbContext = dbContext;
         }
 
-        public async Task<User> GetUserByName(string name)
+        public async Task<ApplicationUser> GetUserByName(string name)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Name == name);
 
