@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,7 @@ namespace WeaponControlSystem.MOI.Server.Controllers
         }
 
         // GET: api/Users
+       [Authorize(Roles ="Admin")]
         [HttpGet]
         public async Task<IEnumerable<UserResponseDTo>> GetUsers()
         {
@@ -49,7 +51,7 @@ namespace WeaponControlSystem.MOI.Server.Controllers
             var user = await _userService.Auth(info);
             if (user)
             {
-                var token = _tokenService.GenerateToken(info.Email);
+                var token =await _tokenService.GenerateToken(info.Email);
                 var response = new LoginResponse
                 {
                     Username = info.Email,
@@ -69,6 +71,7 @@ namespace WeaponControlSystem.MOI.Server.Controllers
 
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<UserAddDto>> PostUser(UserAddDto user)
         {
@@ -78,15 +81,17 @@ namespace WeaponControlSystem.MOI.Server.Controllers
         }
 
         // DELETE: api/Users/5
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        public async Task<IActionResult> DeleteUser(string id)
         {
             await _userService.DeleteUser(id);
 
             return NoContent();
         }
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, [FromBody] UserAddDto user)
+        public async Task<IActionResult> PutUser(string id, [FromBody] UserAddDto user)
         {
          
             UserResponseDTo user2=   await _userService.UpdateUser(id,user);
@@ -100,7 +105,7 @@ namespace WeaponControlSystem.MOI.Server.Controllers
                 return Ok(user2);
             }
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpGet("getByName/{name}")]
         public async Task<ActionResult<UserResponseDTo>> GetUserByName(string name)
         {
@@ -113,36 +118,13 @@ namespace WeaponControlSystem.MOI.Server.Controllers
         }
 
         // GET: api/Users/5
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserResponseDTo>> GetUser(int id)
+        public async Task<ActionResult<UserResponseDTo>> GetUser(string id)
         {
             
 
             return await _userService.GetUserById(id);
         }
-
-
-
-    //    private string GenerateJwtToken(string username)
-    //    {
-    //        var claims = new[]
-    //        {
-    //    new Claim(ClaimTypes.Name, username),
-    //    // Add more claims as needed
-    //};
-
-    //        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-    //        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-    //        var token = new JwtSecurityToken(
-    //            issuer: _config["Jwt:Issuer"],
-    //            audience: _config["Jwt:Audience"],
-    //            claims: claims,
-    //            expires: DateTime.Now.AddHours(2),
-    //            signingCredentials: creds);
-
-    //        return new JwtSecurityTokenHandler().WriteToken(token);
-    //    }
-
     }
 }

@@ -8,6 +8,6 @@ namespace WeaponControlSystem.MOI.Core.ServiceContracts
 {
     public interface ITokenService
     {
-        string GenerateToken(string username);
+        Task<string> GenerateToken(string username);
     }
 }

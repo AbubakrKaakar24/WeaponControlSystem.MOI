@@ -10,24 +10,36 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using WeaponControlSystem.MOI.Core.ServiceContracts;
+using Microsoft.AspNetCore.Identity;
+using WeaponControlSystem.MOI.Core.Domain.Entities;
 
 namespace WeaponControlSystem.MOI.Core.Services
 {
     public class TokenService:ITokenService
     {
         private readonly IConfiguration _config;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public TokenService(IConfiguration config)
+        public TokenService(IConfiguration config, UserManager<ApplicationUser> userManager)
         {
             _config = config;
+            _userManager = userManager;
         }
-
-        public string GenerateToken(string username)
-        {  
-            var claims = new[]
+        public async Task<string> GenerateToken(string email)
+        {   var user= await _userManager.FindByEmailAsync(email);
+            if (user == null)
             {
-            new Claim(ClaimTypes.Name, username),
+                return null;
+
+            }
+            var roles= await _userManager.GetRolesAsync(user);
+            var roleClaims= roles.Select(r => new Claim(ClaimTypes.Role, r)).ToList();
+        var claims= new List<Claim>
+        { new Claim(JwtRegisteredClaimNames.Sub,user.Email!),
+          new Claim(ClaimTypes.NameIdentifier,user.Id),
+          new Claim(ClaimTypes.Name,user.UserName!),
         };
+            claims.AddRange(roleClaims);
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:SecretKey"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -44,5 +56,7 @@ namespace WeaponControlSystem.MOI.Core.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+    
     }
 }

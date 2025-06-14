@@ -26,15 +26,32 @@ class RegisterUser extends Component {
     },
     errors: {},
   };
-
   async componentDidMount() {
     await this.fetchUsers();
   }
 
   fetchUsers = async () => {
-    const response = await fetch("https://localhost:7211/api/users");
-    const data = await response.json();
-    this.setState({ users: data, AllUsers: data });
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch("https://localhost:7211/api/users", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        console.error("Failed to fetch users", response.status);
+        return;
+      }
+
+      const data = await response.json();
+      this.setState({ users: data, AllUsers: data });
+    } catch (error) {
+      console.error("Network error:", error);
+    }
   };
 
   toggleModal = () => {
@@ -115,6 +132,7 @@ class RegisterUser extends Component {
   };
 
   handleDelete = async (userId) => {
+    const token = localStorage.getItem("token");
     const result = await Swal.fire({
       title: this.props.t("Are you sure?"),
       text: this.props.t("You won't be able to revert this!"),
@@ -131,7 +149,10 @@ class RegisterUser extends Component {
           `https://localhost:7211/api/users/${userId}`,
           {
             method: "DELETE",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
           }
         );
         if (response.ok) {
@@ -160,7 +181,14 @@ class RegisterUser extends Component {
   };
 
   handleEdit = async (userId) => {
-    const response = await fetch(`https://localhost:7211/api/users/${userId}`);
+    const token = localStorage.getItem("token");
+    const response = await fetch(`https://localhost:7211/api/users/${userId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
     const user = await response.json();
     this.setState({
       formData: {
@@ -180,6 +208,7 @@ class RegisterUser extends Component {
   };
 
   handleSubmit = async () => {
+    const token = localStorage.getItem("token");
     const { t } = this.props;
     const errors = this.validateForm();
     if (Object.keys(errors).length > 0) {
@@ -207,7 +236,10 @@ class RegisterUser extends Component {
     try {
       const response = await fetch(url, {
         method: Method,
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(userData),
       });
 
@@ -270,7 +302,6 @@ class RegisterUser extends Component {
       { name: t("Last name"), selector: (row) => row.lastName, sortable: true },
       { name: t("Phone no"), selector: (row) => row.phone, sortable: true },
       { name: t("Email"), selector: (row) => row.email, sortable: true },
-      { name: t("Role"), selector: (row) => row.role, sortable: true },
       { name: t("Gate"), selector: (row) => row.gate, sortable: true },
       {
         name: t("Actions"),
@@ -297,7 +328,6 @@ class RegisterUser extends Component {
       lastName: user.lastName,
       phone: user.phone,
       email: user.email,
-      role: user.role,
       gate: user.gate,
     }));
     const paginationOptions = {

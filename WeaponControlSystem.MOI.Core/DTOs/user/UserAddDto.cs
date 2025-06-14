@@ -18,6 +18,7 @@ namespace WeaponControlSystem.MOI.Core.DTOs.user
         {    
             return new ApplicationUser
             {
+                UserName = Email?.Replace("@", "").Replace(".", "").Replace("com",""),
                 Name = Name,
                 LastName = LastName,
                 PhoneNumber = Phone,
@@ -28,3 +29,4 @@ namespace WeaponControlSystem.MOI.Core.DTOs.user
         }
     }
 }
+ 
