@@ -22,7 +22,7 @@ namespace WeaponControlSystem.MOI.Server.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-       
+        
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
         public UsersController(IUserService userService, ITokenService tokenService)

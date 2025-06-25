@@ -2,14 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import Select from "react-select";
-import weaponData from "../assets/weaponData.json";
-import persian from "react-date-object/calendars/persian";
-import persian_fa from "../assets/persian_fa";
-import DatePicker from "react-multi-date-picker";
+import weaponData from "../../assets/weaponData.json";
 import Swal from "sweetalert2"; // Make sure you import this
-import TimePicker from "react-multi-date-picker/plugins/time_picker"; // Not used in UI
-import DateObject from "react-date-object";
-import { set } from "date-fns";
 import { useTranslation } from "react-i18next";
 export default function WeaponModel({ show, onHide, id, fetchWeapons }) {
   const [name, setName] = useState("");
@@ -123,100 +117,54 @@ export default function WeaponModel({ show, onHide, id, fetchWeapons }) {
         <Form noValidate onSubmit={handleSubmit}>
           <Row className="mb-2">
             <Col md={4}>
-              <Select
-                name="type"
-                options={types.map((t) => ({ value: t, label: t }))}
-                value={type ? { value: type, label: type } : null}
-                onChange={(selectedOption) =>
-                  handleDropdownChange("type", selectedOption.value)
-                }
-                placeholder={t("Select type")}
-              />
-              <div className="text-danger">{errors.type}</div>
+              <Form.Group>
+                <Form.Label>{t("Weapon type")}</Form.Label>
+                <Select
+                  name="type"
+                  options={types.map((t) => ({ value: t, label: t }))}
+                  value={type ? { value: type, label: type } : null}
+                  onChange={(selectedOption) =>
+                    handleDropdownChange("type", selectedOption.value)
+                  }
+                  placeholder={t("Select type")}
+                />
+                <div className="text-danger">{errors.type}</div>
+              </Form.Group>
             </Col>
-            <Col md={4}>
-              <Select
-                name="name"
-                options={names.map((n) => ({ value: n, label: n }))}
-                value={name ? { value: name, label: name } : null}
-                onChange={(selectedOption) =>
-                  handleDropdownChange("name", selectedOption.value)
-                }
-                placeholder={t("Select name")}
-              />
-              <div className="text-danger">{errors.name}</div>
-            </Col>
-            <Col md={4}>
-              <Form.Control
-                type="text"
-                name="cardNo"
-                value={serialNo}
-                onChange={(value) => setSerialNo(value.target.value)}
-                isInvalid={!!errors.serialNo}
-                placeholder={t("Enter serial no")}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.serialNo}
-              </Form.Control.Feedback>
-            </Col>
-            {/* <Col md={4}>
-              <Form.Label>In Date</Form.Label>
-              <DatePicker
-                value={inDate}
-                onChange={(value) => {
-                  console.log("VAlue: " + value.toString);
-                  setInDate(value);
-                }}
-                calendar={persian}
-                locale={persian_fa}
-                calendarPosition="bottom-left"
-                placeholder="Select In Date"
-                format="YYYY/MM/DD hh:mm:ss"
-                plugins={[<TimePicker position="bottom" />]}
-                style={{
-                  width: "115%",
-                  backgroundColor: "#fff",
-                  height: "38px",
-                  color: "black",
-                  border: "1px solid #ced4da",
-                  borderRadius: "0.375rem",
-                  padding: "0.375rem 0.75rem",
-                  fontSize: "1rem",
-                }}
-              />
 
-              <div className="text-danger">{errors.inDate}</div>
-            </Col> */}
+            <Col md={4}>
+              <Form.Group>
+                <Form.Label>{t("Weapon name")}</Form.Label>
+                <Select
+                  name="name"
+                  options={names.map((n) => ({ value: n, label: n }))}
+                  value={name ? { value: name, label: name } : null}
+                  onChange={(selectedOption) =>
+                    handleDropdownChange("name", selectedOption.value)
+                  }
+                  placeholder={t("Select name")}
+                />
+                <div className="text-danger">{errors.name}</div>
+              </Form.Group>
+            </Col>
+
+            <Col md={4}>
+              <Form.Group controlId="serialNo">
+                <Form.Label>{t("Serial no")}</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="cardNo"
+                  value={serialNo}
+                  onChange={(e) => setSerialNo(e.target.value)}
+                  isInvalid={!!errors.serialNo}
+                  placeholder={t("Enter serial no")}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.serialNo}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
           </Row>
-
-          {/* <Row className="mb-2">
-            <Col md={4}>
-              <Form.Label>Officer Badge No</Form.Label>
-              <Form.Control
-                type="text"
-                name="officerBadgeNo"
-                value={officerBadgeNo}
-                onChange={handleInputChange}
-                isInvalid={!!errors.officerBadgeNo}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.officerBadgeNo}
-              </Form.Control.Feedback>
-            </Col>
-            <Col md={4}>
-              <Form.Label>Card No</Form.Label>
-              <Form.Control
-                type="text"
-                name="cardNo"
-                value={cardNo}
-                onChange={handleInputChange}
-                isInvalid={!!errors.cardNo}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.cardNo}
-              </Form.Control.Feedback>
-            </Col>
-          </Row> */}
         </Form>
       </Modal.Body>
       <Modal.Footer dir={isRTL ? "rtl" : "ltr"}>

@@ -1,14 +1,14 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/auth/Login";
-import Home from "./components/Home";
-import OfficerAdd from "./components/OfficerAdd";
+import Home from "./components/common/Home";
+import OfficerAdd from "./components/officer/OfficerAdd";
 import RegisterUser from "./components/auth/RegisterUser";
-import WeaponAdd from "./components/WeaponAdd";
+import WeaponAdd from "./components/weapon/WeaponAdd";
 import "./App.css";
 import "./assets/fonts/fonts.css";
-import InWeapon from "./components/InWeapons";
-import WeaponHistory from "./components/WeaponHistory";
-import ProtectedRoute from "./components/ProtectedRoute";
+import InWeapon from "./components/weapon/InWeapons";
+import WeaponHistory from "./components/weapon/WeaponHistory";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 function App() {
   return (
     <Router>

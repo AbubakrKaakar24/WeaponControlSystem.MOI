@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import AddUserModal from "../AddUserModel";
+import AddUserModal from "../weapon/AddUserModel";
 import ministryData from "../../assets/ministryData.json";
 import Swal from "sweetalert2";
-import Navbar from "../Navbar";
+import Navbar from "../common/Navbar";
 import DataTable from "react-data-table-component";
 import "react-data-table-component-extensions/dist/index.css";
 import { withTranslation } from "react-i18next";
@@ -355,6 +355,14 @@ class RegisterUser extends Component {
               <h3 className="mb-4 fw-bold text-primary text-center">
                 {t("Registered Users")}
               </h3>
+              <div className="text-end">
+                <button
+                  className="btn btn-primary shadow"
+                  onClick={this.toggleModal}
+                >
+                  {t("Add user")}
+                </button>
+              </div>
               <DataTable
                 columns={columns}
                 data={rows}
@@ -365,14 +373,7 @@ class RegisterUser extends Component {
                 paginationComponentOptions={paginationOptions}
                 noDataComponent={t("No Data")}
               />
-              <div className="text-start">
-                <button
-                  className="btn btn-primary shadow"
-                  onClick={this.toggleModal}
-                >
-                  {t("Add user")}
-                </button>
-              </div>
+
               <AddUserModal
                 show={this.state.showModal}
                 handleClose={this.toggleModal}

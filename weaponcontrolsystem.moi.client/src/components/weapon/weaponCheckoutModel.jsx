@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import persian from "react-date-object/calendars/persian";
-import persian_fa from "../assets/persian_fa";
+import persian_fa from "../../assets/persian_fa";
 import DatePicker from "react-multi-date-picker";
-import DateObject from "react-date-object";
+const { t, i18n } = useTranslation();
 import Swal from "sweetalert2"; // Make sure you import this
 import TimePicker from "react-multi-date-picker/plugins/time_picker"; // Not used in UI
 export default function WeaponCheckoutModel({
@@ -102,63 +102,66 @@ export default function WeaponCheckoutModel({
     <Modal show={show} onHide={onHide} size="lg" centered>
       <Modal.Header closeButton>
         <Modal.Title className="mb-4 fw-bold text-primary">
-          Checkout Weapon
+          {t("Checkout Weapon")}
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body dir={isRTL ? "rtl" : "ltr"}>
         <Form noValidate onSubmit={handleSubmit}>
           <Row className="mb-2">
             <Col md={4}>
-              <Form.Label>Out Date</Form.Label>
-              <DatePicker
-                value={outDate}
-                onChange={(value) => {
-                  setOutDate(value);
-                }}
-                calendar={persian}
-                locale={persian_fa}
-                calendarPosition="bottom-left"
-                placeholder="Select Out Date"
-                format="YYYY/MM/DD hh:mm:ss"
-                plugins={[<TimePicker position="bottom" />]}
-                style={{
-                  width: "115%",
-                  backgroundColor: "#fff",
-                  height: "38px",
-                  color: "black",
-                  border: "1px solid #ced4da",
-                  borderRadius: "0.375rem",
-                  padding: "0.375rem 0.75rem",
-                  fontSize: "1rem",
-                }}
-              />
-              <div className="text-danger">{errors.outDate}</div>
+              <Form.Group>
+                <Form.Label>{t("Out Date")}</Form.Label>
+                <DatePicker
+                  value={outDate}
+                  onChange={(value) => setOutDate(value)}
+                  calendar={persian}
+                  locale={persian_fa}
+                  calendarPosition="bottom-left"
+                  placeholder={t("Select Out Date")}
+                  format="YYYY/MM/DD hh:mm:ss"
+                  plugins={[<TimePicker position="bottom" />]}
+                  style={{
+                    width: "115%",
+                    backgroundColor: "#fff",
+                    height: "38px",
+                    color: "black",
+                    border: "1px solid #ced4da",
+                    borderRadius: "0.375rem",
+                    padding: "0.375rem 0.75rem",
+                    fontSize: "1rem",
+                  }}
+                />
+                <div className="text-danger">{errors.outDate}</div>
+              </Form.Group>
             </Col>
           </Row>
 
           <Row className="mb-2">
             <Col md={4}>
-              <Form.Label>Card No</Form.Label>
-              <Form.Control
-                type="text"
-                name="cardNo"
-                value={cardNo}
-                onChange={(e) => setCardNo(e.target.value)}
-                isInvalid={!!errors.cardNo}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.cardNo}
-              </Form.Control.Feedback>
+              <Form.Group>
+                <Form.Label>{t("Card No")}</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="cardNo"
+                  value={cardNo}
+                  onChange={(e) => setCardNo(e.target.value)}
+                  isInvalid={!!errors.cardNo}
+                  placeholder={t("Enter Card No")}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.cardNo}
+                </Form.Control.Feedback>
+              </Form.Group>
             </Col>
           </Row>
         </Form>
       </Modal.Body>
-      <Modal.Footer>
+      <Modal.Footer dir={isRTL ? "rtl" : "ltr"}>
         <Button variant="secondary" onClick={onHide}>
-          Cancel
+          {t("Cancel")}
         </Button>
         <Button variant="primary" onClick={handleSubmit}>
-          Submit
+          {t("Submit")}
         </Button>
       </Modal.Footer>
     </Modal>

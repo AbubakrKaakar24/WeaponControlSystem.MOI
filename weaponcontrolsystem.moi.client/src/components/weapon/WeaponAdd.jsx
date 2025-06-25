@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import Navbar from "./Navbar";
+import Navbar from "../common/Navbar";
 import Swal from "sweetalert2";
-import weaponData from "../assets/weaponData.json";
-import { withRouter } from "./withRouter";
+import weaponData from "../../assets/weaponData.json";
+import { withRouter } from "../common/withRouter";
 import DataTable from "react-data-table-component";
 import WeaponModel from "./weaponModel";
 import { withTranslation } from "react-i18next";

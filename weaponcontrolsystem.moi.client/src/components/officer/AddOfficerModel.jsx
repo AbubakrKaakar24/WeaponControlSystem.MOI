@@ -4,17 +4,26 @@ import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import Select from "react-select";
 import { useTranslation } from "react-i18next";
 
-export default function AddUserModal({
+export default function AddOfficerModal({
   show,
   onHide,
   onSubmit,
-  roleOptions,
-  gateOptions,
-  formData,
+  firstName,
+  lastName,
+  badgeNo,
+  deputyMinistry,
+  directorate,
+  administration,
+  base,
+  deputyOptions,
+  directorateOptions,
+  administrationOptions,
+  baseOptions,
   errors,
   handleChange,
   handleSelectChange,
   header,
+  phoneNo,
 }) {
   const { t, i18n } = useTranslation();
   const isRTL = i18n.dir() === "rtl";
@@ -54,10 +63,11 @@ export default function AddUserModal({
         <Form noValidate onSubmit={onSubmit}>
           <Row className="mb-2">
             <Col md={3}>
+              <Form.Label>{t("First name")}</Form.Label>
               <Form.Control
                 type="text"
                 name="firstName"
-                value={formData.firstName}
+                value={firstName}
                 onChange={handleChange}
                 isInvalid={!!errors.firstName}
                 placeholder={t("Enter first name")}
@@ -67,11 +77,13 @@ export default function AddUserModal({
                 {errors.firstName}
               </Form.Control.Feedback>
             </Col>
+
             <Col md={3}>
+              <Form.Label>{t("Last name")}</Form.Label>
               <Form.Control
                 type="text"
                 name="lastName"
-                value={formData.lastName}
+                value={lastName}
                 onChange={handleChange}
                 isInvalid={!!errors.lastName}
                 placeholder={t("Enter last name")}
@@ -81,11 +93,29 @@ export default function AddUserModal({
                 {errors.lastName}
               </Form.Control.Feedback>
             </Col>
+
             <Col md={3}>
+              <Form.Label>{t("Badge no")}</Form.Label>
+              <Form.Control
+                type="text"
+                name="badgeNo"
+                value={badgeNo}
+                onChange={handleChange}
+                isInvalid={!!errors.badgeNo}
+                placeholder={t("Enter badge no")}
+                style={{ textAlign: isRTL ? "right" : "left" }}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.badgeNo}
+              </Form.Control.Feedback>
+            </Col>
+
+            <Col md={3}>
+              <Form.Label>{t("Phone number")}</Form.Label>
               <Form.Control
                 type="text"
                 name="phoneNo"
-                value={formData.phoneNo}
+                value={phoneNo}
                 onChange={handleChange}
                 isInvalid={!!errors.phoneNo}
                 placeholder={t("Enter phone number")}
@@ -95,75 +125,82 @@ export default function AddUserModal({
                 {errors.phoneNo}
               </Form.Control.Feedback>
             </Col>
-            <Col md={3}>
-              <Form.Control
-                type="text"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                isInvalid={!!errors.email}
-                placeholder={t("Enter Email")}
-                style={{ textAlign: isRTL ? "right" : "left" }}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.email}
-              </Form.Control.Feedback>
-            </Col>
           </Row>
+
           <Row className="mb-2">
             <Col md={3}>
+              <Form.Label>{t("Deputy Ministry")}</Form.Label>
               <Select
-                name="role"
-                value={roleOptions.find((opt) => opt.value === formData.role)}
+                name="deputyMinistry"
+                value={deputyOptions.find(
+                  (opt) => opt.value === deputyMinistry
+                )}
                 onChange={(selected) =>
-                  handleSelectChange("role", selected ? selected.value : "")
+                  handleSelectChange(
+                    "deputyMinistry",
+                    selected ? selected.value : ""
+                  )
                 }
-                options={roleOptions}
-                placeholder={t("Select role")}
+                options={deputyOptions}
+                placeholder={t("Select deputy ministry")}
                 styles={customSelectStyles}
               />
-              <div className="text-danger">{errors.role}</div>
+              <div className="text-danger">{errors.deputyMinistry}</div>
             </Col>
+
             <Col md={3}>
+              <Form.Label>{t("Directorate")}</Form.Label>
               <Select
-                name="gate"
-                value={gateOptions.find((opt) => opt.value === formData.gate)}
+                name="directorate"
+                value={directorateOptions.find(
+                  (opt) => opt.value === directorate
+                )}
                 onChange={(selected) =>
-                  handleSelectChange("gate", selected ? selected.value : "")
+                  handleSelectChange(
+                    "directorate",
+                    selected ? selected.value : ""
+                  )
                 }
-                options={gateOptions}
-                placeholder={t("Select gate")}
+                options={directorateOptions}
+                placeholder={t("Select directorate")}
                 styles={customSelectStyles}
               />
-              <div className="text-danger">{errors.gate}</div>
+              <div className="text-danger">{errors.directorate}</div>
             </Col>
+
             <Col md={3}>
-              <Form.Control
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                isInvalid={!!errors.password}
-                placeholder={t("Enter Password")}
-                style={{ textAlign: isRTL ? "right" : "left" }}
+              <Form.Label>{t("Administration")}</Form.Label>
+              <Select
+                name="administration"
+                value={administrationOptions.find(
+                  (opt) => opt.value === administration
+                )}
+                onChange={(selected) =>
+                  handleSelectChange(
+                    "administration",
+                    selected ? selected.value : ""
+                  )
+                }
+                options={administrationOptions}
+                placeholder={t("Select administration")}
+                styles={customSelectStyles}
               />
-              <Form.Control.Feedback type="invalid">
-                {errors.password}
-              </Form.Control.Feedback>
+              <div className="text-danger">{errors.administration}</div>
             </Col>
+
             <Col md={3}>
-              <Form.Control
-                type="password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                isInvalid={!!errors.confirmPassword}
-                placeholder={t("Confirm password")}
-                style={{ textAlign: isRTL ? "right" : "left" }}
+              <Form.Label>{t("Base")}</Form.Label>
+              <Select
+                name="base"
+                value={baseOptions.find((opt) => opt.value === base)}
+                onChange={(selected) =>
+                  handleSelectChange("base", selected ? selected.value : "")
+                }
+                options={baseOptions}
+                placeholder={t("Select base")}
+                styles={customSelectStyles}
               />
-              <Form.Control.Feedback type="invalid">
-                {errors.confirmPassword}
-              </Form.Control.Feedback>
+              <div className="text-danger">{errors.base}</div>
             </Col>
           </Row>
         </Form>

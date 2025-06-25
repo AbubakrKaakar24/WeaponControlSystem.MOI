@@ -14,6 +14,7 @@ namespace WeaponControlSystem.MOI.Core.DTOs.user
         public string Email { get; set; }
         public string Gate { get; set; }
         public string Password { get; set; }
+        public string Role { get; set; }
         public ApplicationUser ToUser()
         {    
             return new ApplicationUser

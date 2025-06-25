@@ -32,6 +32,12 @@
   "Error passwords mismatch": "رمزهای عبور یکسان نیستند",
   "Error gate required": "انتخاب دروازه الزامی است",
   "Error role required": "انتخاب نقش الزامی است",
+  "Error badge no required": "شماره نشان الزامی است",
+  "Error deputy ministry required": "معینت الزامی است",
+  "Error administration required": "مدیریت الزامی است",
+  "Error directorate required": "ریاست الزامی است",
+  "Error base required": "قرارگاه الزامی است",
+  "Error phone number required": "شماره تلیفون الزامی است",
   "Ministry of Internal Affairs": "وزارت امور داخله",
   "Login": "ورود",
   "Username": "نام کاربری",
@@ -117,8 +123,10 @@
   "Please enter a valid phone number": "لطفاً شماره تلفن معتبر وارد کنید",
   "The weapon has been Added successfully!": "!سلاح با موفقیت افزوده شد",
   "Weapon Added": "سلاح افزوده شد",
+  "Weapon type": "نوع سلاح",
   "There was an error adding the weapon.": "خطایی در هنگام افزودن سلاح رخ داد.",
   "Weapon Deleted": "سلاح حذف شد",
   "The weapon has been deleted successfully!": "!سلاح با موفقیت حذف شد",
-  "There was an error deleting the weapon.": "خطایی در هنگام حذف سلاح رخ داد."
+  "There was an error deleting the weapon.": "خطایی در هنگام حذف سلاح رخ داد.",
+  "Weapon name": "نام سلاح"
 }

@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import Navbar from "./Navbar";
+import Navbar from "../common/Navbar";
 import Swal from "sweetalert2";
-import ministryData from "../assets/ministryData.json";
+import ministryData from "../../assets/ministryData.json";
 import AddOfficerModal from "./AddOfficerModel";
 import DataTable from "react-data-table-component";
-import { withRouter } from "./withRouter";
+import { withRouter } from "../common/withRouter";
 import { withTranslation } from "react-i18next";
 class OfficerAdd extends Component {
   state = {
@@ -182,6 +182,7 @@ class OfficerAdd extends Component {
   handleSubmit = async (e) => {
     e.preventDefault();
     const navigate = this.props.router.navigate;
+    const { t } = this.props;
     const {
       firstName,
       lastName,
@@ -193,14 +194,16 @@ class OfficerAdd extends Component {
       phoneNo,
     } = this.state;
     const errors = {};
-    if (!firstName) errors.firstName = "First name is required";
-    if (!lastName) errors.lastName = "Last name is required";
-    if (!badgeNo) errors.badgeNo = "Badge number is required";
-    if (!deputyMinistry) errors.deputyMinistry = "Deputy ministry is required";
-    if (!directorate) errors.directorate = "Directorate is required";
-    if (!administration) errors.administration = "Administration is required";
-    if (!base) errors.base = "Base is required";
-    if (!phoneNo) errors.phoneNo = "Phone number is required";
+    if (!firstName) errors.firstName = t("Error first name required");
+    if (!lastName) errors.lastName = t("Error last name required");
+    if (!badgeNo) errors.badgeNo = t("Error badge no required");
+    if (!deputyMinistry)
+      errors.deputyMinistry = t("Error deputy ministry required");
+    if (!directorate) errors.directorate = t("Error directorate required");
+    if (!administration)
+      errors.administration = t("Error administration required");
+    if (!base) errors.base = t("Error base required");
+    if (!phoneNo) errors.phoneNo = t("Error phone number required");
 
     if (Object.keys(errors).length > 0) {
       this.setState({ errors });
@@ -419,7 +422,12 @@ class OfficerAdd extends Component {
               </div>
               <h3 className="mb-4 fw-bold text-primary">
                 {t("List of Officers")}
-              </h3>
+              </h3>{" "}
+              <div className="d-flex mb-3">
+                <button className="btn btn-primary" onClick={this.toggleModal}>
+                  {this.props.t("Add New Officer")}
+                </button>
+              </div>
               <DataTable
                 columns={columns}
                 data={rows}
@@ -452,11 +460,6 @@ class OfficerAdd extends Component {
                 pagination
                 paginationComponentOptions={paginationOptions}
               />
-              <div className="d-flex justify-content-end mb-3">
-                <button className="btn btn-primary" onClick={this.toggleModal}>
-                  {this.props.t("Add New Officer")}
-                </button>
-              </div>
               <AddOfficerModal
                 firstName={this.state.firstName}
                 lastName={this.state.lastName}

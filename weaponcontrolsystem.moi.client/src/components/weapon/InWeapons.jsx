@@ -1,8 +1,8 @@
 import React, { useState, useEffect, use } from "react";
-import Navbar from "./Navbar";
+import Navbar from "../common/Navbar";
 import DataTable from "react-data-table-component";
 import persian from "react-date-object/calendars/persian";
-import persian_fa from "../assets/persian_fa";
+import persian_fa from "../../assets/persian_fa";
 import DateObject from "react-date-object";
 import { useTranslation } from "react-i18next";
 function InWeapon() {

@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGlobe, faSignOutAlt } from "@fortawesome/free-solid-svg-icons"; // free solid icons
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { jwtDecode } from "jwt-decode";
+
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -13,7 +15,27 @@ const Navbar = () => {
   const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
   const closeDropdown = () => setIsDropdownOpen(false);
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+  const [Role, setRole] = useState("");
 
+  function getUserRole(token) {
+    try {
+      const decoded = jwtDecode(token);
+      console.log(
+        "Decoded role:" +
+          decoded[
+            "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+          ] || null
+      );
+      return (
+        decoded[
+          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        ] || null
+      );
+    } catch (error) {
+      console.error("Error decoding token:", error);
+      return null;
+    }
+  }
   const toggleLangDropdown = () => {
     setIsLangDropdownOpen((prev) => !prev);
   };
@@ -49,6 +71,9 @@ const Navbar = () => {
 
   // Close dropdown on outside click
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    const role = getUserRole(token);
+    setRole(role);
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         closeDropdown();
@@ -150,18 +175,21 @@ const Navbar = () => {
             } ${isDropdownOpen ? "show" : ""}`}
           >
             <ul className="navbar-nav align-items-center">
-              <li className="nav-item">
-                <NavLink
-                  to="/register"
-                  className={({ isActive }) =>
-                    "nav-link" + (isActive ? " active" : "")
-                  }
-                  style={{ fontSize: "20px" }}
-                  onClick={closeDropdown}
-                >
-                  {t("User")}
-                </NavLink>
-              </li>
+              {Role === "Admin" && (
+                <li className="nav-item">
+                  <NavLink
+                    to="/register"
+                    className={({ isActive }) =>
+                      "nav-link" + (isActive ? " active" : "")
+                    }
+                    style={{ fontSize: "20px" }}
+                    onClick={closeDropdown}
+                  >
+                    {t("User")}
+                  </NavLink>
+                </li>
+              )}
+
               <li className="nav-item">
                 <NavLink
                   to="/officer"

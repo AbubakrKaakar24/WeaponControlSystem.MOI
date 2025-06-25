@@ -27,17 +27,18 @@ namespace WeaponControlSystem.MOI.Core.Services
             if (user != null)
             {
                 var result = await _userManager.CreateAsync(user, userAddDto.Password);
+                var role = userAddDto.Role == "ادمین" ? "Admin" : "Staff";
                 if (!result.Succeeded)
                 {
                     var errors = string.Join("; ", result.Errors.Select(e => e.Description));
                     throw new Exception($"User creation failed: {errors}");
                 }
-                if (!await _roleManager.RoleExistsAsync("Admin"))
+                if (!await _roleManager.RoleExistsAsync(role))
                 {
-                    await _roleManager.CreateAsync(new ApplicationRole("Admin"));
+                    await _roleManager.CreateAsync(new ApplicationRole(role));
                 }
 
-                await _userManager.AddToRoleAsync(user, "Admin");
+                await _userManager.AddToRoleAsync(user, role);
             }
             return userAddDto;
         }
