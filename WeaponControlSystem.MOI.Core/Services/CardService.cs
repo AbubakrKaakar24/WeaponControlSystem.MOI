@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WeaponControlSystem.MOI.Core.Common.Response;
 using WeaponControlSystem.MOI.Core.Domain.Entities;
 using WeaponControlSystem.MOI.Core.Domain.RepositoryContracts.Base;
 using WeaponControlSystem.MOI.Core.DTOs.card;
@@ -16,60 +17,64 @@ namespace WeaponControlSystem.MOI.Core.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<int> AddCard(CardAddDto cardAddDto)
+        public async Task<Result<int>> AddCard(CardAddDto cardAddDto)
         {   Card card = cardAddDto.toCard();
             int count = await _unitOfWork.Card.Count();
             
             if (count >= 100)
             {
-                throw new InvalidOperationException("Card limit reached. Cannot add more cards.");
+                return Result<int>.WithError(DeclareMessage.CardNumberExceeds);
             }
             card.CardNo= (count + 1).ToString(); // Assuming CardNo is a sequential number based on the count
             await _unitOfWork.Card.Add(card);
             await _unitOfWork.SaveChanges(CancellationToken.None);
-            return count+1;
+            return Result<int>.SuccessResult(count+1);
         }
 
-        public async Task<CardResponseDto> DeleteCard(int? cardId)
+        public async Task<Result<CardResponseDto>> DeleteCard(int? cardId)
         {   
             if (cardId == null)
-                throw new ArgumentNullException(nameof(cardId), "Card No cannot be null.");
+            return Result<CardResponseDto>.FailureResult(DeclareMessage.InvalidOperation.Code, "Card No cannot be null.");
 
             string cardNo = cardId.ToString();
 
             var card = await _unitOfWork.Card.GetFirstOrDefault(c => c.CardNo == cardNo);
             if (card == null)
-                throw new ArgumentException($"Card with ID {cardNo} not found.");
+            return Result<CardResponseDto>.NotFoundResult(cardId);
 
             await _unitOfWork.Card.Remove(card);
             await _unitOfWork.SaveChanges(CancellationToken.None);
 
-            return card.ToCardResponseDto();
+            return Result<CardResponseDto>.SuccessResult(card.ToCardResponseDto());
         }
 
 
-        public async Task<CardResponseDto> GetCardById(int? cardId)
+        public async Task<Result<CardResponseDto>> GetCardById(int? cardId)
         {   var No= cardId.ToString();
             var card= await _unitOfWork.Card.GetFirstOrDefault(c => c.CardNo == No);
             if (card == null)
             {
-                throw new ArgumentException("Card not found");
+                return Result<CardResponseDto>.NotFoundResult(cardId);
             }
-            return card.ToCardResponseDto();
+            return Result<CardResponseDto>.SuccessResult(card.ToCardResponseDto());
         }
 
-        public async Task<IEnumerable<CardResponseDto>> GetCardList()
+        public async Task<Result<IEnumerable<CardResponseDto>>> GetCardList()
         {
             var cards = await _unitOfWork.Card.GetAll();
-            if (cards == null)
-            {
-                throw new ArgumentException("No cards found");
-            }
-            return cards.Select(c => c.ToCardResponseDto()).ToList();
 
+            if (cards == null || !cards.Any())
+            {
+                return Result<IEnumerable<CardResponseDto>>.EmptyResult("Card");
+            }
+
+            var response = cards.Select(c => c.ToCardResponseDto()).ToList();
+
+            return Result<IEnumerable<CardResponseDto>>.SuccessResult(response);
         }
 
-        public async Task<CardResponseDto> UpdateCard(int id, CardAddDto cardDTo)
+
+        public async Task<Result<CardResponseDto>> UpdateCard(int id, CardAddDto cardDTo)
         {  var cardToUpdate= await _unitOfWork.Card.GetById(id);
            
          
@@ -79,7 +84,7 @@ namespace WeaponControlSystem.MOI.Core.Services
             cardToUpdate.Weaponsid = cardDTo.weaponsId;
             await _unitOfWork.Card.Update(cardToUpdate);
             await _unitOfWork.SaveChanges(CancellationToken.None);
-            return cardToUpdate.ToCardResponseDto();
+            return Result<CardResponseDto>.SuccessResult(cardToUpdate.ToCardResponseDto());
 
         }
     }

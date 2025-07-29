@@ -3,11 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "weaponcontrolsystem.moi.client", "weaponcontrolsystem.moi.client\weaponcontrolsystem.moi.client.esproj", "{1380291C-AC3B-96DC-3905-CF51339E4F0B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeaponControlSystem.MOI.Server", "WeaponControlSystem.MOI.Server\WeaponControlSystem.MOI.Server.csproj", "{55B1501D-A904-46D8-8615-E06FDA32286F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{5CEDEBEB-6E2C-4B42-9239-930FBD2324B1}"
 EndProject
@@ -21,12 +22,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1380291C-AC3B-96DC-3905-CF51339E4F0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1380291C-AC3B-96DC-3905-CF51339E4F0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1380291C-AC3B-96DC-3905-CF51339E4F0B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{1380291C-AC3B-96DC-3905-CF51339E4F0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1380291C-AC3B-96DC-3905-CF51339E4F0B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1380291C-AC3B-96DC-3905-CF51339E4F0B}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{55B1501D-A904-46D8-8615-E06FDA32286F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{55B1501D-A904-46D8-8615-E06FDA32286F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55B1501D-A904-46D8-8615-E06FDA32286F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -44,9 +39,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{1380291C-AC3B-96DC-3905-CF51339E4F0B} = {5CEDEBEB-6E2C-4B42-9239-930FBD2324B1}
 		{55B1501D-A904-46D8-8615-E06FDA32286F} = {5CEDEBEB-6E2C-4B42-9239-930FBD2324B1}
-		{5CEDEBEB-6E2C-4B42-9239-930FBD2324B1} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{ADAE3A04-4884-49C7-9172-927603F177DB} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{B7A30F84-5544-47F2-B4EE-74CFA1203789} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection

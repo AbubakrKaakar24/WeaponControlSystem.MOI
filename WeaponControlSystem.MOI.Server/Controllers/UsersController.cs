@@ -32,7 +32,7 @@ namespace WeaponControlSystem.MOI.Server.Controllers
         }
 
         // GET: api/Users
-       [Authorize(Roles ="Admin")]
+       //[Authorize(Roles ="Admin")]
         [HttpGet]
         public async Task<IEnumerable<UserResponseDTo>> GetUsers()
         {
@@ -71,7 +71,7 @@ namespace WeaponControlSystem.MOI.Server.Controllers
 
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize(Roles = "Admin")]
+       // [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<UserAddDto>> PostUser(UserAddDto user)
         {
@@ -81,7 +81,7 @@ namespace WeaponControlSystem.MOI.Server.Controllers
         }
 
         // DELETE: api/Users/5
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {

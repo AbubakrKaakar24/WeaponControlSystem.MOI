@@ -19,9 +19,12 @@ namespace WeaponControlSystem.MOI.Server.Extensions
     {
         public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+      options.UseSqlServer(
+          configuration.GetConnectionString("DefaultConnection"),
+          sqlOptions => sqlOptions.EnableRetryOnFailure()
+      ));
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IWeaponService, WeaponService>();

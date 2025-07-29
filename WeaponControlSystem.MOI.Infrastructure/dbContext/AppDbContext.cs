@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WeaponControlSystem.MOI.Core.Domain.Entities;
 namespace WeaponControlSystem.MOI.Infrastructure.dbContext
@@ -23,8 +24,6 @@ namespace WeaponControlSystem.MOI.Infrastructure.dbContext
             .HasIndex(o => o.BadgeNo)
              .IsUnique();
             modelBuilder.Entity<Card>().HasIndex(C => C.CardNo).IsUnique();
-
-
 
             modelBuilder.Entity<ApplicationUser>()
         .HasIndex(u => new { u.Name, u.LastName })

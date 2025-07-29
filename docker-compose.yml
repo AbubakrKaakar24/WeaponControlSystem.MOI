@@ -1,0 +1,26 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - SA_PASSWORD=Abubakr#47
+      - ACCEPT_EULA=Y
+    ports:
+      - "1434:1433"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'Abubakr#47' -Q 'SELECT 1'",
+        ]
+      interval: 10s
+      retries: 5
+
+  app:
+    build: .
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=weaponDatabase;User Id=sa;Password=Abubakr#47;TrustServerCertificate=True;
+    ports:
+      - "5000:8080"

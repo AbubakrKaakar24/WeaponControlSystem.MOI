@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WeaponControlSystem.MOI.Infrastructure.dbContext;
 
@@ -11,9 +12,11 @@ using WeaponControlSystem.MOI.Infrastructure.dbContext;
 namespace WeaponControlSystem.MOI.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250729040835__initial")]
+    partial class _initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -264,7 +267,7 @@ namespace WeaponControlSystem.MOI.Infrastructure.Migrations
                     b.HasIndex("CardNo")
                         .IsUnique();
 
-                    b.ToTable("Cards", (string)null);
+                    b.ToTable("Cards");
                 });
 
             modelBuilder.Entity("WeaponControlSystem.MOI.Core.Domain.Entities.Officer", b =>
@@ -308,7 +311,7 @@ namespace WeaponControlSystem.MOI.Infrastructure.Migrations
                     b.HasIndex("BadgeNo")
                         .IsUnique();
 
-                    b.ToTable("Officers", (string)null);
+                    b.ToTable("Officers");
                 });
 
             modelBuilder.Entity("WeaponControlSystem.MOI.Core.Domain.Entities.Weapon", b =>
@@ -346,7 +349,7 @@ namespace WeaponControlSystem.MOI.Infrastructure.Migrations
 
                     b.HasIndex("OfficerId");
 
-                    b.ToTable("Weapons", (string)null);
+                    b.ToTable("Weapons");
                 });
 
             modelBuilder.Entity("WeaponControlSystem.MOI.Core.Domain.Entities.WeaponHandover", b =>
@@ -388,7 +391,7 @@ namespace WeaponControlSystem.MOI.Infrastructure.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("WeaponHandovers", (string)null);
+                    b.ToTable("WeaponHandovers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

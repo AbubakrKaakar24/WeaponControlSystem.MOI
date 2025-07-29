@@ -157,7 +157,7 @@ class WeaponAdd extends Component {
           const data = await response.json();
           Swal.fire({
             icon: "success",
-            title: t("Card no") + data,
+            title: t("Card no") + data.response,
             timer: 5000,
             timerProgressBar: true,
             confirmButtonText: t("Ok"),
